@@ -42,7 +42,7 @@ Run `python3 make_page.py topology.yaml` inside the container after editing page
 
 ## Historical logs
 
-The root-level `week1-run.txt` and `week2-*.txt` files are earlier experiment records. Some describe smaller networks. Keep them as history; use the files in `evidence/` to assess the final topology. Historical logs do not replace current assignment evidence.
+The `archive/lab-logs/week1-run.txt` and `archive/lab-logs/week2-*.txt` files are earlier experiment records. Some describe smaller networks. Keep them as history; use the files in `evidence/` to assess the final topology. Historical logs do not replace current assignment evidence.
 
 The Kali lab guide is optional reference material. With Docker Desktop and WSL integration, skip its Kali-specific Docker installation steps.
 
