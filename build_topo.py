@@ -57,7 +57,24 @@ def check(spec):
     Week 2 task: report any IP address that is used by more than one host.
     """
     problems = []
-    # TODO: your code here
+    seen = {}
+    for host in spec["hosts"]:
+        for key in ("ip", "ipv6"):
+            if key not in host:
+                continue
+            try:
+                address = ipaddress.ip_interface(host[key]).ip
+            except ValueError:
+                continue  # check_mine() reports malformed addresses.
+            if address in seen:
+                problems.append(f"{host['name']} and {seen[address]} both use {address}")
+            else:
+                seen[address] = host["name"]
+    nodes = set(spec["switches"]) | {host["name"] for host in spec["hosts"]}
+    for link in spec["links"]:
+        for endpoint in link:
+            if endpoint not in nodes:
+                problems.append(f"Link {link}: unknown node {endpoint}")
     return problems
 
 
@@ -98,3 +115,4 @@ if __name__ == "__main__":
     add_ipv6(net, spec)
     CLI(net)
     net.stop()
+
