@@ -1,0 +1,39 @@
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+*** Starting CLI:
+h1 h1-eth0:s1-eth1
+h2 h2-eth0:s1-eth2
+h3 h3-eth0:s1-eth3
+s1 lo:  s1-eth1:h1-eth0 s1-eth2:h2-eth0 s1-eth3:h3-eth0
+*** Ping: testing ping reachability
+h1 -> h2 h3 
+h2 -> h1 h3 
+h3 -> h1 h2 
+*** Results: 0% dropped (6/6 received)
+PING fd00:6042::2 (fd00:6042::2) 56 data bytes
+64 bytes from fd00:6042::2: icmp_seq=1 ttl=64 time=0.137 ms
+
+--- fd00:6042::2 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.137/0.137/0.137/0.000 ms
+10.42.0.3 dev h1-eth0 lladdr 00:00:00:00:00:03 REACHABLE 
+10.42.0.2 dev h1-eth0 lladdr 00:00:00:00:00:02 REACHABLE 
+fd00:6042::2 dev h1-eth0 lladdr 00:00:00:00:00:02 REACHABLE 
+*** Stopping 0 controllers
+
+*** Stopping 3 links
+...
+*** Stopping 1 switches
+s1 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done
+mininet> mininet> mininet> mininet> mininet> mininet> 
