@@ -1,25 +1,55 @@
-
-repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
-
+# Draft explanations: review against your understanding before submission.
+repository: https://github.com/DaoPhang/programmable-network
 answers:
   planes:
-    question: "Where are the data, control and management planes in your network?"
-    answer: ""
+    question: Where are the data, control and management planes in your network?
+    answer: The data plane is the Linux bridges s1, s2 and s3 forwarding Ethernet frames between host
+      interfaces. Each bridge learns source MAC addresses locally and uses its forwarding database to
+      decide output ports; there is no routing protocol or separate SDN control plane (controller=None); MAC learning happens locally within each bridge. The management plane
+      is the YAML description, Python builder and CLI commands used to create, inspect and change the
+      network.
   learning:
-    question: "How did your switches learn which port leads to each host? Use your MAC table evidence."
-    answer: ""
+    question: How did your switches learn which port leads to each host? Use your MAC table evidence.
+    answer: 'A Linux bridge learns the source MAC address and ingress port of each received frame. Initially
+      it floods broadcasts and unknown destinations; after traffic it forwards known destinations using
+      its learned table. evidence/macs.txt records s1 after all-host traffic: non-local entries correspond
+      to host MAC addresses, while is local entries belong to bridge interfaces. Hosts behind s2 or s3
+      are learned through the inter-switch port on s1.'
   kind:
-    question: "Which of the four kinds of programmability is this assignment (a network described as data, then built and documented by scripts)? Why isn't it any of the other three?"
-    answer: ""
+    question: Which of the four kinds of programmability is this assignment (a network described as data,
+      then built and documented by scripts)? Why isn't it any of the other three?
+    answer: 'This is automated configuration management: scripts read a desired network description and
+      consistently create and document the network. It does not change packet parsing or forwarding logic,
+      so it is not a programmable data plane. It does not externalise forwarding decisions to an SDN controller,
+      and it is not an exercise in structured device interfaces such as NETCONF or RESTCONF. Python calls
+      operating-system and Mininet facilities to automate setup.'
   two_am:
-    question: "Week 1's 2 a.m. change on 40 switches: what would be different if those switches were described like your network?"
-    answer: ""
+    question: 'Week 1''s 2 a.m. change on 40 switches: what would be different if those switches were
+      described like your network?'
+    answer: With forty switches described as data, a change could be expressed once in version-controlled
+      input, validated before execution and applied by a repeatable script instead of repeated manual
+      CLI edits. A reviewed diff would show what changed, and the previous version would provide a rollback
+      starting point. Production automation would still need device-specific deployment, staged rollout,
+      verification and recovery; this Mininet builder does not implement those features.
   model:
-    question: "What's the difference between your network's data model and its serialisation? Use YAML and JSON as the example."
-    answer: ""
+    question: What's the difference between your network's data model and its serialisation? Use YAML
+      and JSON as the example.
+    answer: 'The data model is the structure and meaning: a student suffix, switch names, hosts with IPv4
+      and IPv6 addresses, and pairs of linked node names. YAML and JSON are two serialisations of that
+      same structure. topology.json is regenerated from topology.yaml and loads to an equal Python object;
+      changing syntax does not change the intended network.'
   check:
-    question: "Why is it better to catch bad data in check() than with pingall? What did IPv6 notice about a duplicate address that IPv4 didn't?"
-    answer: ""
+    question: Why is it better to catch bad data in check() than with pingall? What did IPv6 notice about
+      a duplicate address that IPv4 didn't?
+    answer: check() rejects duplicate addresses and links to unknown nodes before creating interfaces
+      or bridges. evidence/check.txt shows duplicate IPv4 and IPv6 addresses and nonexistent s9 rejected
+      together. pingall instead checks runtime IPv4 reachability and cannot explain every configuration
+      error or validate IPv6. In the separate duplicate experiment, IPv6 DAD marks the second copy dadfailed,
+      while a plain IPv4 address-add command accepts the duplicate without a comparable automatic rejection.
   git:
-    question: "What does your Git history give you that copying files into folders named topology-v2-final wouldn't?"
-    answer: ""
+    question: What does your Git history give you that copying files into folders named topology-v2-final
+      wouldn't?
+    answer: Git records snapshots with commit messages and parent relationships, making changes inspectable
+      with diff and log. Earlier versions can be recovered and compared, and a remote preserves shared
+      history. Copied folders such as topology-v2-final do not provide the same explicit sequence of changes
+      or a reliable explanation of which files changed together.

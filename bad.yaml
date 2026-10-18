@@ -1,0 +1,44 @@
+# Deliberately invalid: duplicate IPv4/IPv6 and nonexistent switch s9.
+student_id_last4: '6042'
+switches:
+- s1
+- s2
+- s3
+hosts:
+- name: h1
+  ip: 10.42.0.1/24
+  ipv6: fd00:6042::1/64
+- name: h2
+  ip: 10.42.0.2/24
+  ipv6: fd00:6042::2/64
+- name: h3
+  ip: 10.42.0.3/24
+  ipv6: fd00:6042::3/64
+- name: h4
+  ip: 10.42.0.4/24
+  ipv6: fd00:6042::4/64
+- name: h5
+  ip: 10.42.0.5/24
+  ipv6: fd00:6042::5/64
+- name: h6
+  ip: 10.42.0.2/24
+  ipv6: fd00:6042::2/64
+links:
+- - h1
+  - s1
+- - h2
+  - s1
+- - h3
+  - s1
+- - h4
+  - s2
+- - s1
+  - s2
+- - h5
+  - s3
+- - h6
+  - s3
+- - s2
+  - s3
+- - h1
+  - s9

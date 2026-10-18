@@ -11,7 +11,7 @@ network never gets published), and writes docs/index.html. The page includes:
   - your answers, from page.yaml
 GitHub Pages then publishes the docs folder (Settings -> Pages -> main, /docs).
 
-Two parts are yours to write: links_section() and mermaid_diagram(). Look for TODO.
+Links and diagram are generated directly from the topology data.
 """
 import datetime
 import html
@@ -58,26 +58,23 @@ def hosts_section(spec):
 
 
 def links_section(spec):
-    """TODO (assignment): return HTML listing every link in spec["links"].
-
-    For example, for links [h1, s1] and [s1, s2] return:
-        <ul><li>h1 — s1</li><li>s1 — s2</li></ul>
-    Use esc() on every name, as hosts_section() does.
-    """
-    return "<p>TODO: list the links.</p>"
+    """Return an escaped HTML list containing each topology link."""
+    items = "".join(f"<li>{esc(a)} — {esc(b)}</li>" for a, b in spec["links"])
+    return f"<ul>{items}</ul>"
 
 
 def mermaid_diagram(spec):
-    """TODO (assignment): return Mermaid text that draws the network, built from spec["links"].
-
-    Mermaid turns text like this into a diagram in the browser:
-        graph LR
-          h1 --- s1
-          s1 --- s2
-    Start with "graph LR", then add one line per link. For extra credit, show each host's
-    IPv4 address in its box, e.g.  h1["h1<br>10.NN.0.1"] --- s1
-    """
-    return "graph LR\n  todo[Diagram not generated yet]"
+    """Draw each link using stable Mermaid identifiers and escaped labels."""
+    names = list(dict.fromkeys(spec["switches"] + [h["name"] for h in spec["hosts"]]))
+    identifiers = {name: f"node{i}" for i, name in enumerate(names)}
+    lines = ["graph LR"]
+    for name in names:
+        # Mermaid accepts entity codes inside quoted labels.
+        label = "".join(f"#{ord(ch)};" if ch in '&<>\"[]\\' else ch for ch in str(name))
+        lines.append(f'  {identifiers[name]}["{label}"]')
+    for a, b in spec["links"]:
+        lines.append(f"  {identifiers[a]} --- {identifiers[b]}")
+    return "\n".join(lines)
 
 
 def evidence_section(ev_id, path, title):

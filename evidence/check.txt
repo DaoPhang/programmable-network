@@ -1,0 +1,4 @@
+PROBLEM: h6 and h2 both use 10.42.0.2
+PROBLEM: h6 and h2 both use fd00:6042::2
+PROBLEM: Link ['h1', 's9']: unknown node s9
+Fix the description and try again.
