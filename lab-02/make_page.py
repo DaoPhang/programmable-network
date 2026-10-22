@@ -159,8 +159,9 @@ def main():
         page = yaml.safe_load(f)
     last4 = str(spec["student_id_last4"])
 
-    os.makedirs("docs", exist_ok=True)
-    with open("docs/index.html", "w") as f:
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs"))
+    os.makedirs(output_dir, exist_ok=True)
+    with open(os.path.join(output_dir, "index.html"), "w") as f:
         f.write(
             PAGE.format(
                 last4=esc(last4),
@@ -181,7 +182,7 @@ def main():
                 data=json.dumps(spec, indent=2).replace("</", "<\\/"),
             )
         )
-    print("Wrote docs/index.html")
+    print("Wrote", os.path.join(output_dir, "index.html"))
 
 
 if __name__ == "__main__":
