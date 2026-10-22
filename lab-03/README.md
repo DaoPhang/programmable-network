@@ -1,4 +1,4 @@
-# Lab 3 â€” Inside the Forwarding Path
+# Lab 3” Inside the Forwarding Path
 
 Student suffix: 6042. IPv4 block: 10.42.0.0/16.
 IPv6 block: fd00:6042::/32.
