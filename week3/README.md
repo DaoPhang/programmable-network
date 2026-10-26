@@ -7,7 +7,7 @@ Start Docker Desktop and run the shared container command from the root
 README. Inside that container:
 
 ~~~bash
-cd /lab/lab-03
+cd /lab/week3
 python3 routers.py --id 6042
 ~~~
 
