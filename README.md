@@ -5,7 +5,7 @@ WIC2005 coursework for student ID suffix **6042**, organised by lab.
 | Location | Purpose |
 |---|---|
 | [lab-02/](lab-02/) | Three switches, six dual-stack hosts; topology, validation, webpage generator, evidence and guides |
-| [lab-03/](lab-03/) | Three routers, three hosts; routing experiment and write-up |
+| [week3/](week3/) | Three routers, three hosts; routing experiment and write-up |
 | [docs/](docs/) | Generated Lab 2 GitHub Pages website |
 | archive/ | Historical Week 1 and Week 2 logs and earlier duplicate-address example |
 | start-lab-wsl.sh | Optional shared WSL container launcher |
@@ -49,7 +49,7 @@ See [Lab 2 setup](lab-02/guides/START-HERE.md) and
 Inside the container:
 
 ~~~bash
-cd /lab/lab-03
+cd /lab/week3
 mkdir -p evidence
 python3 routers.py --id 6042
 ~~~
@@ -57,8 +57,8 @@ python3 routers.py --id 6042
 This lab covers forwarding, static routes, longest-prefix matching, route
 fallback, unreachable destinations, loops, and IPv6.
 
-See [Lab 3 instructions](lab-03/README.md) and
-[6042_Lab3_Writeup.md](lab-03/6042_Lab3_Writeup.md).
+See [Lab 3 instructions](week3/README.md) and
+[6042_Lab3_Writeup.md](week3/6042_Lab3_Writeup.md).
 The write-up uses outputs pasted from the completed run. Raw terminal logs
 have not been reconstructed; keep any original logs or screenshots separately.
 Submit the reviewed write-up on Spectrum as instructed.
@@ -76,7 +76,7 @@ Then use the same container commands above.
 ## Records and changes
 
 Current Lab 2 evidence stays in lab-02/evidence. Keep future Lab 3 evidence
-in lab-03/evidence. Historical archive files are retained as useful records.
+in week3/evidence. Historical archive files are retained as useful records.
 No files were deleted during organisation.
 
 The existing generated website is preserved; it has not been regenerated or
