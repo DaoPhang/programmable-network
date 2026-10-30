@@ -59,13 +59,20 @@ actions: output enqueue set_vlan_vid set_vlan_pcp strip_vlan mod_dl_src mod_dl_d
 OFPT_GET_CONFIG_REPLY (xid=0x4): frags=normal miss_send_len=0
 mininet> sh ovs-ofctl dump-flows s1
 mininet> h1 ping -c 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
-From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1029ms
-pipe 2
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
+
+From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1029ms
+
+pipe 2
+
 mininet> sh ovs-ofctl add-flow s1 actions=flood
 mininet> pingall
 *** Ping: testing ping reachability
@@ -78,14 +85,22 @@ mininet> sh ovs-ofctl dump-flows s1
 mininet> 
 mininet> h3 timeout 4 tcpdump -ni h3-eth0 icmp > /tmp/h3.txt 2>&1 &
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.335 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.297 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.380 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2041ms
-rtt min/avg/max/mdev = 0.297/0.337/0.380/0.033 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.335 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.297 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.380 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2041ms
+
+rtt min/avg/max/mdev = 0.297/0.337/0.380/0.033 ms
+
 mininet> sh sleep 4; cat /tmp/h3.txt
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on h3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
@@ -93,17 +108,29 @@ listening on h3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 0 packets captured
 0 packets received by filter
 0 packets dropped by kernel
-mininet> [Kmininet> [Kmininet> h3 timeout 15 tcpdump -l -n -i h3-eth0 icmp > /tmp/h3.txt 2>&1 &
+mininet> 
+[K
+mininet> 
+[K
+mininet> h3 timeout 15 tcpdump -l -n -i h3-eth0 icmp > /tmp/h3.txt 2>&1 &
 mininet> sh sleep 1
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.560 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.309 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.330 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2043ms
-rtt min/avg/max/mdev = 0.309/0.399/0.560/0.113 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.560 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.309 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.330 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2043ms
+
+rtt min/avg/max/mdev = 0.309/0.399/0.560/0.113 ms
+
 mininet> sh sleep 12; cat /tmp/h3.txt
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on h3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
@@ -139,23 +166,39 @@ mininet> h3 timeout 15 tcpdump -l -n -i h3-eth0 icmp > /tmp/h3.txt 2>&1 &
 mininet> 
 mininet> sh sleep 1
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.533 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.282 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.344 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2037ms
-rtt min/avg/max/mdev = 0.282/0.386/0.533/0.106 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.533 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.282 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.344 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2037ms
+
+rtt min/avg/max/mdev = 0.282/0.386/0.533/0.106 ms
+
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.265 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.542 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.239 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2042ms
-rtt min/avg/max/mdev = 0.239/0.348/0.542/0.137 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.265 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.542 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.239 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2042ms
+
+rtt min/avg/max/mdev = 0.239/0.348/0.542/0.137 ms
+
 mininet> sh sleep 12; cat /tmp/h3.txt
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on h3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
@@ -163,16 +206,26 @@ listening on h3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 0 packets captured
 0 packets received by filter
 0 packets dropped by kernel
-mininet> [Kmininet> sh ovs-ofctl add-flow s1 icmp,nw_src=10.42.0.1,nw_dst=10.42.0.3,actions=drop
+mininet> 
+[K
+mininet> sh ovs-ofctl add-flow s1 icmp,nw_src=10.42.0.1,nw_dst=10.42.0.3,actions=drop
 mininet> h1 ping -c 3 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.334 ms
-64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.251 ms
-64 bytes from 10.42.0.3: icmp_seq=3 ttl=64 time=0.277 ms
-
---- 10.42.0.3 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2042ms
-rtt min/avg/max/mdev = 0.251/0.287/0.334/0.034 ms
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.334 ms
+
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.251 ms
+
+64 bytes from 10.42.0.3: icmp_seq=3 ttl=64 time=0.277 ms
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2042ms
+
+rtt min/avg/max/mdev = 0.251/0.287/0.334/0.034 ms
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=104.674s, table=0, n_packets=20, n_bytes=840, arp actions=FLOOD
  cookie=0x0, duration=104.667s, table=0, n_packets=13, n_bytes=1274, dl_dst=00:00:00:00:00:01 actions=output:"s1-eth1"
@@ -182,35 +235,56 @@ mininet> sh ovs-ofctl dump-flows s1
 mininet> sh ovs-ofctl --strict del-flows s1 icmp,nw_src=10.42.0.1,nw_dst=10.42.0.3
 mininet> sh ovs-ofctl add-flow s1 priority=40000,icmp,nw_src=10.42.0.1,nw_dst=10.42.0.3,actions=drop
 mininet> h1 ping -c 3 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-
---- 10.42.0.3 ping statistics ---
-3 packets transmitted, 0 received, 100% packet loss, time 2053ms
-
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+3 packets transmitted, 0 received, 100% packet loss, time 2053ms
+
+
+
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.519 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.394 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.247 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2048ms
-rtt min/avg/max/mdev = 0.247/0.386/0.519/0.111 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.519 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.394 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.247 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2048ms
+
+rtt min/avg/max/mdev = 0.247/0.386/0.519/0.111 ms
+
 mininet> h3 ping -c 3 h1
-bash: sping: command not found
+bash: sping: command not found
+
 mininet> h3 ping -c 3 h1
-PING 10.42.0.1 (10.42.0.1) 56(84) bytes of data.
-
---- 10.42.0.1 ping statistics ---
-3 packets transmitted, 0 received, 100% packet loss, time 2037ms
-
+PING 10.42.0.1 (10.42.0.1) 56(84) bytes of data.
+
+
+
+--- 10.42.0.1 ping statistics ---
+
+3 packets transmitted, 0 received, 100% packet loss, time 2037ms
+
+
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=71.856s, table=0, n_packets=6, n_bytes=588, priority=40000,icmp,nw_src=10.42.0.1,nw_dst=10.42.0.3 actions=drop
  cookie=0x0, duration=187.596s, table=0, n_packets=28, n_bytes=1176, arp actions=FLOOD
  cookie=0x0, duration=187.589s, table=0, n_packets=19, n_bytes=1862, dl_dst=00:00:00:00:00:01 actions=output:"s1-eth1"
  cookie=0x0, duration=187.579s, table=0, n_packets=13, n_bytes=1274, dl_dst=00:00:00:00:00:02 actions=output:"s1-eth2"
  cookie=0x0, duration=187.571s, table=0, n_packets=7, n_bytes=686, dl_dst=00:00:00:00:00:03 actions=output:"s1-eth3"
-mininet> [Kmininet> sh ovs-testcontroller ptcp:6653 &
+mininet> 
+[K
+mininet> sh ovs-testcontroller ptcp:6653 &
 mininet> sh ovs-ofctl del-flows s1
 mininet> sh ovs-vsctl set-controller s1 tcp:127.0.0.1:6653
 mininet> sh ovs-vsctl show
@@ -230,23 +304,39 @@ mininet> sh ovs-vsctl show
         Port s1-eth2
             Interface s1-eth2
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.965 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.749 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.342 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2015ms
-rtt min/avg/max/mdev = 0.342/0.685/0.965/0.258 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.965 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.749 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.342 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2015ms
+
+rtt min/avg/max/mdev = 0.342/0.685/0.965/0.258 ms
+
 mininet> h2 ping -c 3 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.995 ms
-64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.683 ms
-64 bytes from 10.42.0.3: icmp_seq=3 ttl=64 time=0.244 ms
-
---- 10.42.0.3 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2011ms
-rtt min/avg/max/mdev = 0.244/0.640/0.995/0.308 ms
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.995 ms
+
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.683 ms
+
+64 bytes from 10.42.0.3: icmp_seq=3 ttl=64 time=0.244 ms
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2011ms
+
+rtt min/avg/max/mdev = 0.244/0.640/0.995/0.308 ms
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=18.758s, table=0, n_packets=2, n_bytes=196, idle_timeout=60, priority=1,icmp,in_port="s1-eth2",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:02,dl_dst=00:00:00:00:00:01,nw_src=10.42.0.2,nw_dst=10.42.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:"s1-eth1"
  cookie=0x0, duration=17.757s, table=0, n_packets=1, n_bytes=98, idle_timeout=60, priority=1,icmp,in_port="s1-eth1",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:01,dl_dst=00:00:00:00:00:02,nw_src=10.42.0.1,nw_dst=10.42.0.2,nw_tos=0,icmp_type=8,icmp_code=0 actions=output:"s1-eth2"
@@ -269,11 +359,16 @@ h3 -> h1 h2
 *** Results: 0% dropped (6/6 received)
 mininet> D[C[Ksh ovs-ofctl del-flows s1
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 0 received, 100% packet loss, time 2032ms
-
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 0 received, 100% packet loss, time 2032ms
+
+
+
 mininet> sh pkill -f ovs-testcontroller
 2026-10-29T03:05:23Z|00001|fatal_signal|WARN|terminating with signal 15 (Terminated)
 mininet> sh sleep 2
@@ -297,29 +392,47 @@ status              : {last_error="Connection refused", sec_since_connect="138",
 target              : "tcp:127.0.0.1:6653"
 type                : []
 mininet> h1 ping -c 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
-From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1003ms
-pipe 2
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
+
+From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1003ms
+
+pipe 2
+
 mininet> h1 ping -c 2 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-
---- 10.42.0.3 ping statistics ---
-2 packets transmitted, 0 received, 100% packet loss, time 1004ms
-
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+2 packets transmitted, 0 received, 100% packet loss, time 1004ms
+
+
+
 mininet> sh ovs-ofctl dump-flows s1
 mininet> sh sleep 65
-mininet> 和 [Kh[K[Kh1 ping -c3[K 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
-From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1012ms
-pipe 2
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
+
+From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1012ms
+
+pipe 2
+
 mininet> sh ovs-ofctl dump-flows s1
 mininet> sh ovs-vsctl del-controller s1
 mininet> sh ovs-ofctl del-flows s1
@@ -345,14 +458,22 @@ mininet> sh ovs-vsctl show
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=10.634s, table=0, n_packets=1, n_bytes=70, priority=0 actions=CONTROLLER:128
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=1.57 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.298 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.274 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2015ms
-rtt min/avg/max/mdev = 0.274/0.715/1.573/0.606 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=1.57 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.298 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.274 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2015ms
+
+rtt min/avg/max/mdev = 0.274/0.715/1.573/0.606 ms
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=6.480s, table=0, n_packets=0, n_bytes=0, idle_timeout=60, priority=1,arp,in_port="s1-eth2",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:02,dl_dst=00:00:00:00:00:01,arp_spa=10.42.0.2,arp_tpa=10.42.0.1,arp_op=2 actions=output:"s1-eth1"
  cookie=0x0, duration=1.232s, table=0, n_packets=0, n_bytes=0, idle_timeout=60, priority=1,arp,in_port="s1-eth2",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:02,dl_dst=00:00:00:00:00:01,arp_spa=10.42.0.2,arp_tpa=10.42.0.1,arp_op=1 actions=output:"s1-eth1"
@@ -361,14 +482,22 @@ mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=6.479s, table=0, n_packets=2, n_bytes=196, idle_timeout=60, priority=1,icmp,in_port="s1-eth2",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:02,dl_dst=00:00:00:00:00:01,nw_src=10.42.0.2,nw_dst=10.42.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:"s1-eth1"
  cookie=0x0, duration=21.300s, table=0, n_packets=7, n_bytes=434, priority=0 actions=CONTROLLER:128
 mininet> h1 ping -c 3 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=1.57 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.293 ms
-64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.435 ms
-
---- 10.42.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2012ms
-rtt min/avg/max/mdev = 0.293/0.764/1.566/0.569 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=1.57 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.293 ms
+
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=64 time=0.435 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+3 packets transmitted, 3 received, 0% packet loss, time 2012ms
+
+rtt min/avg/max/mdev = 0.293/0.764/1.566/0.569 ms
+
 mininet> sh pkill -f ovs-testcontroller
 2026-10-29T03:12:38Z|00001|fatal_signal|WARN|terminating with signal 15 (Terminated)
 mininet> sh sleep 2
@@ -393,37 +522,64 @@ status              : {last_error="Connection refused", sec_since_connect="176",
 target              : "tcp:127.0.0.1:6653"
 type                : []
 mininet> h1 ping -c 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.252 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.262 ms
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1027ms
-rtt min/avg/max/mdev = 0.252/0.257/0.262/0.005 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.252 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.262 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 2 received, 0% packet loss, time 1027ms
+
+rtt min/avg/max/mdev = 0.252/0.257/0.262/0.005 ms
+
 mininet> h1 ping -c 2 h2
-bash: h: command not found
-bash: h1: command not found
+bash: h: command not found
+
+bash: h1: command not found
+
 mininet> h1 ping -c 2 h3
-sh: 0: cannot open sleep: No such file
-cat: invalid option -- 'c'
-Try 'cat --help' for more information.
-bash: 1ping: command not found
+sh: 0: cannot open sleep: No such file
+
+cat: invalid option -- 'c'
+
+Try 'cat --help' for more information.
+
+bash: 1ping: command not found
+
 mininet> h1 ping -c 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.290 ms
-64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.264 ms
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1032ms
-rtt min/avg/max/mdev = 0.264/0.277/0.290/0.013 ms
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=64 time=0.290 ms
+
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=64 time=0.264 ms
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 2 received, 0% packet loss, time 1032ms
+
+rtt min/avg/max/mdev = 0.264/0.277/0.290/0.013 ms
+
 mininet> h1 ping -c 2 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
-From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
-
---- 10.42.0.3 ping statistics ---
-2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1004ms
-pipe 2
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+From 10.42.0.1 icmp_seq=1 Destination Host Unreachable
+
+From 10.42.0.1 icmp_seq=2 Destination Host Unreachable
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1004ms
+
+pipe 2
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=62.343s, table=0, n_packets=6, n_bytes=588, idle_timeout=60, priority=1,icmp,in_port="s1-eth1",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:01,dl_dst=00:00:00:00:00:02,nw_src=10.42.0.1,nw_dst=10.42.0.2,nw_tos=0,icmp_type=8,icmp_code=0 actions=output:"s1-eth2"
  cookie=0x0, duration=62.342s, table=0, n_packets=6, n_bytes=588, idle_timeout=60, priority=1,icmp,in_port="s1-eth2",vlan_tci=0x0000/0x1fff,dl_src=00:00:00:00:00:02,dl_dst=00:00:00:00:00:01,nw_src=10.42.0.2,nw_dst=10.42.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:"s1-eth1"
@@ -434,23 +590,35 @@ mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=231.694s, table=0, n_packets=14, n_bytes=840, priority=0 actions=CONTROLLER:128
 mininet> sh sleep 65
 mininet> h1 ping -c 2 h2
-PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
-
---- 10.42.0.2 ping statistics ---
-2 packets transmitted, 0 received, 100% packet loss, time 1019ms
-
+PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+
+
+
+--- 10.42.0.2 ping statistics ---
+
+2 packets transmitted, 0 received, 100% packet loss, time 1019ms
+
+
+
 mininet> sh ovs-ofctl dump-flows s1
  cookie=0x0, duration=374.420s, table=0, n_packets=19, n_bytes=1162, priority=0 actions=CONTROLLER:128
 mininet> sh ovs-vsctl set-fail-mode s1 standalone
 mininet> sh sleep 15
 mininet> h1 ping -c 2 h3
-PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
-64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.532 ms
-64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.152 ms
-
---- 10.42.0.3 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1013ms
-rtt min/avg/max/mdev = 0.152/0.342/0.532/0.190 ms
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=64 time=0.532 ms
+
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=64 time=0.152 ms
+
+
+
+--- 10.42.0.3 ping statistics ---
+
+2 packets transmitted, 2 received, 0% packet loss, time 1013ms
+
+rtt min/avg/max/mdev = 0.152/0.342/0.532/0.190 ms
+
 mininet> sh ovs-vsctl show
 4d39f5cb-8671-43cf-8771-8b6ec63d5b46
     Bridge s1
@@ -467,7 +635,15 @@ mininet> sh ovs-vsctl show
         Port s1-eth2
             Interface s1-eth2
 mininet> sh ovs-ofctl dump-flows s1
-mininet> [Kmininet> [Kmininet> [Kmininet> [Kmininet> exit
+mininet> 
+[K
+mininet> 
+[K
+mininet> 
+[K
+mininet> 
+[K
+mininet> exit
 *** Stopping 0 controllers
 
 *** Stopping 3 links
