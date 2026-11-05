@@ -1,9 +1,9 @@
 # Week 05 assignment — tunnel hop limit
 
 Student suffix: **6042**  
-Working branch: **`hop-limit`**
+Combined coursework branch: **`main`**. Course submission PR branch: **`hop-limit`** (still to be established in the separate P4 repository).
 
-[Course instructions](https://firdaussahran.github.io/wic2005/weeks/week-05/#tab-lab) · [Full report](REPORT.md) · [Submission steps](SUBMISSION.md)
+[Course instructions](https://firdaussahran.github.io/wic2005/weeks/week-05/#tab-lab) · [Full report](REPORT.md) · [Submission steps](#c6--prepare-and-submit)
 
 ## Overview and status
 
@@ -69,9 +69,24 @@ REPORT.md compares two rollout approaches, the required Week 3 `check_paths()` b
 
 The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the proposed PR title/body. [prepare_submission.py](prepare_submission.py) exports a standalone review folder/ZIP, including root compilation and dev-container configuration.
 
-The remaining steps are to establish the separate P4 template repository and baseline, transfer the assignment onto its assignment branch, open a PR into its own `main` titled **Tunnel hop limit**, confirm **Compile tunnel.p4** is green, provide lecturer access, and submit the real PR URL on Spectrum. **Leave the PR unmerged.** Deadline: **13 November 2026, before the Week 6 class**.
+1. Create your own repository from the [course P4 template](https://github.com/firdaussahran/p4-lab). Place `tunnel.p4`, `topo.py`, `.github/` and `.devcontainer/` at its root.
+2. Establish the completed four-byte practical baseline on its `main`, including `tunnel_v1.p4`. Carry over the earlier baseline/C1 history where practical. Keep the finished assignment for the assignment branch.
+3. Create `hop-limit` from that baseline and transfer/commit the reviewed updated source, report and evidence. Preserve the original baseline.
+4. Push `hop-limit` and open a PR targeting that repository's own `main`, titled **Tunnel hop limit**. Use [PR-DESCRIPTION.md](PR-DESCRIPTION.md) for the prepared body.
+5. Confirm **Compile tunnel.p4** is green. Local compilation passed; a GitHub Actions result has not yet been verified.
+6. Make the repository public or grant the lecturer collaborator access.
+7. Submit the actual PR URL on the authenticated Spectrum assignment page.
+8. **Leave the PR unmerged.** Deadline: **Friday 13 November 2026, before the Week 6 class**.
 
-Publishing the combined coursework repository does not complete those course-specific PR and submission steps. See [SUBMISSION.md](SUBMISSION.md) for details.
+Publishing the combined coursework repository does not complete those course-specific PR and submission steps. No Codespace was created; the experiments used the official image locally, and temporary containers were removed.
+
+To generate a standalone export, run this from `week05`:
+
+```powershell
+python -I assignment/prepare_submission.py
+```
+
+The script creates a fresh folder/ZIP under ignored `build/`, with root compilation/dev-container configuration and a SHA-256 manifest. The export contains no Git metadata and does not establish the required baseline/assignment branch history.
 
 ## Evidence and reproduction
 

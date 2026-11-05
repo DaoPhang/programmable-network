@@ -40,4 +40,4 @@ The full rerun used a disposable isolated workspace under `week05/build/`. That 
 
 ## Publication state
 
-No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [SUBMISSION.md](SUBMISSION.md).
+No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [README.md](README.md#c6--prepare-and-submit).

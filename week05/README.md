@@ -10,7 +10,7 @@ The practical and assignment C1–C5 are complete locally. The practical passed 
 
 `tunnel.p4` is the **hop-limit implementation**. `tunnel_v1.p4` preserves the completed practical without a limit. The user published the source, report and evidence to the combined coursework repository in commit `e2e5040` (`Week05`). The separate P4 submission repository/PR, green GitHub compilation check and Spectrum submission remain outstanding.
 
-Start with [assignment/README.md](assignment/README.md) for the complete C1–C6 guide, [assignment/REPORT.md](assignment/REPORT.md) for the design and analysis, and [assignment/SUBMISSION.md](assignment/SUBMISSION.md) for publication status and the remaining submission steps.
+Start with [assignment/README.md](assignment/README.md) for the complete C1–C6 guide, publication status and remaining submission steps, and [assignment/REPORT.md](assignment/REPORT.md) for the design and analysis.
 
 ## Observed assignment results
 
@@ -45,7 +45,7 @@ exit
 
 `--hops` defaults to 8 and accepts 0–255. An incoming budget of 0 or 1 drops before forwarding. A positive N allows at most N ingress visits on an all-upgraded path, with the Nth visit dropping; traversing K switches successfully requires N > K.
 
-To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated course container after preserving the existing evidence. The runner refuses to overwrite results. The Docker launch pattern is documented in [assignment/SUBMISSION.md](assignment/SUBMISSION.md).
+To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated course container after preserving the existing evidence. The runner refuses to overwrite results. The Docker launch pattern is documented in [assignment/README.md](assignment/README.md#evidence-and-reproduction).
 
 ## File guide
 

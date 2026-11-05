@@ -22,7 +22,7 @@ C1 demonstrated unbounded circulation, with counts 18→192 on s1 and 17→192 o
 - `assignment/REPORT.md`: C1–C5 design, results, evaluation and AI-use declaration.
 - `assignment/MIXED-PREDICTION.md`: prediction recorded before implementation/testing.
 - Test runners: reproducible C1, practical and C4/C5 experiments in fresh workspaces, preserving existing evidence.
-- `assignment/README.md`, `SUBMISSION.md`, `PR-DESCRIPTION.md`: assignment guide and remaining publication instructions.
+- `assignment/README.md`, `assignment/PR-DESCRIPTION.md`: assignment guide and remaining publication instructions.
 - `assignment/prepare_submission.py`: optional fresh standalone export when needed.
 
 ## Verification
@@ -37,4 +37,4 @@ The user published Week 05 to the combined coursework repository's `main` in com
 
 Cleanup removed disposable `build/` copies and ZIPs, failed-attempt logs, an empty evidence placeholder, duplicate template/checklist documents, and the unused image-publishing workflow. Successful source/evidence, original packet tools, stage programs, compilation/dev-container configuration, report and review summary remain intact. The tracked deletions are recoverable from Git history; new build/export artifacts can be regenerated.
 
-Nested week05 configuration is not automatically active at the parent repository root. The export script puts it at the root of a standalone review copy for the separate P4 repository. See assignment/SUBMISSION.md.
+Nested week05 configuration is not automatically active at the parent repository root. The export script puts it at the root of a standalone review copy for the separate P4 repository. See assignment/README.md for the remaining submission steps.
