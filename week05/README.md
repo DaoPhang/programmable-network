@@ -8,7 +8,7 @@ Student suffix: **6042**. Hosts: **10.42.0.1**, **10.42.0.2**, **10.42.0.3**.
 
 The practical and assignment C1–C5 are complete locally. The practical passed 31 checks; the hop-limit delivery, loop-boundary and mixed-version experiments passed **26 further assertions** in the official course Docker image.
 
-`tunnel.p4` is now the **hop-limit implementation**. `tunnel_v1.p4` preserves the completed practical without a limit. C2–C5 source, evidence and report changes are **uncommitted**, as requested. No push, separate template repository, PR, GitHub compilation check or Spectrum submission has been performed.
+`tunnel.p4` is the **hop-limit implementation**. `tunnel_v1.p4` preserves the completed practical without a limit. The user published the source, report and evidence to the combined coursework repository in commit `e2e5040` (`Week05`). The separate P4 submission repository/PR, green GitHub compilation check and Spectrum submission remain outstanding.
 
 Start with [assignment/README.md](assignment/README.md) for the complete C1–C6 guide, [assignment/REPORT.md](assignment/REPORT.md) for the design and analysis, and [assignment/SUBMISSION.md](assignment/SUBMISSION.md) for publication status and the remaining submission steps.
 
@@ -63,11 +63,11 @@ To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated co
 | `assignment/prepare_submission.py` | Export a standalone review folder/ZIP without Git publication |
 | `LAB-ANSWERS.md`, `RESULTS.md` | Practical answers and original practical observations |
 | `run_practical.py` | Practical replay with preserved original host tools |
-| `START-HERE.md`, `PREPARATION.md` | Practical walkthrough and course checklist |
-| `SOURCE.md`, `TEMPLATE-README.md` | Provenance and original template notes |
+| `START-HERE.md` | Practical walkthrough; assignment guidance is in `assignment/README.md` |
+| `SOURCE.md` | Starter provenance and verification history |
 
 ## Repository layout
 
-Everything remains inside `week05/`. GitHub does not discover its nested `.github/workflows/` or `.devcontainer/` as root configuration of the parent coursework repository. The standalone export puts these at the root of a review folder intended for your separate P4 template repository. It contains the compilation workflow, not the template's optional image-publishing workflow.
+Everything remains inside `week05/`. GitHub does not discover its nested `.github/workflows/` or `.devcontainer/` as root configuration of the parent coursework repository. The standalone export puts these at the root of a review folder intended for your separate P4 template repository. Only the needed compilation workflow is retained; the template's optional image-publishing workflow has been removed.
 
-The current Git remote is the combined coursework repository. A separate P4 repository and its assignment PR remain to be created after review and permission to commit. Local P4 compilation passed, but no GitHub Actions result is claimed.
+The current Git remote is the combined coursework repository. A separate P4 repository and its assignment PR remain to be configured for the course submission. Local P4 compilation passed, but no GitHub Actions result is claimed. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained. Generate a fresh standalone export with `python -I assignment/prepare_submission.py` when needed.

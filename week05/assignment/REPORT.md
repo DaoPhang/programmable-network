@@ -2,7 +2,7 @@
 
 Student ID (last 4 digits only): **6042**
 
-Status: C1–C5 are complete and experimentally verified locally. C6 publication and Spectrum submission are pending. The C2–C5 changes remain uncommitted at the student's request. The experiments use the official course image on local Docker; no Codespace was needed.
+Status: C1–C5 are complete and experimentally verified. The source, report and evidence were published in the combined coursework repository as commit `e2e5040` (`Week05`). C6 still requires the separate P4 assignment PR, a green GitHub compilation check, lecturer access and Spectrum submission. Experiments used the official course image on local Docker rather than Codespaces.
 
 ## 1. Analysis: the loop
 
@@ -62,7 +62,7 @@ Thus this implementation's decrement alone is insufficient to stop an IPv4 forwa
 - [s1 log](evidence/loop-before-raw/logs/s1.txt) and [s2 log](evidence/loop-before-raw/logs/s2.txt): raw switch records.
 - [Assignment README](README.md): complete C1–C6 overview, evidence and reproduction instructions.
 
-The first attempt stopped before sending a packet because the runner expected `hdr.myTunnel.dst_id`, while the runtime CLI displays `myTunnel.dst_id`. The parser was corrected to accept either spelling. That failed attempt is preserved in `evidence/loop-before-attempt01-parser/`; the counts above come exclusively from the successful fresh run.
+The first attempt stopped before sending a packet because the runner expected `hdr.myTunnel.dst_id`, while the runtime CLI displays `myTunnel.dst_id`. The parser was corrected to accept either spelling. The failed attempt was removed from the current folder during cleanup and remains available in Git history; the counts above come exclusively from the retained successful fresh run.
 
 ## 2. Design: the hop limit
 

@@ -36,14 +36,8 @@ The normal tunnel receivers reported hops 6; ordinary IPv4 worked; the upgraded 
 
 All tested source/config/stage files and original evidence retained their initial hashes. Only REPORT.md and PR-DESCRIPTION.md changed concurrently for the two documentation corrections. The test container was removed and no live Mininet jobs remained. Teardown interface-down and container resource-limit warnings did not prevent the tests passing.
 
-Full fresh logs and the worker's detailed report are retained locally under:
-
-```text
-week05/build/live-review-20261105-151302-57514e67/
-```
-
-That ignored review directory is not required for submission; the required original evidence remains in assignment/evidence/ and agrees with the independent rerun.
+The full rerun used a disposable isolated workspace under `week05/build/`. That workspace was removed during cleanup after its results were recorded here. Required original evidence remains in assignment/evidence/ and agrees with the independent rerun.
 
 ## Publication state
 
-No changes were staged, committed or pushed during these reviews. HEAD remains the earlier C1 commit `8567723`. The student will handle publication. Use a separate P4 template repository with files/configuration at its root, confirm the GitHub compilation check, provide lecturer access, and submit the unmerged PR URL on Spectrum. See [SUBMISSION.md](SUBMISSION.md).
+No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [SUBMISSION.md](SUBMISSION.md).

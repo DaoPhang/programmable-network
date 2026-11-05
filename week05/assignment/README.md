@@ -9,7 +9,7 @@ Working branch: **`hop-limit`**
 
 This assignment adds a hop limit to the practical's P4 tunnel program, demonstrates that it stops a forwarding loop, and evaluates deployment with an older switch program. The topology is h1 → s1 → s2, with h2 and h3 connected to s2. Host addresses are `10.42.0.1`, `10.42.0.2` and `10.42.0.3`.
 
-**C1–C5 are complete locally.** The updated program compiled in the official course image, and all **26 C4/C5 assertions passed**. C6 materials are prepared, but publication and submission remain pending. The latest implementation, report and evidence changes are uncommitted and unstaged as requested.
+**C1–C5 are complete.** The updated program compiled in the official course image, and all **26 C4/C5 assertions passed**. The user published the implementation, report and evidence in the combined coursework repository as commit `e2e5040`. C6 still requires a PR in the separate P4 submission repository, a green compilation check, lecturer access and Spectrum submission.
 
 ## C1 — Demonstrate the original loop
 
@@ -69,9 +69,9 @@ REPORT.md compares two rollout approaches, the required Week 3 `check_paths()` b
 
 The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the proposed PR title/body. [prepare_submission.py](prepare_submission.py) exports a standalone review folder/ZIP, including root compilation and dev-container configuration.
 
-The remaining steps are to review and authorise commits, establish the separate P4 template repository and baseline, push its assignment branch, open a PR into its own `main`, confirm **Compile tunnel.p4** is green, provide lecturer access, and submit the real PR URL on Spectrum. **Leave the PR unmerged.** Deadline: **13 November 2026, before the Week 6 class**.
+The remaining steps are to establish the separate P4 template repository and baseline, transfer the assignment onto its assignment branch, open a PR into its own `main` titled **Tunnel hop limit**, confirm **Compile tunnel.p4** is green, provide lecturer access, and submit the real PR URL on Spectrum. **Leave the PR unmerged.** Deadline: **13 November 2026, before the Week 6 class**.
 
-No new commits, push, separate repository, PR, GitHub Actions result or Spectrum submission is claimed. See [SUBMISSION.md](SUBMISSION.md) for details.
+Publishing the combined coursework repository does not complete those course-specific PR and submission steps. See [SUBMISSION.md](SUBMISSION.md) for details.
 
 ## Evidence and reproduction
 
@@ -94,4 +94,4 @@ For C1 replay, use `python3 assignment/run_loop_before.py` instead. It selects t
 
 Both runners refuse to overwrite existing evidence. Preserve prior transcripts and raw directories under separate backup names before repeating. Each run uses fresh workspaces and a dedicated container, and runs Mininet cleanup. Transcript `mininet>` lines show equivalent commands executed automatically through the topology's CLI callback.
 
-Initial failed attempts are retained separately: the practical exposed Windows shell line endings, and C1's first runner expected a different displayed field name in the runtime CLI. Both were corrected before the successful runs. Temporary experiment containers were removed after execution.
+Initial failed attempts exposed Windows shell line endings and a runtime-CLI field-name mismatch. Both were corrected before the successful runs. Their failed-run logs were removed from the current folder during cleanup and remain recoverable from Git history. Successful evidence is retained. Temporary containers and disposable build/review copies have been removed.

@@ -1,38 +1,38 @@
-# Submission preparation and remaining publication steps
+# Submission status and remaining steps
 
-## Completed locally
+## Current GitHub state
 
-- C1 baseline preservation and loop-before evidence are already committed from the earlier session.
-- C2 design, C3 implementation, C4 protected delivery/loop tests and C5 mixed-version analysis are complete in [REPORT.md](REPORT.md).
-- All four required evidence files exist: [loop-before.txt](evidence/loop-before.txt), [delivery.txt](evidence/delivery.txt), [loop-after.txt](evidence/loop-after.txt), [mixed.txt](evidence/mixed.txt).
-- The updated P4 program compiled in the official image. All 26 C4/C5 assertions passed.
-- The report includes the AI-use declaration and distinguishes actual tests from proposals and code-based conclusions.
-- [PR-DESCRIPTION.md](PR-DESCRIPTION.md) supplies the required title **Tunnel hop limit** and prepared PR body.
-- [REVIEW.md](REVIEW.md) summarises the three independent reviews and fresh live rerun: 59 checks passed, none failed.
-- `prepare_submission.py` creates a standalone review folder and ZIP under `../build/`, with a SHA-256 manifest. Root `.github/workflows/compile.yml` and `.devcontainer/` are included for a separate repository.
+The source, report and experiment evidence were committed by the user as **`e2e5040` — `Week05`** and pushed to `DaoPhang/programmable-network` on `main`. The coursework files are inside `week05/`.
 
-## Why C6 publication is pending
+C1–C5 are complete and tested. The separate course submission repository/PR, green GitHub compilation check, lecturer access and Spectrum submission remain outstanding. Pushing the combined coursework folder alone does not complete these requirements.
 
-The latest instruction is **do not commit anything first**. GitHub pushes and PRs show committed snapshots; they cannot include these uncommitted implementation/report changes. No new commit, staging, push, repository creation or PR was performed during C2–C5 work. Existing branch `hop-limit` still points at the earlier C1 commit `8567723`.
+## Ready files
 
-The current `origin` is `DaoPhang/programmable-network`, the combined coursework repository. The course expects a PR inside your own P4 template repository, where the P4 files and workflow live at the root. That separate repository has not been created. A green local compilation is not a green GitHub Actions check, and no PR URL or Spectrum submission exists yet.
+- [README.md](README.md): complete C1–C6 guide.
+- [REPORT.md](REPORT.md): design, implementation, observations, evaluation and AI-use declaration.
+- Required evidence: [loop-before.txt](evidence/loop-before.txt), [delivery.txt](evidence/delivery.txt), [loop-after.txt](evidence/loop-after.txt), [mixed.txt](evidence/mixed.txt).
+- [REVIEW.md](REVIEW.md): independent reviews and fresh live rerun, with 59 checks passed and none failed.
+- [PR-DESCRIPTION.md](PR-DESCRIPTION.md): exact required title **Tunnel hop limit** and prepared body.
+- [prepare_submission.py](prepare_submission.py): create a standalone review export with root compilation/dev-container configuration and a SHA-256 manifest when needed.
 
-## Final steps for your own GitHub publication
+Successful raw logs, assertion JSONs, test runners and the original `tunnel_v1.p4` remain available. Generated build/review copies, duplicate guides, failed-attempt logs and the unused image-publishing workflow were removed during cleanup. Earlier tracked files remain recoverable from Git history.
 
-1. Create your own repository from https://github.com/firdaussahran/p4-lab, keeping it private until deciding lecturer access if desired.
-2. Establish the completed four-byte practical baseline on its `main`, including preserved `tunnel_v1.p4`. Carry over the meaningful earlier baseline/C1 history where practical so the assignment PR shows the hop-limit change against the finished lab. Do not place the completed assignment directly onto its `main`.
-3. Create `hop-limit` from that baseline and commit the reviewed updated source, report and evidence. Keep the original baseline intact.
-4. Push `hop-limit` and open the prepared PR **within your own repository**, targeting its `main`. Use the exact required title **Tunnel hop limit** and the body in PR-DESCRIPTION.md.
-5. Confirm **Compile tunnel.p4** is green. If it fails, inspect the workflow output and correct the problem before submission.
-6. Make the repository public or grant the lecturer collaborator access. The lecturer's GitHub login has not been supplied here.
-7. Submit the real PR URL through your authenticated Spectrum course assignment page. An authenticated Spectrum session/submission destination is not available to this CLI session.
-8. **Leave the PR unmerged**. Deadline: **Friday 13 November 2026, before the Week 6 class**.
+## Finish the course submission
 
-No Codespace was created, so there is no Codespace to delete. Temporary local test containers were removed.
+1. Create your own repository from https://github.com/firdaussahran/p4-lab. Files such as `tunnel.p4`, `topo.py`, `.github/` and `.devcontainer/` must be at that repository's root, rather than nested inside `week05/`.
+2. Establish the completed four-byte practical baseline on its `main`, including `tunnel_v1.p4`. Carry over the earlier baseline/C1 history where practical. Do not put the finished assignment directly onto the submission repository's `main`.
+3. Create `hop-limit` from that baseline and commit/transfer the reviewed updated source, report and evidence. Keep the preserved baseline unchanged.
+4. Push `hop-limit` and open a PR inside that repository, targeting its own `main`. Use title **Tunnel hop limit** and the body in PR-DESCRIPTION.md.
+5. Confirm **Compile tunnel.p4** is green. Local compilation passed, but no GitHub Actions result is claimed here. If it fails, inspect the workflow output and fix the problem before submission.
+6. Make the submission repository public or grant the lecturer collaborator access.
+7. Submit the actual PR URL on your authenticated Spectrum course assignment page.
+8. **Leave the PR unmerged.** Deadline: **Friday 13 November 2026, before the Week 6 class**.
 
-## Reproduce tests locally
+No Codespace was created, so none needs deleting. The experiments used the official course Docker image locally, and temporary test containers were removed.
 
-In PowerShell, starting at the coursework repository root:
+## Reproduce tests
+
+From PowerShell at the coursework repository root:
 
 ```powershell
 Set-Location .\week05
@@ -40,14 +40,14 @@ $week05Path = (Get-Location).Path
 docker run --rm --privileged --mount "type=bind,source=$week05Path,target=/lab" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 python3 assignment/run_assignment.py
 ```
 
-The test runner refuses to overwrite `delivery.txt`, `loop-after.txt`, `mixed.txt` or their raw directories. Preserve existing results under separately named backups before a repeat. It uses a fresh topology workspace for each scenario and cleans up Mininet after each.
+The runner refuses to overwrite existing delivery, loop-after and mixed transcripts/raw directories. Preserve existing evidence under separately named backups before repeating. Each scenario uses a fresh workspace and Mininet cleanup.
 
-## Produce a fresh review export
+## Generate a standalone export
 
-From `week05` on Windows:
+From `week05`:
 
 ```powershell
 python -I assignment/prepare_submission.py
 ```
 
-The generated folder is a local review artifact without Git metadata, and is not a replacement for the baseline/assignment branch history. The ZIP includes the report, sources, preserved baseline, evidence and a checksum manifest. Review the exported README for standalone operation.
+This generates a fresh folder/ZIP under ignored `build/`. Previous generated copies were removed to keep the workspace small. The export contains the required files at the correct repository root, but does not contain Git metadata or replace the required baseline/assignment branch history.

@@ -228,8 +228,8 @@ The runner stops on a failed check and refuses to overwrite existing evidence. R
 
 - The first run encountered `p4cli: 5: Syntax error: word unexpected (expecting "in")`. Git had checked out that shell script with CRLF endings. The helper was normalised to LF, and `.gitattributes` now keeps Linux shell/P4/Python files in LF format.
 - Mininet can print `Error setting resource limits. Mininet's performance may be affected.` inside Docker. The runner records that warning and checks actual packet delivery; it does not treat that warning alone as a runtime table error.
-- The initial failed experiment is preserved separately in `evidence/practical-attempt01-crlf/`.
+- The initial failed experiment's logs were removed during cleanup; they remain available in Git history. The successful practical evidence is retained.
 
 ## What remains after this practical
 
-The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The assessed hop-limit assignment remains; see PREPARATION.md and the official course page. `assignment/REPORT.md` remains the upstream assignment skeleton, not a completed submission.
+The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The hop-limit assignment C1–C5 are complete; see [assignment/README.md](assignment/README.md) and [assignment/REPORT.md](assignment/REPORT.md). The report is complete, while the course-specific PR and Spectrum submission steps remain in [assignment/SUBMISSION.md](assignment/SUBMISSION.md).

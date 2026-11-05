@@ -28,11 +28,11 @@ At Step 6, s1 consumes the real tunnel header during parsing but fails to reinse
 
 - [Successful automated summary](evidence/practical/summary.json): all checks are true.
 - Each stage directory contains the commands, full session, raw switch/receiver logs and Mininet cleanup output.
-- The first attempt failed because the Windows checkout gave `p4cli` CRLF endings. Its [transcript](evidence/practical-attempt01-crlf/step03-starter/session.txt) and [failed-check summary](evidence/practical-attempt01-crlf/summary.json) are preserved. After normalising the helper to LF and adding `.gitattributes`, the full rerun passed.
+- The first attempt failed because the Windows checkout gave `p4cli` CRLF endings. After normalising the helper to LF and adding `.gitattributes`, the full rerun passed. The failed-attempt transcript/summary was removed during cleanup and remains available in Git history; all successful evidence is retained.
 - Mininet printed a container resource-limit warning. It did not prevent the recorded packet tests from passing.
 - Some receiver logs contain a Scapy `Network is down` warning during teardown, after the topology's interfaces are removed. The saved delivery lines precede teardown.
-- The temporary containers were removed after execution. Build intermediates remain in ignored `build/`; evidence logs are retained for Git tracking.
+- The temporary containers were removed after execution. Disposable build intermediates and repeated review/export copies were removed during cleanup; successful evidence logs remain in the repository.
 
 ## Scope still remaining
 
-The practical code and experiments are complete locally. The four wrap-up questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md), included with the practical baseline and evidence in the earlier local commit. Assignment C1–C5 are now complete too; see [assignment/REPORT.md](assignment/REPORT.md). The latest implementation/report changes remain uncommitted as requested. Separate repository setup, publication, a green GitHub compilation check and Spectrum submission remain; see [assignment/SUBMISSION.md](assignment/SUBMISSION.md).
+The practical code and experiments are complete locally. The four wrap-up questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md), included with the practical baseline and evidence in the earlier local commit. Assignment C1–C5 are now complete too; see [assignment/REPORT.md](assignment/REPORT.md). The user published the implementation/report in the combined coursework repository as commit `e2e5040`. Separate P4 repository/PR setup, a green GitHub compilation check and Spectrum submission remain; see [assignment/SUBMISSION.md](assignment/SUBMISSION.md).
