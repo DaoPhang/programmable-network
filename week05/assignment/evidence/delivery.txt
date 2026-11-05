@@ -1,0 +1,318 @@
+*** Compiling tunnel.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2 
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.42.0.1, h2 10.42.0.2, h3 10.42.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+mininet> h1 python3 send.py 10.42.0.2 "delivery h2 default" --tunnel 2
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 2
+     hops      = 8
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 47
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6667
+        src       = 10.42.0.1
+        dst       = 10.42.0.2
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 27
+           chksum    = 0x936
+###[ Raw ]### 
+              load      = 'delivery h2 default'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "delivery h3 eight" --tunnel 3 --hops 8
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 8
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 45
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6668
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 25
+           chksum    = 0x7b9a
+###[ Raw ]### 
+              load      = 'delivery h3 eight'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "boundary 0" --tunnel 3 --hops 0
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 0
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 38
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666f
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 18
+           chksum    = 0xfac7
+###[ Raw ]### 
+              load      = 'boundary 0'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "boundary 1" --tunnel 3 --hops 1
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 1
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 38
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666f
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 18
+           chksum    = 0xfac6
+###[ Raw ]### 
+              load      = 'boundary 1'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "boundary 2" --tunnel 3 --hops 2
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 2
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 38
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666f
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 18
+           chksum    = 0xfac5
+###[ Raw ]### 
+              load      = 'boundary 2'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "boundary 3" --tunnel 3 --hops 3
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 3
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 38
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666f
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 18
+           chksum    = 0xfac4
+###[ Raw ]### 
+              load      = 'boundary 3'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "boundary 255" --tunnel 3 --hops 255
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 255
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 40
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666d
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 20
+           chksum    = 0xc58c
+###[ Raw ]### 
+              load      = 'boundary 255'
+
+Sent from h1-eth0.
+mininet> h1 python3 send.py 10.42.0.3 "plain IPv4 delivery"
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = IPv4
+###[ IP ]### 
+     version   = 4
+     ihl       = 5
+     tos       = 0x0
+     len       = 47
+     id        = 1
+     flags     = 
+     frag      = 0
+     ttl       = 64
+     proto     = udp
+     chksum    = 0x6666
+     src       = 10.42.0.1
+     dst       = 10.42.0.3
+     \options   \
+###[ UDP ]### 
+        sport     = 4321
+        dport     = 4321
+        len       = 27
+        chksum    = 0xfc69
+###[ Raw ]### 
+           load      = 'plain IPv4 delivery'
+
+Sent from h1-eth0.
+mininet> h1 ping -c 2 10.42.0.3
+PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=50.9 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=47.4 ms
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 47.445/49.166/50.887/1.721 ms
+mininet> sh cat logs/h2.txt
+Listening on h2-eth0...
+Received (tunnelled, dst_id=2, hops=6) from 10.42.0.1 to 10.42.0.2, TTL 64: 'delivery h2 default'
+
+mininet> sh cat logs/h3.txt
+Listening on h3-eth0...
+Received (tunnelled, dst_id=3, hops=6) from 10.42.0.1 to 10.42.0.3, TTL 64: 'delivery h3 eight'
+Received (tunnelled, dst_id=3, hops=1) from 10.42.0.1 to 10.42.0.3, TTL 64: 'boundary 3'
+Received (tunnelled, dst_id=3, hops=253) from 10.42.0.1 to 10.42.0.3, TTL 64: 'boundary 255'
+Received (plain IPv4) from 10.42.0.1 to 10.42.0.3, TTL 62: 'plain IPv4 delivery'
+
+mininet> h1 python3 send.py 10.42.0.3 invalid --tunnel 3 --hops -1; printf "EXIT=%s\n" "$?"
+usage: send.py [-h] [--tunnel N] [--hops N] ip message
+send.py: error: --hops must be between 0 and 255
+EXIT=2
+mininet> h1 python3 send.py 10.42.0.3 invalid --tunnel 3 --hops 256; printf "EXIT=%s\n" "$?"
+usage: send.py [-h] [--tunnel N] [--hops N] ip message
+send.py: error: --hops must be between 0 and 255
+EXIT=2
+mininet> h1 python3 send.py 10.42.0.3 invalid --hops 8; printf "EXIT=%s\n" "$?"
+usage: send.py [-h] [--tunnel N] [--hops N] ip message
+send.py: error: --hops requires --tunnel
+EXIT=2
+=== Assertions ===
+{
+  "h2_default_arrives_with_6": true,
+  "h3_eight_arrives_with_6": true,
+  "exhausted_values_not_delivered": true,
+  "three_arrives_with_1": true,
+  "max_arrives_with_253": true,
+  "plain_udp_works": true,
+  "plain_ping_works": true,
+  "reject_--tunnel 3 --hops -1": true,
+  "reject_--tunnel 3 --hops 256": true,
+  "reject_--hops 8": true
+}
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done

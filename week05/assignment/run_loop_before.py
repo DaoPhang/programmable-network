@@ -109,12 +109,13 @@ def main():
     raw = EVIDENCE / "loop-before-raw"
     if transcript.exists() or raw.exists():
         sys.exit("C1 evidence already exists; preserve it before repeating.")
-    if (ROOT / "tunnel.p4").read_bytes() != (ROOT / "tunnel_v1.p4").read_bytes():
-        sys.exit("This before-protection experiment requires the unchanged practical baseline.")
+    if (ROOT / "tunnel_v1.p4").read_bytes() != (ROOT / "stages/step05-tunnel-forwarding.p4").read_bytes():
+        sys.exit("The preserved practical baseline has changed.")
     (ROOT / "build").mkdir(exist_ok=True)
     work = Path(tempfile.mkdtemp(prefix="loop-before-", dir=ROOT / "build"))
     for filename in ("topo.py", "send.py", "receive.py", "p4cli", "s1-commands.txt", "s2-commands.txt"):
-        shutil.copy2(ROOT / filename, work / filename)
+        source = ROOT / "stages" / filename.replace(".py", "_v1.py") if filename in ("send.py", "receive.py") else ROOT / filename
+        shutil.copy2(source, work / filename)
     shutil.copy2(ROOT / "tunnel_v1.p4", work / "tunnel.p4")
     raw.mkdir()
     print(f"Running C1 in fresh directory {work}", flush=True)

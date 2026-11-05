@@ -109,50 +109,38 @@ Use the exact `p4cli` and `send.py` command syntax and payloads on the official 
 - [x] Stop the topology after the experiment, ending the loop.
 - [x] Inspect `ipv4_forward` and explain in `assignment/REPORT.md` why decrementing IPv4 TTL without an expiration check is insufficient.
 
-See [assignment/C1-README.md](assignment/C1-README.md): s1 counts increased 18 → 192 and s2 counts 17 → 192 in the successful fresh run.
+See [assignment/README.md](assignment/README.md): s1 counts increased 18 → 192 and s2 counts 17 → 192 in the successful fresh run.
 
 ### C2 — Specify your design
 
-- [ ] Define the hop field's bit width and position in the tunnel header.
-- [ ] Choose and justify its initial value, decrement location, and exact exhaustion/drop rule.
-- [ ] State clearly how many switch visits a given starting value permits.
-- [ ] Write your design in **`assignment/REPORT.md`**.
+- [x] Record field width/position, initial value, decrement/drop rules and visit semantics in **`assignment/REPORT.md`** before implementation.
+- [x] Choose an appended 8-bit field, default 8, drop incoming 0/1 and otherwise decrement before lookup.
 
 ### C3 — Implement the design
 
-- [ ] Update **`tunnel.p4`**: header format, hop processing and discard behaviour.
-- [ ] Update **`send.py`**: matching packet layout and configurable starting limit, for example `--hops`.
-- [ ] Update **`receive.py`**: matching layout and display of the remaining limit.
-- [ ] Compile and test through `python3 topo.py --id 6042` while developing.
+- [x] Update **`tunnel.p4`**, **`send.py`** and **`receive.py`** consistently; provide `--hops` and display the remaining limit.
+- [x] Compile and test in the official course image. Preserve `tunnel_v1.p4` and original host tools.
 
 ### C4 — Verify delivery and loop termination
 
-- [ ] Send tunnel packets to h2 (destination identifier **2**) and h3 (**3**).
-- [ ] Save receiver output including remaining hop values, plus `h1 ping -c 2 10.42.0.3`, to **`assignment/evidence/delivery.txt`**.
-- [ ] Start a fresh network and repeat the C1 loop with the updated program.
-- [ ] Save proof that the loop terminates to **`assignment/evidence/loop-after.txt`**.
-- [ ] Count switch visits before discard and compare with your specified semantics.
+- [x] Verify delivery to h2/h3 with remaining hops and ordinary IPv4; save **`assignment/evidence/delivery.txt`**.
+- [x] Repeat the loop in a fresh network and save **`assignment/evidence/loop-after.txt`**.
+- [x] Verify default 8 gives eight total visits and stable counts, plus boundary cases 0/1/2/3.
 
 ### C5 — Test mixed versions and discuss deployment
 
-- [ ] Launch:
-
-```bash
-python3 topo.py --id 6042 --s2-program tunnel_v1.p4
-```
-
-- [ ] **Before sending**, write your prediction of how the old s2 program will interpret your new header.
-- [ ] Send tunnel traffic to h2 and repeat the loop experiment.
-- [ ] Inspect `logs/s2.txt`; use the course's h2 `tcpdump` procedure to inspect actual packet bytes.
-- [ ] Save observations in **`assignment/evidence/mixed.txt`**.
-- [ ] Compare at least **two safe approaches** to deploying the header change without upgrading all switches simultaneously.
-- [ ] Compare your data-plane hop protection with Week 3's control-plane `check_paths()`: explain faults each detects that the other cannot.
-- [ ] Discuss hardware costs and line-rate processing implications.
+- [x] Save **`assignment/MIXED-PREDICTION.md`** before implementation/testing.
+- [x] Run new s1 and old s2 using `--s2-program tunnel_v1.p4`; test delivery, capture bytes and repeat the loop.
+- [x] Save **`assignment/evidence/mixed.txt`**, raw logs and decoded measurements.
+- [x] Explain checksum/protocol corruption and the 15-visit mixed loop in REPORT.md.
+- [x] Compare two safe upgrade approaches, Week 3's required `check_paths()` and hardware costs.
 
 ### C6 — Submit
 
-- [ ] Finish `assignment/REPORT.md`, including design, observations, analysis and an **AI-use declaration** identifying tools and contributions. AI use is permitted at Level 3 (Open); you must understand and defend the work.
-- [ ] Check that all four evidence files contain real experimental outputs with your `10.42.0.x` addresses.
+- [x] Finish `assignment/REPORT.md`, including design, observations, analysis and an **AI-use declaration** identifying tools and contributions. AI use is permitted at Level 3 (Open); you must understand and defend the work.
+- [x] Check that all four evidence files contain real experimental outputs with your `10.42.0.x` addresses.
+- [x] Prepare PR title/body and a standalone review export; see [assignment/SUBMISSION.md](assignment/SUBMISSION.md).
+- [ ] Review and authorise commits before publication; the latest C2–C5 changes remain uncommitted as requested.
 - [ ] Push branch `hop-limit` and open a PR **inside your own P4 repository**, from `hop-limit` into `main`.
 - [ ] Confirm the **Compile tunnel.p4** check passes. The template supplies `.github/workflows/compile.yml`.
 - [ ] Make the repository public or give the lecturer collaborator access.
@@ -175,7 +163,7 @@ assignment/
     mixed.txt
 ```
 
-These are required submission paths, not files already completed in this local folder. Do not fabricate experiment outputs or mark expected behaviour as observed evidence.
+All listed source/report/evidence files are now present locally. C1–C5 are complete; publication, the GitHub compilation check and Spectrum submission remain pending. Experimental outputs are preserved as recorded.
 
 ## Mark allocation
 

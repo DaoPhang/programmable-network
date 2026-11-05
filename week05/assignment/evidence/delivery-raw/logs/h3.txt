@@ -1,0 +1,6 @@
+Listening on h3-eth0...
+Received (tunnelled, dst_id=3, hops=6) from 10.42.0.1 to 10.42.0.3, TTL 64: 'delivery h3 eight'
+Received (tunnelled, dst_id=3, hops=1) from 10.42.0.1 to 10.42.0.3, TTL 64: 'boundary 3'
+Received (tunnelled, dst_id=3, hops=253) from 10.42.0.1 to 10.42.0.3, TTL 64: 'boundary 255'
+Received (plain IPv4) from 10.42.0.1 to 10.42.0.3, TTL 62: 'plain IPv4 delivery'
+WARNING: Socket <scapy.arch.linux.L2ListenSocket object at 0x728d9dc90b90> failed with '[Errno 100] Network is down'. It was closed.

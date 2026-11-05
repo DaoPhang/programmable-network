@@ -2,6 +2,8 @@
 
 These instructions use your student suffix **6042** and **10.42.0.x** addresses. All four stages have now been run successfully in the official course Docker image. Below, **expected** describes what to look for when repeating the exercise; RESULTS.md records the actual observations and links to the saved evidence.
 
+The active `tunnel.p4`, `send.py` and `receive.py` now contain the later hop-limit assignment. To replay this original practical safely, use `run_practical.py`, which selects the preserved original packet tools and runs in separate directories. The manual stage-copy commands below are for a separate practical workspace: use `stages/send_v1.py` as its `send.py` and `stages/receive_v1.py` as its `receive.py`. Do not replace the assignment sources to replay the practical.
+
 ## 1. Choose the environment
 
 ### Course workflow: template repository and Codespaces

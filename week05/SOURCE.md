@@ -4,39 +4,40 @@
 
 - Repository: https://github.com/firdaussahran/p4-lab
 - Retrieved revision: `88245a03baf7dac20e20969d838b1e4e1dfecc09`
-- Retrieved branch: `main`
-- Course environment image: `ghcr.io/firdaussahran/p4-lab:1.0`
-- Upstream Git metadata was not copied into this coursework repository.
+- Course image: `ghcr.io/firdaussahran/p4-lab:1.0`
+- The topology, original host tools, CLI helper, table files, dev-container configuration, workflows and report skeleton came from that starter. TEMPLATE-README.md preserves its README. Upstream Git metadata was not copied.
 
-The topology, sender, receiver, runtime helper, table files, dev-container configuration, workflows and assignment skeleton came from the official starter. TEMPLATE-README.md preserves the upstream README. Stage `step03-starter.p4` preserves its original P4 source.
+## Practical and C1 history
 
-## Local additions and edits
+The practical added tunnel parsing, emission and tunnel-first ingress forwarding. Its 31 recorded checks passed in the official image; see RESULTS.md and evidence/practical/. LAB-ANSWERS.md answers its four questions. Windows shell line endings were corrected and the first failed attempt was retained.
 
-- `tunnel.p4`: implement tunnel parsing, deparser emission and tunnel-first ingress selection for the practical.
-- `stages/`: preserve the original and three later experimental versions.
-- `run_practical.py`: run staged experiments and record raw outputs without replacing the final program.
-- Documentation: README.md, START-HERE.md, PREPARATION.md, RESULTS.md and SOURCE.md.
-- `p4cli`: normalise CRLF to LF so Linux can execute the shell script. Its command logic is unchanged.
-- `.gitattributes`: preserve Linux line endings in code/helper files.
-- `.gitignore`: anchor build/log exclusions at the week05 root, allowing saved evidence logs to be tracked.
-- The parent repository README links to `week05/`.
+`tunnel_v1.p4` and `stages/step05-tunnel-forwarding.p4` preserve the same completed practical. Original host tools are retained in `stages/send_v1.py` and `stages/receive_v1.py` from the earlier committed files. Practical/C1 replay runners explicitly select those definitions.
 
-The final source matches `stages/step05-tunnel-forwarding.p4`. Only the deliberate Step 6 program omits tunnel emission. No hop-limit field or assessed-assignment implementation has been added.
+C1 demonstrated unbounded circulation, with counts 18→192 on s1 and 17→192 on s2. The baseline and C1 history exist as `b5fc667` and `8567723`. An initial runtime-CLI field-name parser mismatch was corrected and its failed attempt preserved.
 
-## Checks actually performed
+## Current assignment implementation
 
-- All four Python files parse successfully with Python's AST parser.
-- All four staged P4 programs compiled with the course P4 compiler.
-- Runtime experiments passed for ordinary IPv4, table deletion/restoration, the parser/deparser stage, tunnel-table forwarding and the deliberate deparser fault.
-- Raw transcripts and host/switch logs are saved in `evidence/practical/`; all checks in `summary.json` are true. See RESULTS.md for interpretation.
-- Final `tunnel.p4` is byte-for-byte equal to the successfully tested Step 5 version.
-- Local documentation link targets exist.
-- The staged source and documentation pass `git diff --check` with raw evidence excluded. Raw transcripts and switch logs retain their original trailing spaces.
+- `tunnel.p4` adds an 8-bit appended hop budget and drops incoming 0/1 before decrement/table lookup.
+- `send.py` and `receive.py` agree on the five-byte header; the sender configures/validates the initial budget and the receiver prints the remaining value.
+- `assignment/REPORT.md` records C2 design before implementation and finishes C1–C5 analysis and the AI-use declaration.
+- `assignment/MIXED-PREDICTION.md` preserves the prediction written before implementation and mixed traffic.
+- `assignment/run_assignment.py` records actual C4/C5 results in fresh workspaces without replacing evidence.
+- `assignment/PR-DESCRIPTION.md`, `SUBMISSION.md` and `prepare_submission.py` prepare the publication materials and standalone review export.
 
-## Execution and limitations
+## Verification actually completed
 
-The official course image ran on local Docker Desktop (Linux x86_64), using a privileged temporary container with only week05 mounted as a workspace. An initial automatic approval block was resolved when the user explicitly approved running the course image and downloaded scripts.
+- Updated and original P4 compile in the official course image.
+- **26 C4/C5 assertions passed:** 10 delivery/argument checks, 10 protected-loop checks, 6 mixed-version checks.
+- h2 and h3 received default-budget traffic with 6 remaining; ordinary IPv4 UDP/ping succeeded.
+- The upgraded default loop stopped after eight visits; boundary limits 0/1/2/3 matched the defined semantics and did not wrap.
+- Mixed s1 new/s2 old stopped after 15 visits. Captured bytes showed preserved hops 7, corrupted IPv4 protocol 13 and invalid checksum, matching the prior prediction.
+- All four required transcripts, structured results and raw logs are under assignment/evidence/.
+- Python syntax and local documentation links are checked separately. Raw experiment outputs retain their original whitespace.
 
-The first runtime attempt exposed CRLF shell-script endings and is preserved in `evidence/practical-attempt01-crlf/`. After correction, the entire practical sequence passed. The containers were removed after execution.
+These are functional BMv2 results; no ASIC timing/resource or throughput measurements are claimed. The Week 3 comparison refers to the required completed `check_paths()` described by the course, not a function present in this local week3 code.
 
-No external GitHub repository/Codespace was created. Nested `week05/.github/` and `week05/.devcontainer/` preserve the template but are not root-level configuration for the parent coursework repository. LAB-ANSWERS.md contains the four practical wrap-up answers, included with the completed program and evidence in the local practical commit. No pushes, pull requests or submissions were made.
+## Publication state
+
+C2–C5 changes remain uncommitted and unstaged at the user's request. No new commits, pushes, repository creation, PR, GitHub Actions run or Spectrum submission was made during this work. Existing C1 commits remain intact on `hop-limit`.
+
+The current remote is the combined coursework repository. Nested week05 configuration is not automatically active at that repository's root. The standalone local export supplies root compilation/dev-container configuration for a separate P4 repository and excludes the optional image-publishing workflow. See assignment/SUBMISSION.md for the remaining C6 steps.
