@@ -6,6 +6,7 @@ WIC2005 coursework for student ID suffix **6042**, organised by lab.
 |---|---|
 | [lab-02/](lab-02/) | Three switches, six dual-stack hosts; topology, validation, webpage generator, evidence and guides |
 | [week3/](week3/) | Three routers, three hosts; routing experiment and write-up |
+| [week05/](week05/) | P4 tunnel practical, staged programs, walkthrough and assignment checklist |
 | [docs/](docs/) | Generated Lab 2 GitHub Pages website |
 | archive/ | Historical Week 1 and Week 2 logs and earlier duplicate-address example |
 | start-lab-wsl.sh | Optional shared WSL container launcher |

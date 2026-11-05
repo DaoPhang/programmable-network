@@ -1,0 +1,41 @@
+{
+  "step03-starter": {
+    "ipv4_initial_pings": true,
+    "deleted_entry_blocks_h3": true,
+    "restored_entry_delivers_h3": true,
+    "starter_tunnel_not_received": true,
+    "ttl_62": true,
+    "process_exited_successfully": true,
+    "both_switch_logs_saved": true,
+    "both_receivers_started": true,
+    "no_runtime_cli_errors": true
+  },
+  "step04-parser-deparser": {
+    "ipv4_destination_h3_receives": true,
+    "tunnel_header_retained": true,
+    "h2_does_not_receive": true,
+    "process_exited_successfully": true,
+    "both_switch_logs_saved": true,
+    "both_receivers_started": true,
+    "no_runtime_cli_errors": true
+  },
+  "step05-tunnel-forwarding": {
+    "tunnel_destination_h2_receives": true,
+    "h3_does_not_receive_tunnel": true,
+    "ipv4_still_works": true,
+    "six_entries_each_switch": true,
+    "process_exited_successfully": true,
+    "both_switch_logs_saved": true,
+    "both_receivers_started": true,
+    "no_runtime_cli_errors": true
+  },
+  "step06-broken-deparser": {
+    "broken_packet_not_received": true,
+    "s2_misreads_ipv4_proto": true,
+    "s2_misreads_length_as_destination": true,
+    "process_exited_successfully": true,
+    "both_switch_logs_saved": true,
+    "both_receivers_started": true,
+    "no_runtime_cli_errors": true
+  }
+}

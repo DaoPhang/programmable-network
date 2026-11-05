@@ -1,0 +1,123 @@
+*** Compiling tunnel.p4
+tunnel.p4(11): [--Wwarn=unused] warning: 'TYPE_MYTUNNEL' is unused
+const bit<16> TYPE_MYTUNNEL = 0x1212;
+              ^^^^^^^^^^^^^
+tunnel.p4(109): [--Wwarn=unused] warning: table 'myTunnel_exact' is unused
+    table myTunnel_exact {
+          ^^^^^^^^^^^^^^
+tunnel.p4(109): [--Winfo=removed] info: removing table 'myTunnel_exact'
+    table myTunnel_exact {
+          ^^^^^^^^^^^^^^
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2 
+*** s1: MyIngress.myTunnel_exact isn't used by the program (yet), so its entries were skipped
+*** s1: 3 table entries added
+*** s2: MyIngress.myTunnel_exact isn't used by the program (yet), so its entries were skipped
+*** s2: 3 table entries added
+*** Your hosts: h1 10.42.0.1, h2 10.42.0.2, h3 10.42.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> mininet> PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=62 time=62.6 ms
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=62 time=49.8 ms
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=62 time=56.2 ms
+
+--- 10.42.0.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 49.771/56.198/62.581/5.229 ms
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=52.0 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=64.7 ms
+64 bytes from 10.42.0.3: icmp_seq=3 ttl=62 time=45.5 ms
+
+--- 10.42.0.3 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 45.522/54.063/64.663/7.948 ms
+mininet> Done
+==========
+TABLE ENTRIES
+**********
+Dumping entry 0x0
+Match key:
+* ipv4.dstAddr        : LPM       0a2a0001/32
+Action entry: MyIngress.ipv4_forward - 01
+**********
+Dumping entry 0x1
+Match key:
+* ipv4.dstAddr        : LPM       0a2a0002/32
+Action entry: MyIngress.ipv4_forward - 02
+**********
+Dumping entry 0x2
+Match key:
+* ipv4.dstAddr        : LPM       0a2a0003/32
+Action entry: MyIngress.ipv4_forward - 03
+==========
+Dumping default entry
+Action entry: MyIngress.drop - 
+==========
+mininet> Done
+Deleting entry 2 from MyIngress.ipv4_lpm
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1031ms
+
+mininet> Done
+Adding entry to lpm match table MyIngress.ipv4_lpm
+match key:           LPM-0a:2a:00:03/32
+action:              MyIngress.ipv4_forward
+runtime data:        00:03
+Entry has been added with handle 16777218
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=49.1 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=46.0 ms
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 46.029/47.563/49.097/1.534 ms
+mininet> ###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 2
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 34
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6673
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 14
+           chksum    = 0xc1ad
+###[ Raw ]### 
+              load      = 'test 1'
+
+Sent from h1-eth0.
+mininet> mininet> Listening on h2-eth0...
+Listening on h3-eth0...
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done

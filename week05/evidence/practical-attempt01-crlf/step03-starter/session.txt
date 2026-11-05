@@ -1,0 +1,98 @@
+*** Compiling tunnel.p4
+tunnel.p4(11): [--Wwarn=unused] warning: 'TYPE_MYTUNNEL' is unused
+const bit<16> TYPE_MYTUNNEL = 0x1212;
+              ^^^^^^^^^^^^^
+tunnel.p4(109): [--Wwarn=unused] warning: table 'myTunnel_exact' is unused
+    table myTunnel_exact {
+          ^^^^^^^^^^^^^^
+tunnel.p4(109): [--Winfo=removed] info: removing table 'myTunnel_exact'
+    table myTunnel_exact {
+          ^^^^^^^^^^^^^^
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2 
+*** s1: MyIngress.myTunnel_exact isn't used by the program (yet), so its entries were skipped
+*** s1: 3 table entries added
+*** s2: MyIngress.myTunnel_exact isn't used by the program (yet), so its entries were skipped
+*** s2: 3 table entries added
+*** Your hosts: h1 10.42.0.1, h2 10.42.0.2, h3 10.42.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> mininet> PING 10.42.0.2 (10.42.0.2) 56(84) bytes of data.
+64 bytes from 10.42.0.2: icmp_seq=1 ttl=62 time=69.1 ms
+64 bytes from 10.42.0.2: icmp_seq=2 ttl=62 time=57.2 ms
+64 bytes from 10.42.0.2: icmp_seq=3 ttl=62 time=67.9 ms
+
+--- 10.42.0.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 57.152/64.711/69.081/5.367 ms
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=63.6 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=62.3 ms
+64 bytes from 10.42.0.3: icmp_seq=3 ttl=62 time=53.3 ms
+
+--- 10.42.0.3 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 53.339/59.747/63.610/4.562 ms
+mininet> ./p4cli: 5: Syntax error: word unexpected (expecting "in")
+mininet> ./p4cli: 5: Syntax error: word unexpected (expecting "in")
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=55.9 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=55.1 ms
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 55.107/55.510/55.913/0.403 ms
+mininet> ./p4cli: 5: Syntax error: word unexpected (expecting "in")
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=54.3 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=54.1 ms
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 54.128/54.197/54.267/0.069 ms
+mininet> ###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 2
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 34
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6673
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 14
+           chksum    = 0xc1ad
+###[ Raw ]### 
+              load      = 'test 1'
+
+Sent from h1-eth0.
+mininet> mininet> Listening on h2-eth0...
+Listening on h3-eth0...
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done

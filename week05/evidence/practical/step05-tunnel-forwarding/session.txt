@@ -1,0 +1,62 @@
+*** Compiling tunnel.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2 
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.42.0.1, h2 10.42.0.2, h3 10.42.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> mininet> ###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 2
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 34
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6673
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 14
+           chksum    = 0xc1ab
+###[ Raw ]### 
+              load      = 'test 3'
+
+Sent from h1-eth0.
+mininet> mininet> Listening on h2-eth0...
+Received (tunnelled, dst_id=2) from 10.42.0.1 to 10.42.0.3, TTL 64: 'test 3'
+Listening on h3-eth0...
+mininet> PING 10.42.0.3 (10.42.0.3) 56(84) bytes of data.
+64 bytes from 10.42.0.3: icmp_seq=1 ttl=62 time=58.1 ms
+64 bytes from 10.42.0.3: icmp_seq=2 ttl=62 time=85.0 ms
+
+--- 10.42.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 58.094/71.570/85.047/13.476 ms
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done

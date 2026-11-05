@@ -1,0 +1,6 @@
+sh sleep 2
+h1 python3 send.py 10.42.0.3 "test 3" --tunnel 2
+sh sleep 2
+sh cat logs/h2.txt logs/h3.txt
+h1 ping -c 2 10.42.0.3
+exit

@@ -1,0 +1,5 @@
+* text=auto
+p4cli text eol=lf
+*.py text eol=lf
+*.p4 text eol=lf
+Dockerfile text eol=lf
