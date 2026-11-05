@@ -94,20 +94,22 @@ Use the exact `p4cli` and `send.py` command syntax and payloads on the official 
 
 ### Preparation
 
-- [ ] After completing practical Steps 4 and 5 and restoring the Step 6 edit, copy `tunnel.p4` to **`tunnel_v1.p4`**.
-- [ ] Create and switch to branch **`hop-limit`**.
-- [ ] Stage and commit `tunnel_v1.p4` as the preserved original tunnel implementation.
+- [x] After completing practical Steps 4 and 5 and restoring the Step 6 edit, copy `tunnel.p4` to **`tunnel_v1.p4`**.
+- [x] Create and switch to branch **`hop-limit`**.
+- [x] Stage and commit `tunnel_v1.p4` as the preserved original tunnel implementation (baseline commit `b5fc667`).
 - [ ] Make meaningful development commits throughout the assignment.
 
 ### C1 — Record the loop before protection
 
-- [ ] Start the topology with `--id 6042`.
-- [ ] Dump s2's tunnel table, identify the handle for destination **3**, then modify that entry to output port **1**, back towards s1.
-- [ ] Send a tunnel packet from h1 to `10.42.0.3` with tunnel destination **3**.
-- [ ] Count packet-reception records in both switch logs, wait five seconds, then count again to demonstrate continued circulation.
-- [ ] Save actual commands and outputs to **`assignment/evidence/loop-before.txt`**.
-- [ ] Exit Mininet to stop the loop.
-- [ ] Inspect `ipv4_forward` and explain whether decrementing IPv4 TTL in the supplied code is enough to stop an IPv4 loop.
+- [x] Start the topology with `--id 6042`.
+- [x] Dump s2's tunnel table, identify the handle for destination **3**, then modify that entry to output port **1**, back towards s1.
+- [x] Send a tunnel packet from h1 to `10.42.0.3` with tunnel destination **3**.
+- [x] Count packet-reception records in both switch logs, wait five seconds, then count again to demonstrate continued circulation.
+- [x] Save actual commands and outputs to **`assignment/evidence/loop-before.txt`**.
+- [x] Stop the topology after the experiment, ending the loop.
+- [x] Inspect `ipv4_forward` and explain in `assignment/REPORT.md` why decrementing IPv4 TTL without an expiration check is insufficient.
+
+See [assignment/C1-README.md](assignment/C1-README.md): s1 counts increased 18 → 192 and s2 counts 17 → 192 in the successful fresh run.
 
 ### C2 — Specify your design
 

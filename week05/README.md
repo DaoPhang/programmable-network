@@ -37,7 +37,8 @@ The environment used was local Docker rather than Codespaces. The four wrap-up q
 | `SOURCE.md` | Starter provenance and change scope |
 | `.devcontainer/` | Original course Codespaces/dev-container configuration |
 | `.github/workflows/` | Original template workflows; see the nested-folder note below |
-| `assignment/` | Original, uncompleted report/evidence skeleton for the later assignment |
+| `tunnel_v1.p4` | Preserved pre-hop-limit practical baseline, committed on `hop-limit` |
+| `assignment/` | C1 loop experiment, raw evidence and partial report; see [C1-README.md](assignment/C1-README.md) |
 
 ## Environment and repository layout
 
