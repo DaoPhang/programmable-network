@@ -60,7 +60,6 @@ To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated co
 | `assignment/run_assignment.py` | Actual C4/C5 experiments and assertions |
 | `assignment/run_loop_before.py` | C1 replay using preserved P4 and original host tools |
 | `assignment/PR-DESCRIPTION.md` | Prepared PR title/body |
-| `assignment/prepare_submission.py` | Export a standalone review folder/ZIP without Git publication |
 | `LAB-ANSWERS.md`, `RESULTS.md` | Practical answers and original practical observations |
 | `run_practical.py` | Practical replay with preserved original host tools |
 | `START-HERE.md` | Practical walkthrough; assignment guidance is in `assignment/README.md` |
@@ -68,6 +67,6 @@ To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated co
 
 ## Repository layout
 
-Everything remains inside `week05/`. GitHub does not discover its nested `.github/workflows/` or `.devcontainer/` as root configuration of the parent coursework repository. The standalone export puts these at the root of a review folder intended for your separate P4 template repository. Only the needed compilation workflow is retained; the template's optional image-publishing workflow has been removed.
+Everything remains inside `week05/`. GitHub does not discover its nested `.github/workflows/` or `.devcontainer/` as root configuration of the parent coursework repository. Copy them to the root of your separate P4 template repository when submitting. Only the needed compilation workflow is retained; the template's optional image-publishing workflow has been removed.
 
-The current Git remote is the combined coursework repository. A separate P4 repository and its assignment PR remain to be configured for the course submission. Local P4 compilation passed, but no GitHub Actions result is claimed. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained. Generate a fresh standalone export with `python -I assignment/prepare_submission.py` when needed.
+The current Git remote is the combined coursework repository. A separate P4 repository and its assignment PR remain to be configured for the course submission. Local P4 compilation passed, but no GitHub Actions result is claimed. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained.

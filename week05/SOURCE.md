@@ -23,7 +23,6 @@ C1 demonstrated unbounded circulation, with counts 18→192 on s1 and 17→192 o
 - `assignment/MIXED-PREDICTION.md`: prediction recorded before implementation/testing.
 - Test runners: reproducible C1, practical and C4/C5 experiments in fresh workspaces, preserving existing evidence.
 - `assignment/README.md`, `assignment/PR-DESCRIPTION.md`: assignment guide and remaining publication instructions.
-- `assignment/prepare_submission.py`: optional fresh standalone export when needed.
 
 ## Verification
 

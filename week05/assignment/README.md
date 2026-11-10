@@ -67,7 +67,7 @@ REPORT.md compares two rollout approaches, the required Week 3 `check_paths()` b
 
 ## C6 — Prepare and submit
 
-The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the proposed PR title/body. [prepare_submission.py](prepare_submission.py) exports a standalone review folder/ZIP, including root compilation and dev-container configuration.
+The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the proposed PR title/body.
 
 1. Create your own repository from the [course P4 template](https://github.com/firdaussahran/p4-lab). Place `tunnel.p4`, `topo.py`, `.github/` and `.devcontainer/` at its root.
 2. Establish the completed four-byte practical baseline on its `main`, including `tunnel_v1.p4`. Carry over the earlier baseline/C1 history where practical. Keep the finished assignment for the assignment branch.
@@ -79,14 +79,6 @@ The report and AI-use declaration are complete, and all four required evidence f
 8. **Leave the PR unmerged.** Deadline: **Friday 13 November 2026, before the Week 6 class**.
 
 Publishing the combined coursework repository does not complete those course-specific PR and submission steps. No Codespace was created; the experiments used the official image locally, and temporary containers were removed.
-
-To generate a standalone export, run this from `week05`:
-
-```powershell
-python -I assignment/prepare_submission.py
-```
-
-The script creates a fresh folder/ZIP under ignored `build/`, with root compilation/dev-container configuration and a SHA-256 manifest. The export contains no Git metadata and does not establish the required baseline/assignment branch history.
 
 ## Evidence and reproduction
 
