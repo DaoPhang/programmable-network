@@ -1,6 +1,6 @@
-# Mixed-version prediction — recorded before implementation/testing
+# Mixed-version prediction, recorded before implementation and testing
 
-This prediction was written before changing the packet layout and before sending any C4/C5 packets. It is retained separately so the original expectation remains visible.
+This prediction was written before changing the packet layout and before sending any C4/C5 packets. It is kept separately so the original expectation stays visible.
 
 ## Chosen format and semantics
 
@@ -10,7 +10,7 @@ New header: `proto_id` (2 bytes), `dst_id` (2 bytes), `hops` (1 byte), then IPv4
 
 For new s1 and original s2, s1 changes hops 8 to 7. s2 reads the unchanged proto_id/dst_id prefix correctly, so destination 2 still selects h2. However, s2 interprets the hop byte as IPv4's first byte. Its parsed version becomes 0 and IHL becomes 7 (from 0x07); its fields are shifted one byte. The supplied old program does not validate those fields and still applies the tunnel table.
 
-The old program recomputes the checksum of its misaligned IPv4 header. Its checksum positions correspond to bytes 9 and 10 of the real IPv4 header: the real protocol byte and the first checksum byte. I predict a frame reaches h2 with the hop byte still 7 but damaged enclosed IPv4 protocol/checksum, preventing the normal UDP receiver from reporting a valid test message. A raw 0x1212 capture should reveal this. Preserving the four-byte prefix alone is therefore not safe compatibility.
+The old program recomputes the checksum of its misaligned IPv4 header. Its checksum positions correspond to bytes 9 and 10 of the real IPv4 header: the real protocol byte and the first checksum byte. I predict a frame reaches h2 with the hop byte still 7 but damaged enclosed IPv4 protocol/checksum, preventing the normal UDP receiver from reporting a valid test message. A raw 0x1212 capture should reveal this. Keeping the four-byte prefix is not enough for safe compatibility.
 
 ## Loop prediction
 

@@ -1,6 +1,6 @@
 # Independent pre-submission review
 
-Result: **PASS for local C1–C5 implementation and experiments**. C6 publication, the GitHub compilation check and Spectrum submission remain pending.
+Result: PASS for local C1 to C5 implementation and experiments. C6 publication, the GitHub compilation check and Spectrum submission remain pending.
 
 Three independent Codex workers, coordinated through Orca, reviewed the implementation, audited the report/evidence against the course requirements, and reran the experiments. The requested `codex-luna` model was rejected by the connected ChatGPT account before review work began; the workers were restarted with the configured default Codex model.
 
@@ -10,11 +10,11 @@ No concrete C2/C3 defects were found. The reviewer checked the matching five-byt
 
 ## Documentation and evidence audit
 
-The report's C1–C5 coverage, visit-count mathematics, mixed-version byte analysis, Week 3 comparison and hardware-cost limitations agreed with the saved evidence and course requirements. Relative links and standalone export layout were valid.
+The report's C1 to C5 coverage, visit-count mathematics, mixed-version byte analysis, Week 3 comparison and hardware-cost limitations agreed with the saved evidence and course requirements. Relative links and standalone export layout were valid.
 
-Two corrections were identified and applied:
+The audit found two problems, both now fixed:
 
-- The course's required PR title is **Tunnel hop limit**; PR-DESCRIPTION.md now uses that exact title.
+- The course's required PR title is Tunnel hop limit; PR-DESCRIPTION.md now uses that exact title.
 - REPORT.md's AI-use section now includes the independent Codex/Orca review contribution.
 
 The audit could not independently prove the claimed pre-test prediction chronology from saved files alone. It also noted that the course requests Codespaces while these experiments transparently used the official image on local Docker; lecturer acceptance of that environment substitution has not been confirmed. No unsupported ASIC throughput claim is made.
@@ -26,11 +26,11 @@ The test worker copied the current sources into a fresh isolated review workspac
 | Fresh execution | Outcome |
 |---|---|
 | `run_practical.py` | 31/31 assertions passed |
-| `assignment/run_loop_before.py` | Counts grew on both switches: s1 23→157, s2 23→157 over 5.021 seconds |
+| `assignment/run_loop_before.py` | Counts grew on both switches: s1 23 to 157, s2 23 to 157 over 5.021 seconds |
 | `assignment/run_assignment.py` | 26/26 assertions passed: delivery 10, protected loop 10, mixed 6 |
 | Independent C1 and mixed-capture verification | Both passed |
 
-Total: **59 checks passed, 0 failed** in the live review: 57 runner assertions plus two independent evidence checks. The implementation review's separate nine argument checks are not included in this total.
+Total: 59 checks passed, 0 failed in the live review: 57 runner assertions plus two independent evidence checks. The implementation review's separate nine argument checks are not included in this total.
 
 The normal tunnel receivers reported hops 6; ordinary IPv4 worked; the upgraded loop stopped after eight visits; the mixed loop stopped after 15. The fresh capture again showed mixed remaining hops 7, actual IPv4 protocol 13 and invalid checksum. C1's exact counts depend on timing; their difference from the original report is not a contradiction.
 
@@ -40,4 +40,4 @@ The full rerun used a disposable isolated workspace under `week05/build/`. That 
 
 ## Publication state
 
-No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [README.md](README.md#c6--prepare-and-submit).
+No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [README.md](README.md#c6-prepare-and-submit).

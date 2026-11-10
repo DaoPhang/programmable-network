@@ -1,8 +1,8 @@
-# Week 5 assignment — Put a limit on the tunnel
+# Week 5 assignment: put a limit on the tunnel
 
-Student ID (last 4 digits only): **6042**
+Student ID (last 4 digits only): 6042
 
-Status: C1–C5 are complete and experimentally verified. The source, report and evidence were published in the combined coursework repository as commit `e2e5040` (`Week05`). C6 still requires the separate P4 assignment PR, a green GitHub compilation check, lecturer access and Spectrum submission. Experiments used the official course image on local Docker rather than Codespaces.
+Status: C1 to C5 are complete and experimentally verified. The source, report and evidence were published in the combined coursework repository as commit `e2e5040` (`Week05`). C6 still requires the separate P4 assignment PR, a green GitHub compilation check, lecturer access and Spectrum submission. Experiments used the official course image on local Docker rather than Codespaces.
 
 ## 1. Analysis: the loop
 
@@ -37,7 +37,7 @@ The runner counted `Processing packet received` records in each switch log, wait
 | s1 | 18 | 192 | 174 |
 | s2 | 17 | 192 | 175 |
 
-The measured interval covering the wait and second reads was approximately **5.018 seconds**. These are switch packet-processing visits, not separately generated host packets or complete round trips. The counters are read sequentially while the packet is moving, so small differences between switches are expected.
+The measured interval covering the wait and second reads was approximately 5.018 seconds. These are switch packet-processing visits, not separately generated host packets or complete round trips. The counters are read sequentially while the packet is moving, so small differences between switches are expected.
 
 Both counters continued increasing, demonstrating repeated circulation of the single injected packet. Tunnel ingress selects `myTunnel_exact`; its `myTunnel_forward` action only sets the output port. It does not reduce the enclosed IPv4 TTL or impose another visit limit. The result therefore shows continued looping during the observation window; the code explains why there is no automatic hop-based stopping condition.
 
@@ -45,7 +45,7 @@ After the second measurement, the experiment returned from the topology's CLI ca
 
 ### Does IPv4 TTL decrement stop an IPv4 loop in this program?
 
-**No.** This conclusion comes from inspecting the supplied program; a separate ordinary-IPv4 loop was not run for C1. `ipv4_forward` sets the output port and executes:
+No. This conclusion comes from inspecting the supplied program; a separate ordinary-IPv4 loop was not run for C1. `ipv4_forward` sets the output port and executes:
 
 ```p4
 hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
@@ -60,7 +60,7 @@ Thus this implementation's decrement alone is insufficient to stop an IPv4 forwa
 - [loop-before.txt](evidence/loop-before.txt): commands, runtime table dumps, packet fields, two count measurements and topology shutdown.
 - [counts.json](evidence/loop-before-raw/counts.json): structured count values and measured interval.
 - [s1 log](evidence/loop-before-raw/logs/s1.txt) and [s2 log](evidence/loop-before-raw/logs/s2.txt): raw switch records.
-- [Assignment README](README.md): complete C1–C6 overview, evidence and reproduction instructions.
+- [Assignment README](README.md): complete C1 to C6 overview, evidence and reproduction instructions.
 
 The first attempt stopped before sending a packet because the runner expected `hdr.myTunnel.dst_id`, while the runtime CLI displays `myTunnel.dst_id`. The parser was corrected to accept either spelling. The failed attempt was removed from the current folder during cleanup and remains available in Git history; the counts above come exclusively from the retained successful fresh run.
 
@@ -68,11 +68,11 @@ The first attempt stopped before sending a packet because the runner expected `h
 
 ### Design recorded before implementation and experiments
 
-Use an unsigned **8-bit `hops` field appended after `dst_id`**. The wire header becomes `proto_id:16 | dst_id:16 | hops:8`, in network byte order, for a total of five bytes. One byte supports values 0–255, avoids sub-byte host packing and adds only one byte per tunnel packet. Appending keeps the original four-byte prefix intact, but does **not** make old switches compatible: their IPv4 parser still starts one byte too early. The mixed-version evaluation must test that explicitly.
+Use an unsigned 8-bit `hops` field appended after `dst_id`. The wire header becomes `proto_id:16 | dst_id:16 | hops:8`, in network byte order, for a total of five bytes. One byte supports values 0 to 255, avoids sub-byte host packing and adds only one byte per tunnel packet. Appending keeps the original four-byte prefix intact, but does not make old switches compatible: their IPv4 parser still starts one byte too early. The mixed-version evaluation must test that explicitly.
 
-`send.py` will default to **8** and accept `--hops` in **0–255**. Eight comfortably exceeds the two-switch normal path while keeping a mistaken loop short. A value of zero is accepted for exhaustion testing. The sender will reject out-of-range limits and an explicit `--hops` without `--tunnel`.
+`send.py` will default to 8 and accept `--hops` in 0 to 255. Eight comfortably exceeds the two-switch normal path while keeping a mistaken loop short. A value of zero is accepted for exhaustion testing. The sender will reject out-of-range limits and an explicit `--hops` without `--tunnel`.
 
-In ingress, only when `hdr.myTunnel.isValid()`, test the limit **before applying the tunnel table**:
+In ingress, only when `hdr.myTunnel.isValid()`, test the limit before applying the tunnel table:
 
 1. If incoming `hops <= 1`, mark the packet to drop and do not apply the forwarding table or subtract.
 2. Otherwise subtract exactly one, then apply `myTunnel_exact`.
@@ -80,19 +80,19 @@ In ingress, only when `hdr.myTunnel.isValid()`, test the limit **before applying
 
 This uses a TTL-style rule: an incoming value of 1 means the current switch is the final permitted processing visit and discards the packet. No exhausted value is subtracted, so 0 cannot wrap to 255. A header value is not a promise that forwarding will succeed; table misses can discard it sooner.
 
-For an all-upgraded loop, a positive initial value **N permits at most N switch ingress visits**, of which at most **N−1 forward** and the Nth drops. For N=0, the first switch drops immediately. For N=8, the two-switch delivery path leaves 6 at the receiver; the loop has eight visits, seven forwards and a drop at s2 (four visits at each switch). For N=2, s1 forwards with 1 and s2 drops. Successful traversal of K switches therefore requires N > K.
+For an all-upgraded loop, a positive initial value N permits at most N switch ingress visits, of which at most N−1 forward and the Nth drops. For N=0, the first switch drops immediately. For N=8, the two-switch delivery path leaves 6 at the receiver; the loop has eight visits, seven forwards and a drop at s2 (four visits at each switch). For N=2, s1 forwards with 1 and s2 drops. Successful traversal of K switches therefore requires N > K.
 
 Both Python packet definitions must use the same appended byte as P4, the sender must initialise it, and the receiver must print it. Extracting and emitting the existing header automatically includes the added field. The preserved `tunnel_v1.p4` must remain unchanged. No new match key or table entry is needed.
 
-These bounds assume every visited switch understands and enforces the limit. With new s1 and old s2, only s1 spends the budget: for N=8 the predicted loop bound is eight s1 visits plus seven s2 visits, **15 total**, with discard at s1. A cycle consisting entirely of old switches would remain unprotected.
+These bounds assume every visited switch understands and enforces the limit. With new s1 and old s2, only s1 spends the budget: for N=8 the predicted loop bound is eight s1 visits plus seven s2 visits, 15 total, with discard at s1. A cycle consisting entirely of old switches would remain unprotected.
 
 ## 3. Implementation
 
-- **`tunnel.p4`:** append `bit<8> hops` to `myTunnel_t`. The tunnel branch of ingress drops incoming values at or below 1; otherwise it subtracts one before `myTunnel_exact.apply()`. The guard prevents unsigned underflow and applies even if the packet will subsequently miss the table. The existing parser extraction and deparser emission now handle the full five-byte header. No forwarding-table key, entry or host address changes.
-- **`send.py`:** append Scapy `ByteField("hops", 8)` after the two 16-bit fields. Add configurable `--hops`; omission uses 8. Reject limits outside 0–255 and explicit limits without `--tunnel`, before interface selection or transmission. Validate the 16-bit tunnel destination range as well.
-- **`receive.py`:** use the identical five-byte definition and display `dst_id` and remaining `hops` for received lab UDP packets. Put sniffing behind a `main()` guard so importing the packet definition does not start a live receiver.
-- **Preserved baseline:** `tunnel_v1.p4` remains identical to the completed practical. The original sender/receiver are retained as `stages/send_v1.py` and `stages/receive_v1.py`, and earlier experiment runners use them to avoid mixing old P4 with the new host format.
-- **Experiment automation:** `assignment/run_assignment.py` creates separate fresh working directories for delivery, protected looping and mixed deployment. It uses the original topology, drives its CLI callback with equivalent recorded commands, asserts the actual observations, preserves raw logs and cleans up the network. `MIXED-PREDICTION.md` was written before implementation and before those tests.
+- `tunnel.p4`: append `bit<8> hops` to `myTunnel_t`. The tunnel branch of ingress drops incoming values at or below 1; otherwise it subtracts one before `myTunnel_exact.apply()`. The guard prevents unsigned underflow and applies even if the packet will subsequently miss the table. The existing parser extraction and deparser emission now handle the full five-byte header. No forwarding-table key, entry or host address changes.
+- `send.py`: append Scapy `ByteField("hops", 8)` after the two 16-bit fields. Add configurable `--hops`; omission uses 8. Reject limits outside 0 to 255 and explicit limits without `--tunnel`, before interface selection or transmission. Validate the 16-bit tunnel destination range as well.
+- `receive.py`: use the identical five-byte definition and display `dst_id` and remaining `hops` for received lab UDP packets. Put sniffing behind a `main()` guard so importing the packet definition does not start a live receiver.
+- Preserved baseline: `tunnel_v1.p4` remains identical to the completed practical. The original sender/receiver are retained as `stages/send_v1.py` and `stages/receive_v1.py`, and earlier experiment runners use them to avoid mixing old P4 with the new host format.
+- Experiment automation: `assignment/run_assignment.py` creates separate fresh working directories for delivery, protected looping and mixed deployment. It uses the original topology, drives its CLI callback with equivalent recorded commands, asserts the actual observations, preserves raw logs and cleans up the network. `MIXED-PREDICTION.md` was written before implementation and before those tests.
 
 Ordinary IPv4 retains the practical's behaviour, including its missing TTL expiration check discussed in section 1. This assignment's protection applies to the tunnel path; it does not claim to fix ordinary IPv4 looping.
 
@@ -100,13 +100,13 @@ Ordinary IPv4 retains the practical's behaviour, including its missing TTL expir
 
 ### Tunnel and ordinary IPv4 delivery
 
-[delivery.txt](evidence/delivery.txt) records successful compilation and the actual sender/receiver outputs. The default sender value of 8 delivered to h2 (identifier 2), and explicit `--hops 8` delivered to h3 (identifier 3). Each receiver printed **hops=6** and enclosed IPv4 **TTL 64**, as expected after two tunnel forwards. Plain UDP also reached h3, and `h1 ping -c 2 10.42.0.3` received **2/2 replies, TTL 62**.
+[delivery.txt](evidence/delivery.txt) records successful compilation and the actual sender/receiver outputs. The default sender value of 8 delivered to h2 (identifier 2), and explicit `--hops 8` delivered to h3 (identifier 3). Each receiver printed hops=6 and enclosed IPv4 TTL 64, as expected after two tunnel forwards. Plain UDP also reached h3, and `h1 ping -c 2 10.42.0.3` received 2/2 replies, TTL 62.
 
 Boundary delivery tests sent limits 0, 1, 2, 3 and 255. Values 0 and 1 dropped at s1; 2 reached s2 and dropped there. Their messages did not appear in the receiver log. Value 3 arrived with 1 remaining; 255 arrived with 253. Invalid CLI values −1 and 256, and `--hops` without a tunnel, exited with argument-error status 2 before transmission. All ten delivery/argument assertions passed; see [delivery checks](evidence/delivery-raw/checks.json).
 
 ### The same loop after protection
 
-In a fresh topology I again changed s2's tunnel destination 3 to port 1. [loop-after.txt](evidence/loop-after.txt) records a single `--hops 8` packet. The first counts were **s1=4, s2=4** and remained **4,4** after a further five-second wait, compared with the growing C1 counts. This is **eight visits total**, including seven forwards and the final drop at s2. The stable counters show termination before topology shutdown.
+In a fresh topology I again changed s2's tunnel destination 3 to port 1. [loop-after.txt](evidence/loop-after.txt) records a single `--hops 8` packet. The first counts were s1=4, s2=4 and remained 4,4 after a further five-second wait, compared with the growing C1 counts. This is eight visits total, including seven forwards and the final drop at s2. The stable counters show termination before topology shutdown.
 
 The same isolated loop then tested exhaustion and odd-budget boundaries, taking a baseline count before each packet:
 
@@ -124,31 +124,31 @@ Every per-packet count matched the design and remained stable for five seconds. 
 
 ### a. Mixed deployment: prediction and observation
 
-The original [prediction](MIXED-PREDICTION.md) was saved before implementation/testing and is reproduced in [mixed.txt](evidence/mixed.txt). I predicted that old s2 would preserve the destination prefix but misparse the extra byte as IPv4, corrupt the enclosed packet through checksum recomputation, and fail normal UDP delivery. I also predicted that an 8-budget loop through new s1 and old s2 would stop after **15 total visits**, because only s1 decrements.
+The original [prediction](MIXED-PREDICTION.md) was saved before implementation/testing and is reproduced in [mixed.txt](evidence/mixed.txt). I predicted that old s2 would preserve the destination prefix but misparse the extra byte as IPv4, corrupt the enclosed packet through checksum recomputation, and fail normal UDP delivery. I also predicted that an 8-budget loop through new s1 and old s2 would stop after 15 total visits, because only s1 decrements.
 
-The topology was launched with `--id 6042 --s2-program tunnel_v1.p4`. I sent to IPv4 address `10.42.0.3` with tunnel identifier 2 and limit 8, and captured on **h2**. The frame did reach h2: the destination identifier remained 2 and the received budget was 7, confirming only s1 decremented. However, no normal UDP receiver message appeared. The [raw capture](evidence/mixed-raw/logs/h2cap.txt) and [decoded measurements](evidence/mixed-raw/checks.json) explain why.
+The topology was launched with `--id 6042 --s2-program tunnel_v1.p4`. I sent to IPv4 address `10.42.0.3` with tunnel identifier 2 and limit 8, and captured on h2. The frame did reach h2: the destination identifier remained 2 and the received budget was 7, confirming only s1 decremented. However, no normal UDP receiver message appeared. The [raw capture](evidence/mixed-raw/logs/h2cap.txt) and [decoded measurements](evidence/mixed-raw/checks.json) explain why.
 
 Offsets below are measured from the start of the Ethernet frame, without an FCS:
 
 | Bytes | Correct interpretation | Old s2's interpretation/effect |
 |---|---|---|
-| 14–15: `08 00` | Encapsulated protocol IPv4 | Correct tunnel `proto_id` |
-| 16–17: `00 02` | Tunnel destination 2 | Correct tunnel `dst_id`, selecting h2 |
+| 14 to 15: `08 00` | Encapsulated protocol IPv4 | Correct tunnel `proto_id` |
+| 16 to 17: `00 02` | Tunnel destination 2 | Correct tunnel `dst_id`, selecting h2 |
 | 18: `07` | Remaining hops 7 | IPv4 first byte: version 0, IHL 7 |
 | 19: `45` | Real IPv4 version 4/IHL 5 | Old parser's IPv4 service byte |
-| 28–29: `0d 66` after s2 | Real protocol byte and first checksum byte | Old parser's two-byte IPv4 checksum, rewritten by its checksum stage |
+| 28 to 29: `0d 66` after s2 | Real protocol byte and first checksum byte | Old parser's two-byte IPv4 checksum, rewritten by its checksum stage |
 | 30: `6b` | Real IPv4 checksum's second byte | Not part of the old parser's checksum field |
 
-Before s2, the actual IPv4 protocol byte was `0x11` (17, UDP). Old s2's checksum update wrote `0x0d66` into its misaligned checksum positions, changing that real protocol byte to **`0x0d` (13)**. The real checksum bytes in the received frame were `66 6b`, which failed checksum validation over the real 20-byte IPv4 header. The UDP bytes were still present later in the frame, but the IP protocol no longer selected UDP. The old parser does not validate IPv4 version/IHL and its tunnel table remains applicable, so this damage occurs despite successful forwarding to the intended physical host.
+Before s2, the actual IPv4 protocol byte was `0x11` (17, UDP). Old s2's checksum update wrote `0x0d66` into its misaligned checksum positions, changing that real protocol byte to `0x0d` (13). The real checksum bytes in the received frame were `66 6b`, which failed checksum validation over the real 20-byte IPv4 header. The UDP bytes were still present later in the frame, but the IP protocol no longer selected UDP. The old parser does not validate IPv4 version/IHL and its tunnel table remains applicable, so this damage occurs despite successful forwarding to the intended physical host.
 
-I then created the destination-3 loop in the same mixed network. Before the loop, both switches had one reception from the delivery test. Counts rose to **s1=9, s2=8**, then stayed unchanged for five seconds. Subtracting that prior delivery gives **8 s1 visits + 7 s2 visits = 15**, with discard at new s1 on incoming budget 1. All six mixed assertions passed. The observed behaviour agrees with the prediction; the captured checksum/protocol values provide the exact bytes that were unknown before testing. This bound depends on revisiting an upgraded switch and does not protect a cycle containing only old switches.
+I then created the destination-3 loop in the same mixed network. Before the loop, both switches had one reception from the delivery test. Counts rose to s1=9, s2=8, then stayed unchanged for five seconds. Subtracting that prior delivery gives 8 s1 visits + 7 s2 visits = 15, with discard at new s1 on incoming budget 1. All six mixed assertions passed. The observed behaviour agrees with the prediction; the captured checksum/protocol values provide the exact bytes that were unknown before testing. This bound depends on revisiting an upgraded switch and does not protect a cycle containing only old switches.
 
 ### b. Safe upgrade approaches
 
 | Approach | Deployment sequence | Benefits and costs |
 |---|---|---|
-| **New EtherType with dual-format upgraded switches** | First deploy a parser that accepts old four-byte traffic and a distinct new EtherType for the five-byte format. Continue sending old packets during preparation. Enable new packets only on paths whose switches and receivers support them; constrain paths or use boundary translation until upgrades finish. | Explicit discrimination prevents a new header being silently treated as the old layout. Old switches cannot safely transit new packets merely because another EtherType is chosen: they drop unknown traffic in this program. Requires capability/path management and temporary dual-format parsing, but enables unambiguous full enforcement on upgraded paths. |
-| **Keep the legacy prefix and use a new `proto_id` for an opaque extension** | Use the existing four-byte outer header, with a new protocol discriminator meaning an extension containing hops followed by IPv4. Prepare upgraded parsers/receivers to accept both forms before changing senders. The inspected old parser accepts non-IPv4 `proto_id` without extracting IPv4, and its tunnel action can forward that opaque suffix using the unchanged destination field. | Old nodes avoid the misaligned IPv4 checksum update and preserve the extension as payload. This can maintain transit through these particular old programs, but they still do not decrement the limit. Every allowed cycle must cross an enforcing node, or old-only cycles must be prevented by configuration. Requires verifying opaque forwarding on the actual legacy target and handling boundaries explicitly. |
+| New EtherType with dual-format upgraded switches | First deploy a parser that accepts old four-byte traffic and a distinct new EtherType for the five-byte format. Continue sending old packets during preparation. Enable new packets only on paths whose switches and receivers support them; constrain paths or use boundary translation until upgrades finish. | Explicit discrimination prevents a new header being silently treated as the old layout. Old switches cannot safely transit new packets merely because another EtherType is chosen: they drop unknown traffic in this program. Requires capability/path management and temporary dual-format parsing, but enables unambiguous full enforcement on upgraded paths. |
+| Keep the legacy prefix and use a new `proto_id` for an opaque extension | Use the existing four-byte outer header, with a new protocol discriminator meaning an extension containing hops followed by IPv4. Prepare upgraded parsers/receivers to accept both forms before changing senders. The inspected old parser accepts non-IPv4 `proto_id` without extracting IPv4, and its tunnel action can forward that opaque suffix using the unchanged destination field. | Old nodes avoid the misaligned IPv4 checksum update and preserve the extension as payload. This can maintain transit through these particular old programs, but they still do not decrement the limit. Every allowed cycle must cross an enforcing node, or old-only cycles must be prevented by configuration. Requires verifying opaque forwarding on the actual legacy target and handling boundaries explicitly. |
 
 These are rollout proposals, not features claimed in the current implementation. Adding a version byte in front of an old header, or simply appending a field as in this experiment, is insufficient unless old nodes already know how to distinguish or skip it. For a network requiring protection at every hop, I would use dual-format switches and enable the new EtherType only on fully upgraded paths, then retire the old format after validation.
 
