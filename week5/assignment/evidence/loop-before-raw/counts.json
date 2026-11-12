@@ -1,0 +1,17 @@
+{
+  "student_suffix": "6042",
+  "tunnel_destination": 3,
+  "s2_entry_handle": 2,
+  "s2_modified_output_port": 1,
+  "first_counts": {
+    "s1": 18,
+    "s2": 17
+  },
+  "second_counts": {
+    "s1": 192,
+    "s2": 192
+  },
+  "count_interval_seconds": 5.018,
+  "both_counts_increased": true,
+  "source": "tunnel_v1.p4 (preserved completed practical)"
+}
