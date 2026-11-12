@@ -1,6 +1,7 @@
 name: Compile tunnel.p4
 
-# Compiles tunnel.p4 with the same P4 compiler as the lab image, on every push and pull request.
+# The lab lives in week05/, so the compile step runs there.
+# Compiles week05/tunnel.p4 with the same P4 compiler as the lab image, on every push and pull request.
 # A red cross means the program doesn't compile; open the run to read the compiler's message.
 # Warnings are shown in the log but don't fail the check.
 on:
@@ -20,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compile tunnel.p4
+        working-directory: week05
         run: |
           mkdir -p build
           p4c-bm2-ss -o build/tunnel.json tunnel.p4
