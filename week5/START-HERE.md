@@ -2,6 +2,8 @@
 
 These instructions use your student suffix **6042** and **10.42.0.x** addresses. All four stages have now been run successfully in the official course Docker image. Below, **expected** describes what to look for when repeating the exercise; RESULTS.md records the actual observations and links to the saved evidence.
 
+The active `tunnel.p4`, `send.py` and `receive.py` now contain the later hop-limit assignment. To replay this original practical safely, use `run_practical.py`, which selects the preserved original packet tools and runs in separate directories. The manual stage-copy commands below are for a separate practical workspace: use `stages/send_v1.py` as its `send.py` and `stages/receive_v1.py` as its `receive.py`. Do not replace the assignment sources to replay the practical.
+
 ## 1. Choose the environment
 
 ### Course workflow: template repository and Codespaces
@@ -226,8 +228,8 @@ The runner stops on a failed check and refuses to overwrite existing evidence. R
 
 - The first run encountered `p4cli: 5: Syntax error: word unexpected (expecting "in")`. Git had checked out that shell script with CRLF endings. The helper was normalised to LF, and `.gitattributes` now keeps Linux shell/P4/Python files in LF format.
 - Mininet can print `Error setting resource limits. Mininet's performance may be affected.` inside Docker. The runner records that warning and checks actual packet delivery; it does not treat that warning alone as a runtime table error.
-- The initial failed experiment is preserved separately in `evidence/practical-attempt01-crlf/`.
+- The initial failed experiment's logs were removed during cleanup; they remain available in Git history. The successful practical evidence is retained.
 
 ## What remains after this practical
 
-The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The assessed hop-limit assignment remains; see PREPARATION.md and the official course page. `assignment/REPORT.md` remains the upstream assignment skeleton, not a completed submission.
+The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The hop-limit assignment C1–C5 are complete; see [assignment/README.md](assignment/README.md) and [assignment/REPORT.md](assignment/REPORT.md). The report is complete, while the course-specific PR and Spectrum submission steps remain in [assignment/README.md](assignment/README.md#c6--prepare-and-submit).
