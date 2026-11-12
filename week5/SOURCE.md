@@ -36,4 +36,4 @@ Week 05 is submitted as the unmerged PR "Tunnel hop limit" from `hop-limit` into
 
 Cleanup removed disposable `build/` copies and ZIPs, failed-attempt logs, an empty evidence placeholder, duplicate template/checklist documents, and the unused image-publishing workflow. Successful source/evidence, original packet tools, stage programs, compilation/dev-container configuration, report and review summary remain intact. The tracked deletions are recoverable from Git history; new build/export artifacts can be regenerated.
 
-The compile workflow is at the repository root so GitHub runs it; it compiles in `week05/`.
+The compile workflow is at the repository root so GitHub runs it; it compiles in `week5/`.

@@ -7,7 +7,7 @@ WIC2005 coursework for student ID suffix **6042**, organised by week. This repos
 | [week2/](week2/) | Three-switch, six-host dual-stack topology, input validation, webpage generator, evidence and assignment report |
 | [week3/](week3/) | Three-router routing experiments and completed write-up; observations preserved as excerpts rather than a raw session log |
 | [week4/](week4/README.md) | OpenFlow forwarding, firewall rules, controller failure and standalone fallback; wrap-up answers and a partial session log |
-| [week05/](week05/README.md) | Completed P4 tunnel practical and hop-limit assignment C1–C5, preserved baseline, report, test runners and successful evidence |
+| [week5/](week5/README.md) | Completed P4 tunnel practical and hop-limit assignment C1–C5, preserved baseline, report, test runners and successful evidence |
 | [docs/](docs/) | Generated Week 2 website; GitHub Pages source is `main` → `/docs` |
 | [archive/](archive/) | Historical Week 1/2 logs and duplicate-address example |
 | [start-lab-wsl.sh](start-lab-wsl.sh) | Optional WSL launcher for the Weeks 2–4 Mininet image |
@@ -60,9 +60,9 @@ The [Week 4 README](week4/README.md) records hub and manual forwarding, firewall
 Week 5 uses the official **P4 image**, which contains BMv2 and the P4 compiler. From the repository root in PowerShell:
 
 ```powershell
-Set-Location .\week05
-$week05Path = (Get-Location).Path
-docker run -it --rm --privileged --mount "type=bind,source=$week05Path,target=/lab" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 bash
+Set-Location .\week5
+$week5Path = (Get-Location).Path
+docker run -it --rm --privileged --mount "type=bind,source=$week5Path,target=/lab" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 bash
 ```
 
 Inside this container:
@@ -89,13 +89,13 @@ Completed validation in the official course image:
 - **26 assignment assertions passed**, covering delivery, argument and hop boundaries, protected loops and mixed-version deployment.
 - Normal two-switch delivery with initial hops 8 arrived with **6 remaining**. The all-upgraded loop stopped after **8 switch visits**.
 - Mixed deployment stopped the tested loop after **15 visits**, but the old switch corrupted the inner IPv4 packet. The report explains why the new format requires a deployment strategy.
-- Independent reviewers repeated the experiments and recorded **59 passing checks**, including two additional evidence checks; see the [review summary](week05/assignment/REVIEW.md).
+- Independent reviewers repeated the experiments and recorded **59 passing checks**, including two additional evidence checks; see the [review summary](week5/assignment/REVIEW.md).
 
-Start with the [Week 5 overview](week05/README.md), [practical answers](week05/LAB-ANSWERS.md), [assignment guide](week05/assignment/README.md) and [full report](week05/assignment/REPORT.md). The assignment guide links all four required evidence transcripts and provides reproduction instructions. Runners refuse to overwrite existing evidence; preserve it before repeating experiments.
+Start with the [Week 5 overview](week5/README.md), [practical answers](week5/LAB-ANSWERS.md), [assignment guide](week5/assignment/README.md) and [full report](week5/assignment/REPORT.md). The assignment guide links all four required evidence transcripts and provides reproduction instructions. Runners refuse to overwrite existing evidence; preserve it before repeating experiments.
 
-The source, report and evidence are published in this combined coursework repository. The assignment is submitted as the unmerged PR **Tunnel hop limit** from branch `hop-limit` into `main`, with the **Compile tunnel.p4** check run by GitHub Actions. The PR URL is submitted on Spectrum. The deadline is **Friday 13 November 2026, before the Week 6 class**. See the [C6 instructions](week05/assignment/README.md#c6--prepare-and-submit).
+The source, report and evidence are published in this combined coursework repository. The assignment is submitted as the unmerged PR **Tunnel hop limit** from branch `hop-limit` into `main`, with the **Compile tunnel.p4** check run by GitHub Actions. The PR URL is submitted on Spectrum. The deadline is **Friday 13 November 2026, before the Week 6 class**. See the [C6 instructions](week5/assignment/README.md#c6--prepare-and-submit).
 
-The compile workflow lives at the repository root (`.github/workflows/compile.yml`) because GitHub only reads workflows there; it compiles `week05/tunnel.p4` with `working-directory: week05`. Week 5's `.devcontainer/` stays inside `week05/`.
+The compile workflow lives at the repository root (`.github/workflows/compile.yml`) because GitHub only reads workflows there; it compiles `week5/tunnel.p4` with `working-directory: week5`. Week 5's `.devcontainer/` stays inside `week5/`.
 
 ## Optional WSL workflow
 
@@ -105,10 +105,10 @@ From the repository root in WSL:
 bash start-lab-wsl.sh
 ```
 
-Then use the Weeks 2–4 container commands above. For Week 5, use its P4 image and mount `week05/` at `/lab` as shown above.
+Then use the Weeks 2–4 container commands above. For Week 5, use its P4 image and mount `week5/` at `/lab` as shown above.
 
 ## Evidence and course links
 
-Week 2 evidence is in [week2/evidence/](week2/evidence/), Week 3 observations are in its write-up, and Week 4's saved log has the coverage limits described above. Week 5 retains successful practical evidence in [week05/evidence/practical/](week05/evidence/practical/) and assignment evidence in [week05/assignment/evidence/](week05/assignment/evidence/). Historical logs remain in `archive/`; generated build copies and failed Week 5 attempts were removed during cleanup.
+Week 2 evidence is in [week2/evidence/](week2/evidence/), Week 3 observations are in its write-up, and Week 4's saved log has the coverage limits described above. Week 5 retains successful practical evidence in [week5/evidence/practical/](week5/evidence/practical/) and assignment evidence in [week5/assignment/evidence/](week5/assignment/evidence/). Historical logs remain in `archive/`; generated build copies and failed Week 5 attempts were removed during cleanup.
 
 Course labs: [Week 2](https://firdaussahran.github.io/wic2005/weeks/week-02/#tab-lab) · [Week 3](https://firdaussahran.github.io/wic2005/weeks/week-03/#tab-lab) · [Week 4](https://firdaussahran.github.io/wic2005/weeks/week-04/#tab-lab) · [Week 5](https://firdaussahran.github.io/wic2005/weeks/week-05/#tab-lab).

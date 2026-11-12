@@ -70,7 +70,7 @@ REPORT.md compares two rollout approaches, the required Week 3 `check_paths()` b
 The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the PR title and body.
 
 1. `main` holds the finished four-byte practical. Branch `hop-limit` starts with the commit "Keep the finished lab program as tunnel_v1.p4" and then adds C1, the prediction, the P4 and Python changes, the evidence and the report as separate commits.
-2. The compile workflow is `.github/workflows/compile.yml` at the repository root (GitHub ignores workflows elsewhere). It runs `p4c-bm2-ss` on `week05/tunnel.p4` in the course image.
+2. The compile workflow is `.github/workflows/compile.yml` at the repository root (GitHub ignores workflows elsewhere). It runs `p4c-bm2-ss` on `week5/tunnel.p4` in the course image.
 3. The PR is `hop-limit` into `main`, titled Tunnel hop limit, and is left unmerged.
 4. The repository is public.
 5. The PR URL is submitted on Spectrum before the Week 6 class on Friday 13 November 2026.
@@ -89,9 +89,9 @@ No Codespace was created; experiments used the official image locally.
 From PowerShell at the coursework repository root, run C4/C5 in the official course container:
 
 ```powershell
-Set-Location .\week05
-$week05Path = (Get-Location).Path
-docker run --rm --privileged --mount "type=bind,source=$week05Path,target=/lab" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 python3 assignment/run_assignment.py
+Set-Location .\week5
+$week5Path = (Get-Location).Path
+docker run --rm --privileged --mount "type=bind,source=$week5Path,target=/lab" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 python3 assignment/run_assignment.py
 ```
 
 For C1 replay, use `python3 assignment/run_loop_before.py` instead. It selects the preserved baseline and original host tools in `../stages/`, independent of the current assignment format.

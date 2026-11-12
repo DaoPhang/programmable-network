@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Record C4/C5 in fresh workspaces inside the dedicated course container.
 
-From week05: python3 assignment/run_assignment.py
+From week5: python3 assignment/run_assignment.py
 Existing evidence is never overwritten. No Git operations are performed.
 """
 import json

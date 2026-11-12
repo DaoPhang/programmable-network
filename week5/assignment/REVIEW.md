@@ -36,7 +36,7 @@ The normal tunnel receivers reported hops 6; ordinary IPv4 worked; the upgraded 
 
 All tested source/config/stage files and original evidence retained their initial hashes. Only REPORT.md and PR-DESCRIPTION.md changed concurrently for the two documentation corrections. The test container was removed and no live Mininet jobs remained. Teardown interface-down and container resource-limit warnings did not prevent the tests passing.
 
-The full rerun used a disposable isolated workspace under `week05/build/`. That workspace was removed during cleanup after its results were recorded here. Required original evidence remains in assignment/evidence/ and agrees with the independent rerun.
+The full rerun used a disposable isolated workspace under `week5/build/`. That workspace was removed during cleanup after its results were recorded here. Required original evidence remains in assignment/evidence/ and agrees with the independent rerun.
 
 ## Publication state
 

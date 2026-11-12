@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Record C1 using the preserved practical in a dedicated course container.
 
-From week05: python3 assignment/run_loop_before.py
+From week5: python3 assignment/run_loop_before.py
 Each run uses a fresh build directory; existing evidence is never overwritten.
 """
 import json

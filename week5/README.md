@@ -67,6 +67,6 @@ To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated co
 
 ## Repository layout
 
-The lab lives in `week05/`. GitHub only reads workflows from the repository root, so the compilation workflow is `.github/workflows/compile.yml` at the root and compiles with `working-directory: week05`. The template's optional image-publishing workflow has been removed.
+The lab lives in `week5/`. GitHub only reads workflows from the repository root, so the compilation workflow is `.github/workflows/compile.yml` at the root and compiles with `working-directory: week5`. The template's optional image-publishing workflow has been removed.
 
 Local P4 compilation passed in the course image; the GitHub Actions result is shown on the PR. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained.
