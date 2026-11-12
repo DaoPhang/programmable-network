@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "h2_default_arrives_with_6": true,
+    "h3_eight_arrives_with_6": true,
+    "exhausted_values_not_delivered": true,
+    "three_arrives_with_1": true,
+    "max_arrives_with_253": true,
+    "plain_udp_works": true,
+    "plain_ping_works": true,
+    "reject_--tunnel 3 --hops -1": true,
+    "reject_--tunnel 3 --hops 256": true,
+    "reject_--hops 8": true
+  },
+  "measurements": {}
+}

@@ -1,0 +1,214 @@
+*** Compiling tunnel.p4
+*** Compiling tunnel_v1.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3 
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2 
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.42.0.1, h2 10.42.0.2, h3 10.42.0.3
+*** Mixed rollout: s1 runs tunnel.p4, s2 runs tunnel_v1.p4
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+=== Prediction recorded before this run ===
+# Mixed-version prediction — recorded before implementation/testing
+
+This prediction was written before changing the packet layout and before sending any C4/C5 packets. It is retained separately so the original expectation remains visible.
+
+## Chosen format and semantics
+
+New header: `proto_id` (2 bytes), `dst_id` (2 bytes), `hops` (1 byte), then IPv4. Default hops 8. An upgraded switch drops incoming hops 0 or 1; otherwise it subtracts one before the tunnel lookup. EtherType remains 0x1212 for this deliberate compatibility experiment. The old header is only four bytes.
+
+## Delivery prediction
+
+For new s1 and original s2, s1 changes hops 8 to 7. s2 reads the unchanged proto_id/dst_id prefix correctly, so destination 2 still selects h2. However, s2 interprets the hop byte as IPv4's first byte. Its parsed version becomes 0 and IHL becomes 7 (from 0x07); its fields are shifted one byte. The supplied old program does not validate those fields and still applies the tunnel table.
+
+The old program recomputes the checksum of its misaligned IPv4 header. Its checksum positions correspond to bytes 9 and 10 of the real IPv4 header: the real protocol byte and the first checksum byte. I predict a frame reaches h2 with the hop byte still 7 but damaged enclosed IPv4 protocol/checksum, preventing the normal UDP receiver from reporting a valid test message. A raw 0x1212 capture should reveal this. Preserving the four-byte prefix alone is therefore not safe compatibility.
+
+## Loop prediction
+
+After setting old s2's tunnel destination 3 to port 1, s1 and s2 will still use the correct tunnel destination field. s2 will not decrement hops. New s1 will decrement it on successive returns and eventually drop incoming 1. With initial 8, I predict s1=8 visits, s2=7 visits, total=15, followed by stable counts. The enclosed IPv4 fields may be damaged, but the tunnel prefix/hop positions remain available to s1 and still bound this particular loop.
+
+This does not prove safety for loops that visit no upgraded switch. The all-upgraded loop should instead stop after eight total visits (s1=4, s2=4).
+
+mininet> h2 timeout 8 tcpdump -ni h2-eth0 -c 1 -XX 'ether proto 0x1212' > logs/h2cap.txt 2>&1 &
+[2] 444
+mininet> h2 timeout 8 tcpdump -ni h2-eth0 -c 1 -w logs/mixed.pcap 'ether proto 0x1212' > logs/pcap-status.txt 2>&1 &
+[3] 445
+mininet> h1 python3 send.py 10.42.0.3 "mixed delivery" --tunnel 2 --hops 8
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 2
+     hops      = 8
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 42
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666b
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 22
+           chksum    = 0xc60b
+###[ Raw ]### 
+              load      = 'mixed delivery'
+
+Sent from h1-eth0.
+mininet> sh sleep 8
+mininet> sh cat logs/h2cap.txt
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:47:35.343059 00:00:00:00:00:01 > ff:ff:ff:ff:ff:ff, ethertype Unknown (0x1212), length 61: 
+	0x0000:  ffff ffff ffff 0000 0000 0001 1212 0800  ................
+	0x0010:  0002 0745 0000 2a00 0100 0040 0d66 6b0a  ...E..*....@.fk.
+	0x0020:  2a00 010a 2a00 0310 e110 e100 16c6 0b6d  *...*..........m
+	0x0030:  6978 6564 2064 656c 6976 6572 79         ixed.delivery
+1 packet captured
+1 packet received by filter
+0 packets dropped by kernel
+
+Captured packet decoded at NEW header offsets:
+{
+  "frame_hex": "ffffffffffff000000000001121208000002074500002a00010000400d666b0a2a00010a2a000310e110e10016c60b6d697865642064656c6976657279",
+  "proto_id": 2048,
+  "dst_id": 2,
+  "hops": 7,
+  "ipv4_version": 4,
+  "ipv4_protocol": 13,
+  "ipv4_checksum": "666b",
+  "ipv4_checksum_valid": false
+}
+mininet> sh cat logs/h2.txt
+Listening on h2-eth0...
+
+mininet> sh cat logs/h3.txt
+Listening on h3-eth0...
+
+mininet> sh sh ./p4cli s2 table_dump MyIngress.myTunnel_exact
+Done
+==========
+TABLE ENTRIES
+**********
+Dumping entry 0x0
+Match key:
+* myTunnel.dst_id     : EXACT     0001
+Action entry: MyIngress.myTunnel_forward - 01
+**********
+Dumping entry 0x1
+Match key:
+* myTunnel.dst_id     : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 02
+**********
+Dumping entry 0x2
+Match key:
+* myTunnel.dst_id     : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 03
+==========
+Dumping default entry
+Action entry: MyIngress.drop - 
+==========
+mininet> sh sh ./p4cli s2 table_modify MyIngress.myTunnel_exact MyIngress.myTunnel_forward 2 1
+Done
+Modifying entry 2 for exact match table MyIngress.myTunnel_exact
+mininet> sh sh ./p4cli s2 table_dump MyIngress.myTunnel_exact
+Done
+==========
+TABLE ENTRIES
+**********
+Dumping entry 0x0
+Match key:
+* myTunnel.dst_id     : EXACT     0001
+Action entry: MyIngress.myTunnel_forward - 01
+**********
+Dumping entry 0x1
+Match key:
+* myTunnel.dst_id     : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 02
+**********
+Dumping entry 0x2
+Match key:
+* myTunnel.dst_id     : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 01
+==========
+Dumping default entry
+Action entry: MyIngress.drop - 
+==========
+mininet> sh grep -c "Processing packet received" logs/s1.txt
+1
+mininet> sh grep -c "Processing packet received" logs/s2.txt
+1
+mininet> h1 python3 send.py 10.42.0.3 "loop hops 8" --tunnel 3 --hops 8
+###[ Ethernet ]### 
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]### 
+     proto_id  = 2048
+     dst_id    = 3
+     hops      = 8
+###[ IP ]### 
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 39
+        id        = 1
+        flags     = 
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x666e
+        src       = 10.42.0.1
+        dst       = 10.42.0.3
+        \options   \
+###[ UDP ]### 
+           sport     = 4321
+           dport     = 4321
+           len       = 19
+           chksum    = 0xb2d5
+###[ Raw ]### 
+              load      = 'loop hops 8'
+
+Sent from h1-eth0.
+mininet> sh grep -c "Processing packet received" logs/s1.txt
+9
+mininet> sh grep -c "Processing packet received" logs/s2.txt
+8
+mininet> sh sleep 5
+mininet> sh grep -c "Processing packet received" logs/s1.txt
+9
+mininet> sh grep -c "Processing packet received" logs/s2.txt
+8
+=== Assertions ===
+{
+  "mixed_frame_reaches_h2_with_7": true,
+  "mixed_ipv4_protocol_corrupted": true,
+  "mixed_ipv4_checksum_invalid": true,
+  "mixed_udp_not_received": true,
+  "hops_8_exact_visits": true,
+  "hops_8_counts_stable": true
+}
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 3 hosts
+h1 h2 h3 
+*** Done

@@ -1,0 +1,3 @@
+Listening on h2-eth0...
+Received (tunnelled, dst_id=2, hops=6) from 10.42.0.1 to 10.42.0.2, TTL 64: 'delivery h2 default'
+WARNING: Socket <scapy.arch.linux.L2ListenSocket object at 0x704fac378b00> failed with '[Errno 100] Network is down'. It was closed.
