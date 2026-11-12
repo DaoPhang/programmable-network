@@ -86,7 +86,8 @@ def main():
         work = ROOT / "build" / "practical" / label
         work.mkdir(parents=True, exist_ok=True)
         for filename in FILES:
-            shutil.copy2(ROOT / filename, work / filename)
+            source = ROOT / "stages" / filename.replace(".py", "_v1.py") if filename in ("send.py", "receive.py") else ROOT / filename
+            shutil.copy2(source, work / filename)
         shutil.copy2(ROOT / "stages" / f"{label}.p4", work / "tunnel.p4")
         out = EVIDENCE / label
         out.mkdir()
