@@ -8,7 +8,7 @@ Student suffix: **6042**. Hosts: **10.42.0.1**, **10.42.0.2**, **10.42.0.3**.
 
 The practical and assignment C1–C5 are complete locally. The practical passed 31 checks; the hop-limit delivery, loop-boundary and mixed-version experiments passed **26 further assertions** in the official course Docker image.
 
-`tunnel.p4` is the **hop-limit implementation**. `tunnel_v1.p4` preserves the completed practical without a limit. The user published the source, report and evidence to the combined coursework repository in commit `e2e5040` (`Week05`). The separate P4 submission repository/PR, green GitHub compilation check and Spectrum submission remain outstanding.
+`tunnel.p4` is the **hop-limit implementation**. `tunnel_v1.p4` preserves the completed practical without a limit. The hop-limit work is on branch `hop-limit` and is submitted as the unmerged PR "Tunnel hop limit" into `main`.
 
 Start with [assignment/README.md](assignment/README.md) for the complete C1–C6 guide, publication status and remaining submission steps, and [assignment/REPORT.md](assignment/REPORT.md) for the design and analysis.
 
@@ -67,6 +67,6 @@ To reproduce C4/C5, use `python3 assignment/run_assignment.py` in a dedicated co
 
 ## Repository layout
 
-Everything remains inside `week05/`. GitHub does not discover its nested `.github/workflows/` or `.devcontainer/` as root configuration of the parent coursework repository. Copy them to the root of your separate P4 template repository when submitting. Only the needed compilation workflow is retained; the template's optional image-publishing workflow has been removed.
+The lab lives in `week05/`. GitHub only reads workflows from the repository root, so the compilation workflow is `.github/workflows/compile.yml` at the root and compiles with `working-directory: week05`. The template's optional image-publishing workflow has been removed.
 
-The current Git remote is the combined coursework repository. A separate P4 repository and its assignment PR remain to be configured for the course submission. Local P4 compilation passed, but no GitHub Actions result is claimed. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained.
+Local P4 compilation passed in the course image; the GitHub Actions result is shown on the PR. Disposable build/review copies, failed-attempt logs and duplicate guides were removed; successful evidence and reproducible test runners are retained.

@@ -8,7 +8,7 @@ The original tunnel forwarding action can circulate packets indefinitely after a
 
 In the supplied two-switch Mininet topology, both tunnel destinations received default-budget packets with 6 remaining, and ordinary IPv4 continued working. The all-upgraded loop terminated after eight visits. With old s2, the loop terminated after 15 visits, while a packet capture demonstrated the old parser's one-byte misalignment corrupting the enclosed IPv4 protocol/checksum. The report explains the pre-test prediction, upgrade alternatives, comparison with Week 3's path checking and hardware costs.
 
-Validation: P4 compilation in the official course image; 26 passing delivery, argument-validation, loop-boundary and mixed-version assertions. Evidence is under `assignment/evidence/`, with design and analysis in `assignment/REPORT.md`. GitHub's compilation check must be confirmed separately after publication; local compilation is not a GitHub Actions result.
+Validation: P4 compilation in the official course image; 26 passing delivery, argument-validation, loop-boundary and mixed-version assertions. Evidence is under `assignment/evidence/`, with design and analysis in `assignment/REPORT.md`. The Compile tunnel.p4 check runs from the repository-root workflow, which compiles in `week05/`.
 
 Leave this PR unmerged for lecturer review. AI assistance is declared in the report.
 

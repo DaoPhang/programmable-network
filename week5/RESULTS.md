@@ -35,4 +35,4 @@ At Step 6, s1 consumes the real tunnel header during parsing but fails to reinse
 
 ## Scope still remaining
 
-The practical code and experiments are complete locally. The four wrap-up questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md), included with the practical baseline and evidence in the earlier local commit. Assignment C1–C5 are now complete too; see [assignment/REPORT.md](assignment/REPORT.md). The user published the implementation/report in the combined coursework repository as commit `e2e5040`. Separate P4 repository/PR setup, a green GitHub compilation check and Spectrum submission remain; see [assignment/README.md](assignment/README.md#c6--prepare-and-submit).
+The practical code and experiments are complete locally. The four wrap-up questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md), included with the practical baseline and evidence in the earlier local commit. Assignment C1–C5 are now complete too; see [assignment/REPORT.md](assignment/REPORT.md). The work is submitted as the unmerged PR "Tunnel hop limit"; see [assignment/README.md](assignment/README.md#c6-prepare-and-submit).

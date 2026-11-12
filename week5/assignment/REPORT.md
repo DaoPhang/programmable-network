@@ -2,13 +2,13 @@
 
 Student ID (last 4 digits only): 6042
 
-Status: C1 to C5 are complete and experimentally verified. The source, report and evidence were published in the combined coursework repository as commit `e2e5040` (`Week05`). C6 still requires the separate P4 assignment PR, a green GitHub compilation check, lecturer access and Spectrum submission. Experiments used the official course image on local Docker rather than Codespaces.
+Status: C1 to C5 are complete and experimentally verified. The work is on branch `hop-limit` and submitted as the unmerged PR "Tunnel hop limit" into `main`; its compile check is the repository-root workflow. Experiments used the official course image on local Docker rather than Codespaces.
 
 ## 1. Analysis: the loop
 
 ### Baseline and experiment setup
 
-The completed practical was preserved as `../tunnel_v1.p4` on branch `hop-limit`, in baseline commit `b5fc667`. It is identical to the tested practical program and contains no hop-limit field or exhaustion check. Both switches ran that baseline in the official course container using student suffix `6042`.
+The completed practical was preserved as `../tunnel_v1.p4` as the first commit on branch `hop-limit`. It is identical to the tested practical program and contains no hop-limit field or exhaustion check. Both switches ran that baseline in the official course container using student suffix `6042`.
 
 The automated experiment used a fresh working directory to avoid counting earlier logs. It compiled the preserved program as `tunnel.p4` and started the original topology with `--id 6042`. The runner invokes the topology's normal CLI callback with a scripted experiment and records the equivalent Mininet commands and actual outputs in [loop-before.txt](evidence/loop-before.txt).
 

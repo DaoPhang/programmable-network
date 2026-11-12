@@ -1,6 +1,6 @@
 # Independent pre-submission review
 
-Result: PASS for local C1 to C5 implementation and experiments. C6 publication, the GitHub compilation check and Spectrum submission remain pending.
+Result: PASS for local C1 to C5 implementation and experiments. C6 is the PR from `hop-limit`; its GitHub check is reported on the PR.
 
 Three independent Codex workers, coordinated through Orca, reviewed the implementation, audited the report/evidence against the course requirements, and reran the experiments. The requested `codex-luna` model was rejected by the connected ChatGPT account before review work began; the workers were restarted with the configured default Codex model.
 
@@ -40,4 +40,4 @@ The full rerun used a disposable isolated workspace under `week05/build/`. That 
 
 ## Publication state
 
-No changes were staged, committed or pushed during these independent reviews. The user subsequently published the assignment in the combined coursework repository as commit `e2e5040` (`Week05`). A separate P4 template repository/PR, green compilation check, lecturer access and Spectrum submission remain; see [README.md](README.md#c6-prepare-and-submit).
+No changes were staged, committed or pushed during these independent reviews. The history was later rebuilt on `hop-limit` for the PR; see [README.md](README.md#c6-prepare-and-submit).

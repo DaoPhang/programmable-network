@@ -1,7 +1,7 @@
 # Week 05 assignment: tunnel hop limit
 
 Student suffix: 6042  
-Combined coursework branch: `main`. Course submission PR branch: `hop-limit` (still to be established in the separate P4 repository).
+Base branch: `main` (the finished practical). Submission branch: `hop-limit`, opened as the unmerged PR "Tunnel hop limit".
 
 [Course instructions](https://firdaussahran.github.io/wic2005/weeks/week-05/#tab-lab) · [Full report](REPORT.md) · [Submission steps](#c6-prepare-and-submit)
 
@@ -9,11 +9,11 @@ Combined coursework branch: `main`. Course submission PR branch: `hop-limit` (st
 
 This assignment adds a hop limit to the practical's P4 tunnel program, demonstrates that it stops a forwarding loop, and evaluates deployment with an older switch program. The topology is h1 → s1 → s2, with h2 and h3 connected to s2. Host addresses are `10.42.0.1`, `10.42.0.2` and `10.42.0.3`.
 
-C1 to C5 are complete. The updated program compiled in the official course image, and all 26 C4/C5 assertions passed. The user published the implementation, report and evidence in the combined coursework repository as commit `e2e5040`. C6 still requires a PR in the separate P4 submission repository, a green compilation check, lecturer access and Spectrum submission.
+C1 to C5 are complete. The updated program compiled in the official course image, and all 26 C4/C5 assertions passed. C6 is the PR `hop-limit` into `main`; its Compile tunnel.p4 check runs from the root workflow.
 
 ## C1: Demonstrate the original loop
 
-The completed practical is preserved in [tunnel_v1.p4](../tunnel_v1.p4), which matches the saved Step 5 program. Baseline commit `b5fc667` and C1 commit `8567723` preserve the earlier work.
+The completed practical is preserved in [tunnel_v1.p4](../tunnel_v1.p4), which matches the saved Step 5 program. It is the first commit on `hop-limit`, followed by the C1 evidence commit.
 
 The experiment identified s2's tunnel destination-3 entry as handle 2 and changed its output from port 3 to port 1. Since s1 already sends destination 3 towards s2, this created s1 → s2 → s1. One packet was sent from h1 with destination identifier 3, then switch packet-reception counts were measured twice.
 
@@ -67,18 +67,15 @@ REPORT.md compares two rollout approaches, the required Week 3 `check_paths()` b
 
 ## C6: Prepare and submit
 
-The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the proposed PR title/body.
+The report and AI-use declaration are complete, and all four required evidence files exist. [PR-DESCRIPTION.md](PR-DESCRIPTION.md) contains the PR title and body.
 
-1. Create your own repository from the [course P4 template](https://github.com/firdaussahran/p4-lab). Place `tunnel.p4`, `topo.py`, `.github/` and `.devcontainer/` at its root.
-2. Establish the completed four-byte practical baseline on its `main`, including `tunnel_v1.p4`. Carry over the earlier baseline/C1 history where practical. Keep the finished assignment for the assignment branch.
-3. Create `hop-limit` from that baseline and transfer/commit the reviewed updated source, report and evidence. Preserve the original baseline.
-4. Push `hop-limit` and open a PR targeting that repository's own `main`, titled Tunnel hop limit. Use [PR-DESCRIPTION.md](PR-DESCRIPTION.md) for the prepared body.
-5. Confirm Compile tunnel.p4 is green. Local compilation passed; a GitHub Actions result has not yet been verified.
-6. Make the repository public or grant the lecturer collaborator access.
-7. Submit the actual PR URL on the authenticated Spectrum assignment page.
-8. Leave the PR unmerged. Deadline: Friday 13 November 2026, before the Week 6 class.
+1. `main` holds the finished four-byte practical. Branch `hop-limit` starts with the commit "Keep the finished lab program as tunnel_v1.p4" and then adds C1, the prediction, the P4 and Python changes, the evidence and the report as separate commits.
+2. The compile workflow is `.github/workflows/compile.yml` at the repository root (GitHub ignores workflows elsewhere). It runs `p4c-bm2-ss` on `week05/tunnel.p4` in the course image.
+3. The PR is `hop-limit` into `main`, titled Tunnel hop limit, and is left unmerged.
+4. The repository is public.
+5. The PR URL is submitted on Spectrum before the Week 6 class on Friday 13 November 2026.
 
-Publishing the combined coursework repository does not complete those course-specific PR and submission steps. No Codespace was created; the experiments used the official image locally, and temporary containers were removed.
+No Codespace was created; experiments used the official image locally.
 
 ## Evidence and reproduction
 

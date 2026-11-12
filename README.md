@@ -93,9 +93,9 @@ Completed validation in the official course image:
 
 Start with the [Week 5 overview](week05/README.md), [practical answers](week05/LAB-ANSWERS.md), [assignment guide](week05/assignment/README.md) and [full report](week05/assignment/REPORT.md). The assignment guide links all four required evidence transcripts and provides reproduction instructions. Runners refuse to overwrite existing evidence; preserve it before repeating experiments.
 
-The source, report and evidence are published in this combined coursework repository. **Course submission remains outstanding:** a separate P4 template repository, an unmerged PR titled **Tunnel hop limit**, a green **Compile tunnel.p4** check, lecturer access and the PR URL submitted on Spectrum. The deadline is **Friday 13 November 2026, before the Week 6 class**. See the [C6 instructions](week05/assignment/README.md#c6--prepare-and-submit).
+The source, report and evidence are published in this combined coursework repository. The assignment is submitted as the unmerged PR **Tunnel hop limit** from branch `hop-limit` into `main`, with the **Compile tunnel.p4** check run by GitHub Actions. The PR URL is submitted on Spectrum. The deadline is **Friday 13 November 2026, before the Week 6 class**. See the [C6 instructions](week05/assignment/README.md#c6--prepare-and-submit).
 
-Week 5's `.github/` and `.devcontainer/` are nested inside `week05/`; GitHub does not use them as root configuration for this combined repository. The assignment guide explains the standalone export for the separate P4 repository.
+The compile workflow lives at the repository root (`.github/workflows/compile.yml`) because GitHub only reads workflows there; it compiles `week05/tunnel.p4` with `working-directory: week05`. Week 5's `.devcontainer/` stays inside `week05/`.
 
 ## Optional WSL workflow
 

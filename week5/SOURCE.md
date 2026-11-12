@@ -13,7 +13,7 @@ The practical added tunnel parsing, emission and tunnel-first forwarding. Its 31
 
 `tunnel_v1.p4` matches `stages/step05-tunnel-forwarding.p4`. Original host tools remain in `stages/send_v1.py` and `stages/receive_v1.py`, and practical/C1 runners explicitly select those definitions.
 
-C1 demonstrated unbounded circulation, with counts 18→192 on s1 and 17→192 on s2. Baseline and C1 commits are `b5fc667` and `8567723`. Initial shell-line-ending and runtime-CLI parser errors were corrected before the successful runs. Their failed-run logs were removed from the current folder during cleanup and remain available in Git history.
+C1 demonstrated unbounded circulation, with counts 18→192 on s1 and 17→192 on s2. The baseline and C1 are separate commits on `hop-limit`. Initial shell-line-ending and runtime-CLI parser errors were corrected before the successful runs. Their failed-run logs were removed from the current folder during cleanup and remain available in Git history.
 
 ## Current assignment
 
@@ -32,8 +32,8 @@ Three independent reviews found no implementation defects, verified the evidence
 
 ## Cleanup and GitHub state
 
-The user published Week 05 to the combined coursework repository's `main` in commit `e2e5040` (`Week05`). A separate P4 assignment repository/PR, a green GitHub compilation check, lecturer access and Spectrum submission remain outstanding.
+Week 05 is submitted as the unmerged PR "Tunnel hop limit" from `hop-limit` into `main`.
 
 Cleanup removed disposable `build/` copies and ZIPs, failed-attempt logs, an empty evidence placeholder, duplicate template/checklist documents, and the unused image-publishing workflow. Successful source/evidence, original packet tools, stage programs, compilation/dev-container configuration, report and review summary remain intact. The tracked deletions are recoverable from Git history; new build/export artifacts can be regenerated.
 
-Nested week05 configuration is not automatically active at the parent repository root. The export script puts it at the root of a standalone review copy for the separate P4 repository. See assignment/README.md for the remaining submission steps.
+The compile workflow is at the repository root so GitHub runs it; it compiles in `week05/`.

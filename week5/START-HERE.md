@@ -232,4 +232,4 @@ The runner stops on a failed check and refuses to overwrite existing evidence. R
 
 ## What remains after this practical
 
-The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The hop-limit assignment C1–C5 are complete; see [assignment/README.md](assignment/README.md) and [assignment/REPORT.md](assignment/REPORT.md). The report is complete, while the course-specific PR and Spectrum submission steps remain in [assignment/README.md](assignment/README.md#c6--prepare-and-submit).
+The four wrap-up lab questions are answered in [LAB-ANSWERS.md](LAB-ANSWERS.md). The hop-limit assignment C1–C5 are complete; see [assignment/README.md](assignment/README.md) and [assignment/REPORT.md](assignment/REPORT.md). The report is complete; the PR steps are in [assignment/README.md](assignment/README.md#c6-prepare-and-submit).
