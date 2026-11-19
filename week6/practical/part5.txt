@@ -1,0 +1,107 @@
+Script started on 2026-11-19 06:49:47+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="174" LINES="21"]
+# mn --topo single,2 --mac --switch lxbr --controller none --ipbase 10.42.0.0/24
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Creating network
+*** Adding controller
+*** Adding hosts:
+h1 h2 
+*** Adding switches:
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+s1 
+*** Adding links:
+(h1, s1) (h2, s1) 
+*** Configuring hosts
+h1 h2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+*** Starting CLI:
+mininet> h1 ip addr add fd00:6042::1/64 dev h1-eth0
+mininet> h2 ip addr add fd00:6042::2/64 dev h2-eth0
+mininet> sh sleep 3
+mininet> h1 ping -6 -c 2 fd00:6042::2
+PING fd00:6042::2 (fd00:6042::2) 56 data bytes
+64 bytes from fd00:6042::2: icmp_seq=1 ttl=64 time=1.59 ms
+64 bytes from fd00:6042::2: icmp_seq=2 ttl=64 time=0.053 ms
+
+--- fd00:6042::2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 0.053/0.821/1.589/0.768 ms
+mininet> h1 ip link add vxlan106 type vxlan id 106 local fd00:6042::1 remote fd00:6042::2 dstport 4789 dev h1-eth0
+mininet> h2 ip link add vxlan106 type vxlan id 106 local fd00:6042::2 remote fd00:6042::1 dstport 4789 dev h2-eth0
+mininet> h1 ip addr add 10.42.106.1/24 dev vxlan106
+mininet> h2 ip addr add 10.42.106.2/24 dev vxlan106
+mininet> h1 ip link set vxlan106 up
+mininet> h2 ip link set vxlan106 up
+mininet> h1 ip link show vxlan106
+3: vxlan106: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1430 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 6e:41:3c:bc:09:d5 brd ff:ff:ff:ff:ff:ff
+mininet> h1 ping -M do -c 1 -s 1402 10.42.106.2
+PING 10.42.106.2 (10.42.106.2) 1402(1430) bytes of data.
+1410 bytes from 10.42.106.2: icmp_seq=1 ttl=64 time=0.112 ms
+
+--- 10.42.106.2 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.112/0.112/0.112/0.000 ms
+mininet> h1 ping -M do -c 1 -s 1403 10.42.106.2
+PING 10.42.106.2 (10.42.106.2) 1403(1431) bytes of data.
+ping: local error: message too long, mtu=1430
+
+--- 10.42.106.2 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+mininet> h2 tcpdump -ni h2-eth0 -c 8 udp port 4789 > /tmp/h2v6.txt 2>&1 &
+mininet> x`[K[Ksh sleep 2
+mininet> h1 ping -c 3 10.42.106.2
+PING 10.42.106.2 (10.42.106.2) 56(84) bytes of data.
+64 bytes from 10.42.106.2: icmp_seq=1 ttl=64 time=0.165 ms
+64 bytes from 10.42.106.2: icmp_seq=2 ttl=64 time=0.071 ms
+64 bytes from 10.42.106.2: icmp_seq=3 ttl=64 time=0.112 ms
+
+--- 10.42.106.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2054ms
+rtt min/avg/max/mdev = 0.071/0.116/0.165/0.038 ms
+mininet> sh sleep 2
+mininet> sh pkill tcpdump
+mininet> sh sleep 1
+mininet> sh cat /tmp/h2v6.txt
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:51:48.018511 IP6 fd00:6042::2.53883 > fd00:6042::1.4789: VXLAN, flags [I] (0x08), vni 106
+IP6 fe80::f45a:baff:feff:f2b6 > ff02::2: ICMP6, router solicitation, length 16
+06:52:27.148588 IP6 fd00:6042::1.47159 > fd00:6042::2.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.1 > 10.42.106.2: ICMP echo request, id 1867, seq 1, length 64
+06:52:27.148639 IP6 fd00:6042::2.47159 > fd00:6042::1.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.2 > 10.42.106.1: ICMP echo reply, id 1867, seq 1, length 64
+06:52:28.178417 IP6 fd00:6042::1.47159 > fd00:6042::2.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.1 > 10.42.106.2: ICMP echo request, id 1867, seq 2, length 64
+06:52:28.178440 IP6 fd00:6042::2.47159 > fd00:6042::1.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.2 > 10.42.106.1: ICMP echo reply, id 1867, seq 2, length 64
+06:52:29.202704 IP6 fd00:6042::1.47159 > fd00:6042::2.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.1 > 10.42.106.2: ICMP echo request, id 1867, seq 3, length 64
+06:52:29.202767 IP6 fd00:6042::2.47159 > fd00:6042::1.4789: VXLAN, flags [I] (0x08), vni 106
+IP 10.42.106.2 > 10.42.106.1: ICMP echo reply, id 1867, seq 3, length 64
+06:52:32.306655 IP6 fd00:6042::2.59693 > fd00:6042::1.4789: VXLAN, flags [I] (0x08), vni 106
+ARP, Request who-has 10.42.106.1 tell 10.42.106.2, length 28
+8 packets captured
+11 packets received by filter
+0 packets dropped by kernel
+mininet> e[Keixt
+*** Unknown command: eixt
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 2 links
+..
+*** Stopping 1 switches
+s1 
+*** Stopping 2 hosts
+h1 h2 
+*** Done
+completed in 291.268 seconds
+# exit
+
+Script done on 2026-11-19 06:54:43+00:00 [COMMAND_EXIT_CODE="0"]

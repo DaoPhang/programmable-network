@@ -1,0 +1,49 @@
+Script started on 2026-11-19 06:40:50+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="174" LINES="21"]
+# ip netns add red
+# ip netns add blue
+# ip link add veth-red type veth peer name red-br
+# ip link add veth-blue type veth peer name blue-br
+# ip link add br0 type bridge
+# ip link set veth-red netns red
+# ip link set veth-blue netns blue
+# ip link set red-br master br0
+# ip link set blue-br master br0
+# ip link set br0 up
+# ip link set red-br up
+# ip link set blue-br up
+# ip netns exec red ip addr add 10.42.9.1/24 dev veth-red
+# ip netns exec blue ip addr add 10.42.9.2/24 dev veth-blue
+# ip netns exec red ip link set veth-red up
+# ip netns exec blue ip link set veth-blue up
+# ip netns exec red ping -c 2 10.42.9.2
+PING 10.42.9.2 (10.42.9.2) 56(84) bytes of data.
+64 bytes from 10.42.9.2: icmp_seq=1 ttl=64 time=0.782 ms
+64 bytes from 10.42.9.2: icmp_seq=2 ttl=64 time=0.062 ms
+
+--- 10.42.9.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1027ms
+rtt min/avg/max/mdev = 0.062/0.422/0.782/0.360 ms
+# bridge fdb show br br0
+96:77:5a:d6:a6:38 dev red-br master br0 
+06:c7:7f:d5:33:00 dev red-br vlan 1 master br0 permanent
+06:c7:7f:d5:33:00 dev red-br master br0 permanent
+33:33:00:00:00:01 dev red-br self permanent
+01:00:5e:00:00:01 dev red-br self permanent
+33:33:ff:d5:33:00 dev red-br self permanent
+86:18:84:3e:df:e6 dev blue-br master br0 
+56:5e:f4:78:d1:b9 dev blue-br vlan 1 master br0 permanent
+56:5e:f4:78:d1:b9 dev blue-br master br0 permanent
+33:33:00:00:00:01 dev blue-br self permanent
+01:00:5e:00:00:01 dev blue-br self permanent
+33:33:ff:78:d1:b9 dev blue-br self permanent
+33:33:00:00:00:01 dev br0 self permanent
+01:00:5e:00:00:6a dev br0 self permanent
+33:33:00:00:00:6a dev br0 self permanent
+01:00:5e:00:00:01 dev br0 self permanent
+33:33:ff:d5:33:00 dev br0 self permanent
+# ip netns del red
+# ip netns del blue
+# ip link del br0
+# exit
+
+Script done on 2026-11-19 06:43:05+00:00 [COMMAND_EXIT_CODE="0"]

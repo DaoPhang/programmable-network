@@ -1,0 +1,170 @@
+Script started on 2026-11-19 06:43:50+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="174" LINES="21"]
+# mn --topo single,2 --mac --switch lxbr --controller none --ipbase 10.42.0.0/24
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Creating network
+*** Adding controller
+*** Adding hosts:
+h1 h2 
+*** Adding switches:
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+s1 
+*** Adding links:
+(h1, s1) (h2, s1) 
+*** Configuring hosts
+h1 h2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+*** Starting CLI:
+mininet> h1 ip link add vxlan100 type vxlan id 100 local 10.42.0.1 remote 10.42.0.2 dstport 4789 dev h1-eth0
+mininet> h1 ip addr add 10.42.100.1/24 dev vxlan100
+mininet> h1 ip link set vxlan100 up
+mininet> h2 ip link add vxlan100 type vxlan id 100 local 10.42.0.2 remote 10.42.0.1 dstport 4789 dev h2-eth0
+mininet> 
+Interrupt
+mininet> h2 ip addr add 10.42.100.2/24 dev vxlan100
+mininet> h2 ip link set vxlan100 uph2 ip link set vxlan100 up
+Error: either "dev" is duplicate, or "uph2" is a garbage.
+mininet> h2 ip link set vxlan100 uph2 ip link set vxlan100 up
+Error: either "dev" is duplicate, or "uph2" is a garbage.
+mininet> h1 ping -c 2 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 56(84) bytes of data.
+From 10.42.100.1 icmp_seq=1 Destination Host Unreachable
+From 10.42.100.1 icmp_seq=2 Destination Host Unreachable
+
+--- 10.42.100.2 ping statistics ---
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1022ms
+pipe 2
+mininet> h2 tcpdump -ni h2-eth0 -c 4 udp port 4789 > /tmp/h2.txt 2>&1 &
+mininet> sh sleep 2
+mininet> h1 ping -c 3 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 56(84) bytes of data.
+From 10.42.100.1 icmp_seq=1 Destination Host Unreachable
+From 10.42.100.1 icmp_seq=2 Destination Host Unreachable
+From 10.42.100.1 icmp_seq=3 Destination Host Unreachable
+
+--- 10.42.100.2 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2044ms
+pipe 3
+mininet> sh sleep 2
+mininet> sh cat /tmp/h2.txt
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:45:14.802504 IP 10.42.0.1.44563 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+IP6 fe80::e4bb:c4ff:fe3a:4539 > ff02::2: ICMP6, router solicitation, length 16
+06:45:17.590994 IP 10.42.0.1.59693 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+ARP, Request who-has 10.42.100.2 tell 10.42.100.1, length 28
+06:45:18.610610 IP 10.42.0.1.59693 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+ARP, Request who-has 10.42.100.2 tell 10.42.100.1, length 28
+06:45:19.634567 IP 10.42.0.1.59693 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+ARP, Request who-has 10.42.100.2 tell 10.42.100.1, length 28
+4 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+mininet> h2 ip link set vxlan100 up
+mininet> h1 ip -br addr show vxlan100
+vxlan100         UNKNOWN        10.42.100.1/24 fe80::e4bb:c4ff:fe3a:4539/64 
+mininet> h2 ip -br addr show vxlan100
+vxlan100         UNKNOWN        10.42.100.2/24 fe80::4c1b:9ff:fe20:b495/64 
+mininet> h1 ping -c 2 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 56(84) bytes of data.
+64 bytes from 10.42.100.2: icmp_seq=1 ttl=64 time=11.1 ms
+64 bytes from 10.42.100.2: icmp_seq=2 ttl=64 time=0.063 ms
+
+--- 10.42.100.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.063/5.567/11.071/5.504 ms
+mininet> h2 tcpdump -ni h2-eth0 -c 4 udp port 4789 > /tmp/h2b.txt 2>&1 &
+mininet> sh sleep 2
+mininet> h1 ping -c 3 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 56(84) bytes of data.
+64 bytes from 10.42.100.2: icmp_seq=1 ttl=64 time=0.096 ms
+64 bytes from 10.42.100.2: icmp_seq=2 ttl=64 time=0.074 ms
+64 bytes from 10.42.100.2: icmp_seq=3 ttl=64 time=0.057 ms
+
+--- 10.42.100.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2034ms
+rtt min/avg/max/mdev = 0.057/0.075/0.096/0.015 ms
+mininet> sh sleep 2
+mininet> sh cat /tmp/h2b.txt
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:46:24.434478 IP 10.42.0.1.44563 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+IP6 fe80::e4bb:c4ff:fe3a:4539 > ff02::2: ICMP6, router solicitation, length 16
+06:46:28.274650 IP 10.42.0.2.57647 > 10.42.0.1.4789: VXLAN, flags [I] (0x08), vni 100
+IP6 fe80::4c1b:9ff:fe20:b495 > ff02::2: ICMP6, router solicitation, length 16
+06:46:34.112332 IP 10.42.0.1.50022 > 10.42.0.2.4789: VXLAN, flags [I] (0x08), vni 100
+IP 10.42.100.1 > 10.42.100.2: ICMP echo request, id 1733, seq 1, length 64
+06:46:34.112375 IP 10.42.0.2.50022 > 10.42.0.1.4789: VXLAN, flags [I] (0x08), vni 100
+IP 10.42.100.2 > 10.42.100.1: ICMP echo reply, id 1733, seq 1, length 64
+4 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+mininet> h1 ip link show h1-eth0
+2: h1-eth0@if35: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 00:00:00:00:00:01 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+mininet> h1 ip link show vxlan100
+3: vxlan100: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether e6:bb:c4:3a:45:39 brd ff:ff:ff:ff:ff:ff
+mininet> h1 ping -M do -c 1 -s 1422 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 1422(1450) bytes of data.
+1430 bytes from 10.42.100.2: icmp_seq=1 ttl=64 time=0.084 ms
+
+--- 10.42.100.2 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.084/0.084/0.084/0.000 ms
+mininet> h1 ping -M do -c 1 -s 1423 10.42.100.2
+PING 10.42.100.2 (10.42.100.2) 1423(1451) bytes of data.
+ping: local error: message too long, mtu=1450
+
+--- 10.42.100.2 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+mininet> h2 iperf3 -s -D
+mininet> h1 iperf3 -c 10.42.0.2 -t 5
+Connecting to host 10.42.0.2, port 5201
+[  5] local 10.42.0.1 port 60746 connected to 10.42.0.2 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  3.43 GBytes  29.4 Gbits/sec   90   2.92 MBytes       
+[  5]   1.00-2.00   sec  3.94 GBytes  33.8 Gbits/sec    0   2.92 MBytes       
+[  5]   2.00-3.00   sec  3.75 GBytes  32.2 Gbits/sec    1   2.93 MBytes       
+[  5]   3.00-4.00   sec  1.89 GBytes  16.2 Gbits/sec    0   2.93 MBytes       
+[  5]   4.00-5.00   sec  3.68 GBytes  31.6 Gbits/sec    0   2.93 MBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  16.8 GBytes  28.8 Gbits/sec   91             sender
+[  5]   0.00-5.00   sec  16.8 GBytes  28.8 Gbits/sec                  receiver
+
+iperf Done.
+mininet> h1 iperf3 -c 10.42.100.2 -t 5
+Connecting to host 10.42.100.2, port 5201
+[  5] local 10.42.100.1 port 38500 connected to 10.42.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  2.58 GBytes  22.2 Gbits/sec  100   2.49 MBytes       
+[  5]   1.00-2.00   sec  2.56 GBytes  22.0 Gbits/sec    0   2.49 MBytes       
+[  5]   2.00-3.00   sec  2.54 GBytes  21.8 Gbits/sec    0   2.49 MBytes       
+[  5]   3.00-4.00   sec  2.59 GBytes  22.3 Gbits/sec    0   2.49 MBytes       
+[  5]   4.00-5.00   sec  2.57 GBytes  22.1 Gbits/sec    0   2.49 MBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  12.9 GBytes  22.1 Gbits/sec  100             sender
+[  5]   0.00-5.00   sec  12.9 GBytes  22.1 Gbits/sec                  receiver
+
+iperf Done.
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 2 links
+..
+*** Stopping 1 switches
+s1 
+*** Stopping 2 hosts
+h1 h2 
+*** Done
+completed in 297.617 seconds
+# exit
+
+Script done on 2026-11-19 06:48:54+00:00 [COMMAND_EXIT_CODE="0"]

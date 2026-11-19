@@ -1,0 +1,56 @@
+Script started on 2026-11-19 06:39:04+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="174" LINES="21"]
+# mn --topo single,2 --mac --switch lxbr --controller none --ipbase 10.42.0.0/24
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Creating network
+*** Adding controller
+*** Adding hosts:
+h1 h2 
+*** Adding switches:
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+s1 
+*** Adding links:
+(h1, s1) (h2, s1) 
+*** Configuring hosts
+h1 h2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+*** Starting CLI:
+mininet> dump
+<Host h1: h1-eth0:10.42.0.1 pid=1552> 
+<Host h2: h2-eth0:10.42.0.2 pid=1554> 
+<LinuxBridge s1: lo:127.0.0.1,s1-eth1:None,s1-eth2:None pid=1560> 
+mininet> sh lsns -t net -o NS,PID,COMMAND
+        NS   PID COMMAND
+4026532556     1 bash
+4026532904   964 ├─iperf3 -s -D
+4026532973  1240 ├─iperf3 -s -D
+4026533042  1475 └─iperf3 -s -D
+4026532628  1552 bash --norc --noediting -is mininet:h1
+4026532697  1554 bash --norc --noediting -is mininet:h2
+mininet> h1 ip -br link
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+h1-eth0@if27     UP             00:00:00:00:00:01 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+mininet> sh ip -br link
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0@if10        UP             2e:8f:21:9d:bc:ff <BROADCAST,MULTICAST,UP,LOWER_UP> 
+s1-eth1@if2      UP             a6:bf:30:9b:3a:d5 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+s1-eth2@if2      UP             46:a2:ce:06:03:a9 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+s1               UP             46:a2:ce:06:03:a9 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 2 links
+..
+*** Stopping 1 switches
+s1 
+*** Stopping 2 hosts
+h1 h2 
+*** Done
+completed in 16.607 seconds
+# exit
+
+Script done on 2026-11-19 06:39:30+00:00 [COMMAND_EXIT_CODE="0"]

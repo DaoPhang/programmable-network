@@ -1,0 +1,45 @@
+Script started on 2026-11-19 15:01:07+08:00 [TERM="xterm-256color" TTY="/dev/pts/3" COLUMNS="157" LINES="22"]
+[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker run -d --name c1 alpine:3.20 sleep 600[27mdocker run -d --name c1 alpine:3.20 sleep 600
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25hError response from daemon: The command 'docker' could not be found in this WSL 2 distro.
+We recommend to activate the WSL integration in Docker Desktop settings.
+For details about using Docker Desktop with WSL 2, visit: https://docs.docker.com/go/wsl2/
+
+[1mWhat's next:[22m[K
+    Debug this container error with Gordon → docker ai "help me fix this container error"[?9001l[?1004l
+[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker.exe run -d --name c1 alpine:3.20 sleep 600[27mdocker.exe run -d --name c1 alpine:3.20 sleep 600
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25hUnable to find image 'alpine:3.20' locally
+3.20: Pulling from library/alpine
+
+[?25l[21;1H25f1d6b1951a: Pulling fs layer[K
+[?25h[?25l[21;1H[?25h25f1d6b1951a: Downloading [==============>                                    ]  1.049MB/3.63MB[K
+[?25l[21;1H[?25h25f1d6b1951a: Downloading [===========================================>       ]  3.146MB/3.63MB[K
+[?25l[21;1H[?25h25f1d6b1951a: Extracting 1 s[K
+
+[?25l[21;1Hd4050d56ebf2: Download complete[K
+[?25h[?25l
+[19;1H25f1d6b1951a: Pull complete                                                                                                                                  [21;1H3a030ca3f633: Download complete                                                                                                                              
+[?25hDigest: sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+Status: Downloaded newer image for alpine:3.20
+2a1edf110284f3acabf89a27dd4605f6472591da6df515b3bfd61f6f2fd16143
+[?9001l[?1004l[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker.exe exec c1 ip addr show eth0[27mdocker.exe exec c1 ip addr show eth0
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25h2: eth0@if11: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether 0a:02:f8:07:b3:e9 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+[?9001l[?1004l[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker.exe exec c1 cat /etc/os-release[27mdocker.exe exec c1 cat /etc/os-release
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25hNAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.20.10
+PRETTY_NAME="Alpine Linux v3.20"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+[?9001l[?1004l[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker.exe exec c1 ps[27mdocker.exe exec c1 ps
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25hPID   USER     TIME  COMMAND
+    1 root      0:00 sleep 600
+   19 root      0:00 ps
+[?9001l[?1004l[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mdocker.exe rm -f c1[27mdocker.exe rm -f c1
+[?2004l[6n[?9001h[?1004h[m]0;C:\Users\dtpha\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe[?25hc1
+[?9001l[?1004l[?2004h]0;daophang@Oo: /mnt/c/Users/dtpha/Documents/Programmable Network/week6[01;32mdaophang@Oo[00m:[01;34m/mnt/c/Users/dtpha/Documents/Programmable Network/week6[00m$ [7mexit[27mexit
+[?2004lexit
+
+Script done on 2026-11-19 15:02:23+08:00 [COMMAND_EXIT_CODE="0"]
