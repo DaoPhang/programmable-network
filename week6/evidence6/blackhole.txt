@@ -1,0 +1,46 @@
+=== small ping (works?) ===
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=11.6 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.112 ms
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.112/5.876/11.641/5.764 ms
+=== full-size DF ping, 1500-byte packet ===
+PING 10.42.50.11 (10.42.50.11) 1472(1500) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1016ms
+
+=== iperf3 over the overlay ===
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 43862 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    2   1.41 KBytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec    4             sender
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec                  receiver
+
+iperf Done.
+=== size sweep (first attempt discarded: the command was split across two lines) ===
+=== MTU of the tunnel device and the underlay port on hv1 ===
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 5e:fd:a5:5a:e9:2a brd ff:ff:ff:ff:ff:ff
+2: hv1-eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 6a:c6:06:07:a4:20 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+PING 10.42.50.11 (10.42.50.11) 1300(1328) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1400(1428) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1450(1478) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+largest working payload: 1422 (1450-byte packet); smallest failing: 1423 (1451-byte packet)

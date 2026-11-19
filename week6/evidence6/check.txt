@@ -1,0 +1,3 @@
+PROBLEM: tenant web: MTU 1500 + 50 bytes of VXLAN headers = 1550, which exceeds the underlay MTU 1500 by 50 bytes
+PROBLEM: tenant db: MTU 1500 + 50 bytes of VXLAN headers = 1550, which exceeds the underlay MTU 1500 by 50 bytes
+Fix the design and try again: nothing was built.

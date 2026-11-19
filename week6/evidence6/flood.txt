@@ -1,0 +1,40 @@
+=== BEFORE traffic: VTEP tables ===
+0e:ca:fe:70:08:fd vlan 1 master br4201 permanent
+0e:ca:fe:70:08:fd master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+fa:63:16:14:39:87 vlan 1 master br4201 permanent
+fa:63:16:14:39:87 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+fe:4e:43:1d:54:d0 vlan 1 master br4201 permanent
+fe:4e:43:1d:54:d0 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== AFTER traffic: VTEP tables ===
+02:00:10:69:00:0b master br4201 
+0e:ca:fe:70:08:fd vlan 1 master br4201 permanent
+0e:ca:fe:70:08:fd master br4201 permanent
+02:00:10:69:00:0b dst 10.42.0.2 self 
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+02:00:10:69:00:0a master br4201 
+fa:63:16:14:39:87 vlan 1 master br4201 permanent
+fa:63:16:14:39:87 master br4201 permanent
+02:00:10:69:00:0a dst 10.42.0.1 self 
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+02:00:10:69:00:0a master br4201 
+fe:4e:43:1d:54:d0 vlan 1 master br4201 permanent
+fe:4e:43:1d:54:d0 master br4201 permanent
+02:00:10:69:00:0a dst 10.42.0.1 self 
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== capture on hv3 (web1 pings web2) ===
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on hv3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:10:31.721498 IP 10.42.0.1.59693 > 10.42.0.3.4789: VXLAN, flags [I] (0x08), vni 4201
+ARP, Request who-has 10.42.50.11 tell 10.42.50.10, length 28
+1 packet captured
+1 packet received by filter
+0 packets dropped by kernel

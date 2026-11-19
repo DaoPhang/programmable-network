@@ -1,0 +1,983 @@
+Script started on 2026-11-19 05:59:29+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="174" LINES="11"]
+# python3 build_overlay.py overlay.yaml
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1500): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1500): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> web1 ping -c 2 10.42.50.11
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=4.88 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.069 ms
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 0.069/2.474/4.880/2.405 ms
+mininet> esxi[K[K[K[Kesi[K[Kxit
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# mn -c
+*** Removing excess controllers/ofprotocols/ofdatapaths/pings/noxes
+killall controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+killall -9 controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+pkill -9 -f "sudo mnexec"
+*** Removing junk from /tmp
+rm -f /tmp/vconn* /tmp/vlogs* /tmp/*.out /tmp/*.log
+*** Removing old X11 tunnels
+*** Removing excess kernel datapaths
+ps ax | egrep -o 'dp[0-9]+' | sed 's/dp/nl:/'
+***  Removing OVS datapaths
+ovs-vsctl --timeout=1 list-br
+ovs-vsctl --timeout=1 list-br
+*** Removing all links of the pattern foo-ethX
+ip link show | egrep -o '([-_.[:alnum:]]+-eth[[:digit:]]+)'
+ip link show
+*** Killing stale mininet node processes
+pkill -9 -f mininet:
+*** Shutting down stale tunnels
+pkill -9 -f Tunnel=Ethernet
+pkill -9 -f .ssh/mn
+rm -f ~/.ssh/mn/*
+*** Cleanup complete.
+# python3 build_overlay.py overlay.yaml
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1500): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1500): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> [Kmininet> sh echo "=== BEFORE traffic: VTEP tables ===" > /lab/week6/evidence6/flood.txt
+mininet> hv1 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> 
+mininet> hv2 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv3 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv3 timeout 8 tcpdump -ni hv3-eth0 udp port 4789 > /tmp/hv3.txt 2>&1 &
+mininet> sh sleep 1
+mininet> web1 ping -c 3 10.42.50.11
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=4.48 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.083 ms
+64 bytes from 10.42.50.11: icmp_seq=3 ttl=64 time=0.074 ms
+
+--- 10.42.50.11 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2016ms
+rtt min/avg/max/mdev = 0.074/1.546/4.482/2.075 ms
+mininet> sh sleep 8
+mininet> sh echo "=== AFTER traffic: VTEP tables ===" >> /lab/week6/evidence6/flood.txt
+mininet> hv1 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+bash: hbridge: command not found
+mininet> sh cat /lab/week6/evidence6/flood.txt
+=== BEFORE traffic: VTEP tables ===
+d6:02:4f:df:51:1b vlan 1 master br4201 permanent
+d6:02:4f:df:51:1b master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+16:82:ea:ca:70:f8 vlan 1 master br4201 permanent
+16:82:ea:ca:70:f8 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+b2:cd:4c:78:79:72 vlan 1 master br4201 permanent
+b2:cd:4c:78:79:72 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== AFTER traffic: VTEP tables ===
+mininet> hv1 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv2 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+bash: v2: command not found
+mininet> hv3 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> sh echo "=== capture on hv3 (web1 pings web2) ===" >> /lab/week6/evidence6/flood.txt
+mininet> sh cat /tmp/hv3.txt >> /lab/week6/evidence6/flood.txt
+mininet> sh cat /lab/week6/evidence6/flood.txt
+=== BEFORE traffic: VTEP tables ===
+d6:02:4f:df:51:1b vlan 1 master br4201 permanent
+d6:02:4f:df:51:1b master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+16:82:ea:ca:70:f8 vlan 1 master br4201 permanent
+16:82:ea:ca:70:f8 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+b2:cd:4c:78:79:72 vlan 1 master br4201 permanent
+b2:cd:4c:78:79:72 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== AFTER traffic: VTEP tables ===
+02:00:10:69:00:0b master br4201 
+d6:02:4f:df:51:1b vlan 1 master br4201 permanent
+d6:02:4f:df:51:1b master br4201 permanent
+02:00:10:69:00:0b dst 10.42.0.2 self 
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+02:00:10:69:00:0a master br4201 
+b2:cd:4c:78:79:72 vlan 1 master br4201 permanent
+b2:cd:4c:78:79:72 master br4201 permanent
+02:00:10:69:00:0a dst 10.42.0.1 self 
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== capture on hv3 (web1 pings web2) ===
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on hv3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# mn -c
+*** Removing excess controllers/ofprotocols/ofdatapaths/pings/noxes
+killall controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+killall -9 controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+pkill -9 -f "sudo mnexec"
+*** Removing junk from /tmp
+rm -f /tmp/vconn* /tmp/vlogs* /tmp/*.out /tmp/*.log
+*** Removing old X11 tunnels
+*** Removing excess kernel datapaths
+ps ax | egrep -o 'dp[0-9]+' | sed 's/dp/nl:/'
+***  Removing OVS datapaths
+ovs-vsctl --timeout=1 list-br
+ovs-vsctl --timeout=1 list-br
+*** Removing all links of the pattern foo-ethX
+ip link show | egrep -o '([-_.[:alnum:]]+-eth[[:digit:]]+)'
+ip link show
+*** Killing stale mininet node processes
+pkill -9 -f mininet:
+*** Shutting down stale tunnels
+pkill -9 -f Tunnel=Ethernet
+pkill -9 -f .ssh/mn
+rm -f ~/.ssh/mn/*
+*** Cleanup complete.
+# python3 build_overlay.py overlay.yaml
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1500): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1500): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> sh echo "=== BEFORE traffic: VTEP tables ===" > /lab/week6/evidence6/flood.txt
+mininet> hv1 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv2 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv3 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv3 tcpdump -ni hv3-eth0 -c 1 udp port 4789 > /tmp/hv3.txt 2>&1 &
+mininet> sh sleep 2
+mininet> web1 ping -c 3 10.42.50.11
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=3.57 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.061 ms
+64 bytes from 10.42.50.11: icmp_seq=3 ttl=64 time=0.068 ms
+
+--- 10.42.50.11 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2028ms
+rtt min/avg/max/mdev = 0.061/1.232/3.567/1.651 ms
+mininet> sh sleep 3
+mininet> sh echo "=== AFTER traffic: VTEP tables ===" >> /lab/week6/evidence6/flood.txt
+mininet> hv1 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv2 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> hv3 bridge fdb show dev vxlan4201 >> /lab/week6/evidence6/flood.txt
+mininet> sh echo "=== capture on hv3 (web1 pings web2) ===" >> /lab/week6/evidence6/flood.txt
+mininet> sh cat /tmp/hv3.txt >> /lab/week6/evidence6/flood.txt
+mininet> sh cat /lab/week6/evidence6/flood.txt
+=== BEFORE traffic: VTEP tables ===
+0e:ca:fe:70:08:fd vlan 1 master br4201 permanent
+0e:ca:fe:70:08:fd master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+fa:63:16:14:39:87 vlan 1 master br4201 permanent
+fa:63:16:14:39:87 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+fe:4e:43:1d:54:d0 vlan 1 master br4201 permanent
+fe:4e:43:1d:54:d0 master br4201 permanent
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== AFTER traffic: VTEP tables ===
+02:00:10:69:00:0b master br4201 
+0e:ca:fe:70:08:fd vlan 1 master br4201 permanent
+0e:ca:fe:70:08:fd master br4201 permanent
+02:00:10:69:00:0b dst 10.42.0.2 self 
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+02:00:10:69:00:0a master br4201 
+fa:63:16:14:39:87 vlan 1 master br4201 permanent
+fa:63:16:14:39:87 master br4201 permanent
+02:00:10:69:00:0a dst 10.42.0.1 self 
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.3 self permanent
+02:00:10:69:00:0a master br4201 
+fe:4e:43:1d:54:d0 vlan 1 master br4201 permanent
+fe:4e:43:1d:54:d0 master br4201 permanent
+02:00:10:69:00:0a dst 10.42.0.1 self 
+00:00:00:00:00:00 dst 10.42.0.1 self permanent
+00:00:00:00:00:00 dst 10.42.0.2 self permanent
+=== capture on hv3 (web1 pings web2) ===
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on hv3-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:10:31.721498 IP 10.42.0.1.59693 > 10.42.0.3.4789: VXLAN, flags [I] (0x08), vni 4201
+ARP, Request who-has 10.42.50.11 tell 10.42.50.10, length 28
+1 packet captured
+1 packet received by filter
+0 packets dropped by kernel
+mininet> web2 tcpdump -ni web2-eth0 -c 2 icmp > /tmp/web2.txt 2>&1 &
+mininet> db2 tcpdump -ni db2-eth0 > /tmp/db2.txt 2>&1 &
+mininet> sh sleep 2
+mininet> sh echo "=== web3 pings 10.42.50.11 (web2 and db2 both use it) ===" > /lab/week6/evidence6/isolation.txt
+mininet> web3 ping -c 3 10.42.50.11 >> /lab/week6/evidence6/isolation.txt
+mininet> sh sleep 3
+mininet> sh pkill tcpdump
+mininet> sh sleep 1
+mininet> sh echo "=== web3 neighbour table ===" >> /lab/week6/evidence6/isolation.txt
+mininet> web3 ip neigh >> /lab/week6/evidence6/isolation.txt
+mininet> sh echo "=== capture on web2 (positive control) ===" >> /lab/week6/evidence6/isolation.txt
+mininet> sh cat /tmp/web2.txt >> /lab/week6/evidence6/isolation.txt
+mininet> sh echo "=== capture on db2 (should see nothing from web3) ===" >> /lab/week6/evidence6/isolation.txt
+mininet> sh cat /tmp/db2.txt >> /lab/week6/evidence6/isolation.txt
+mininet> sh cat /lab/week6/evidence6/isolation.txt
+=== web3 pings 10.42.50.11 (web2 and db2 both use it) ===
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=1.75 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.104 ms
+64 bytes from 10.42.50.11: icmp_seq=3 ttl=64 time=0.126 ms
+
+--- 10.42.50.11 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2024ms
+rtt min/avg/max/mdev = 0.104/0.661/1.754/0.772 ms
+=== web3 neighbour table ===
+10.42.50.11 dev web3-eth0 lladdr 02:00:10:69:00:0b REACHABLE 
+=== capture on web2 (positive control) ===
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on web2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+06:18:59.276503 IP 10.42.50.12 > 10.42.50.11: ICMP echo request, id 727, seq 1, length 64
+06:18:59.276613 IP 10.42.50.11 > 10.42.50.12: ICMP echo reply, id 727, seq 1, length 64
+2 packets captured
+2 packets received by filter
+0 packets dropped by kernel
+=== capture on db2 (should see nothing from web3) ===
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on db2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
+mininet> eixt
+*** Unknown command: eixt
+mininet> exir[Kt
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# mn -c
+*** Removing excess controllers/ofprotocols/ofdatapaths/pings/noxes
+killall controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+killall -9 controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+pkill -9 -f "sudo mnexec"
+*** Removing junk from /tmp
+rm -f /tmp/vconn* /tmp/vlogs* /tmp/*.out /tmp/*.log
+*** Removing old X11 tunnels
+*** Removing excess kernel datapaths
+ps ax | egrep -o 'dp[0-9]+' | sed 's/dp/nl:/'
+***  Removing OVS datapaths
+ovs-vsctl --timeout=1 list-br
+ovs-vsctl --timeout=1 list-br
+*** Removing all links of the pattern foo-ethX
+ip link show | egrep -o '([-_.[:alnum:]]+-eth[[:digit:]]+)'
+ip link show
+*** Killing stale mininet node processes
+pkill -9 -f mininet:
+*** Shutting down stale tunnels
+pkill -9 -f Tunnel=Ethernet
+pkill -9 -f .ssh/mn
+rm -f ~/.ssh/mn/*
+*** Cleanup complete.
+# python3 build_overlay.py blackhole.yaml --force
+WARNING: --force: building despite check_mtu():
+   tenant web: MTU 1500 + 50 bytes of VXLAN headers = 1550, which exceeds the underlay MTU 1500 by 50 bytes
+   tenant db: MTU 1500 + 50 bytes of VXLAN headers = 1550, which exceeds the underlay MTU 1500 by 50 bytes
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1500): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1500): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> web2 iperf3 -s -D
+mininet> sh echo "=== small ping (works?) ===" > /lab/week6/evidence6/blackhole.txt
+mininet> web1 ping -c 2 10.42.50.11 >> /lab/week6/evidence6/blackhole.txt
+mininet> sh echo "=== full-size DF ping, 1500-byte packet ===" >> /lab/week6/evidence6/blackhole.txt
+mininet> web1 ping -M do -c 2 -W 1 -s 1472 10.42.50.11 >> /lab/week6/evidence6/blackhole.txt
+mininet> sh echo "=== iperf3 over the overlay ===" >> /lab/week6/evidence6/blackhole.txt
+mininet> web1 iperf3 -c 10.42.50.11 -t 5 >> /lab/week6/evidence6/blackhole.txt
+mininet> sh echo "=== size sweep ===" >> /lab/week6/evidence6/blackhole.txt
+mininet> web1 for s in 1300 1350 1400 1420 1422 1423 1440 1450 1472; do ping -M do -c 1 -W 1 -s $s 10.42.50.11 >/dev/null 
+> 2>&1 && echo "ok $s" || echo "FAIL $s"; done >> /lab/week6/evidence6/blackhole.txt
+mininet> sh cat /lab/week6/evidence6/blackhole.txt
+=== small ping (works?) ===
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=11.6 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.112 ms
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.112/5.876/11.641/5.764 ms
+=== full-size DF ping, 1500-byte packet ===
+PING 10.42.50.11 (10.42.50.11) 1472(1500) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1016ms
+
+=== iperf3 over the overlay ===
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 43862 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    2   1.41 KBytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec    4             sender
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec                  receiver
+
+iperf Done.
+=== size sweep ===
+ok 1300
+ok 1350
+ok 1400
+ok 1420
+ok 1422
+ok 1423
+ok 1440
+ok 1450
+ok 1472
+mininet> [Kmininet> [Kmininet> sh sed -i '/=== size sweep ===/,$d' /lab/week6/evidence6/blackhole.txt
+mininet> sh echo "=== size sweep (first attempt discarded: the command was split across two lines) ===" >> /lab/week6/evidence6/blackhole.txt
+mininet> sh rm -f /tmp/sw.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1300 10.42.50.11 | grep -E "bytes of data|transmitted" >> /tmp/sw.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1400 10.42.50.11 | grep -E "bytes of data|transmitted" >> /tmp/sw.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1422 10.42.50.11 | grep -E "bytes of data|transmitted" >> /tmp/sw.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1423 10.42.50.11 | grep -E "bytes of data|transmitted" >> /tmp/sw.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1450 10.42.50.11 | grep -E "bytes of data|transmitted" >> /tmp/sw.txt
+mininet> sh cat /tmp/sw.txt
+PING 10.42.50.11 (10.42.50.11) 1300(1328) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1400(1428) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1450(1478) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+mininet> sh echo "=== MTU of the tunnel device and the underlay port on hv1 ===" >> /lab/week6/evidence6/blackhole.txt
+mininet> hv1 ip link show vxlan4201 >> /lab/week6/evidence6/blackhole.txt
+mininet> hv1 ip link show hv1-eth0 >> /lab/week6/evidence6/blackhole.txt
+mininet> sh cat /tmp/sw.txt >> /lab/week6/evidence6/blackhole.txt
+mininet> sh echo "largest working payload: 1422 (1450-byte packet); smallest failing: 1423 (1451-byte packet)" >> /lab/week6/evidence6/blackhole.txt
+mininet> sh cat /lab/week6/evidence6/blackhole.txt
+=== small ping (works?) ===
+PING 10.42.50.11 (10.42.50.11) 56(84) bytes of data.
+64 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=11.6 ms
+64 bytes from 10.42.50.11: icmp_seq=2 ttl=64 time=0.112 ms
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.112/5.876/11.641/5.764 ms
+=== full-size DF ping, 1500-byte packet ===
+PING 10.42.50.11 (10.42.50.11) 1472(1500) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1016ms
+
+=== iperf3 over the overlay ===
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 43862 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    2   1.41 KBytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   1.41 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec    4             sender
+[  5]   0.00-5.00   sec  0.00 Bytes  0.00 bits/sec                  receiver
+
+iperf Done.
+=== size sweep (first attempt discarded: the command was split across two lines) ===
+=== MTU of the tunnel device and the underlay port on hv1 ===
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 5e:fd:a5:5a:e9:2a brd ff:ff:ff:ff:ff:ff
+2: hv1-eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 6a:c6:06:07:a4:20 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+PING 10.42.50.11 (10.42.50.11) 1300(1328) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1400(1428) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+PING 10.42.50.11 (10.42.50.11) 1450(1478) bytes of data.
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+largest working payload: 1422 (1450-byte packet); smallest failing: 1423 (1451-byte packet)
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# mn -c
+*** Removing excess controllers/ofprotocols/ofdatapaths/pings/noxes
+killall controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+killall -9 controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+pkill -9 -f "sudo mnexec"
+*** Removing junk from /tmp
+rm -f /tmp/vconn* /tmp/vlogs* /tmp/*.out /tmp/*.log
+*** Removing old X11 tunnels
+*** Removing excess kernel datapaths
+ps ax | egrep -o 'dp[0-9]+' | sed 's/dp/nl:/'
+***  Removing OVS datapaths
+ovs-vsctl --timeout=1 list-br
+ovs-vsctl --timeout=1 list-br
+*** Removing all links of the pattern foo-ethX
+ip link show | egrep -o '([-_.[:alnum:]]+-eth[[:digit:]]+)'
+ip link show
+*** Killing stale mininet node processes
+pkill -9 -f mininet:
+*** Shutting down stale tunnels
+pkill -9 -f Tunnel=Ethernet
+pkill -9 -f .ssh/mn
+rm -f ~/.ssh/mn/*
+*** Cleanup complete.
+# python3 build_overlay.py mtu_a.yaml
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1450): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1450): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> web2 iperf3 -s -D
+mininet> sh echo "=== FIX A: tenant MTU 1450, underlay 1500 ===" > /lab/week6/evidence6/fixes.txt
+mininet> web1 ip link show web1-eth0 >> /lab/week6/evidence6/fixes.txt
+mininet> hv1 ip link show vxlan4201 >> /lab/week6/evidence6/fixes.txt
+mininet> web1 ping -M do -c 1 -s 1422 10.42.50.11 >> /lab/week6/evidence6/fixes.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1423 10.42.50.11 >> /lab/week6/evidence6/fixes.txt
+ping: local error: message too long, mtu=1450
+mininet> web1 iperf3 -c 10.42.50.11 -t 5 >> /lab/week6/evidence6/fixes.txt
+mininet> sh cat /lab/week6/evidence6/fixes.txt
+=== FIX A: tenant MTU 1450, underlay 1500 ===
+2: web1-eth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 02:00:10:69:00:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether c6:33:6b:68:f3:0f brd ff:ff:ff:ff:ff:ff
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1430 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=0.323 ms
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.323/0.323/0.323/0.000 ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 56884 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   1.00-2.00   sec   426 MBytes  3.57 Gbits/sec    1    425 KBytes       
+[  5]   2.00-3.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   3.00-4.00   sec   432 MBytes  3.63 Gbits/sec    2    425 KBytes       
+[  5]   4.00-5.00   sec   419 MBytes  3.52 Gbits/sec    4    425 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec   15             sender
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec                  receiver
+
+iperf Done.
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# mn -c
+*** Removing excess controllers/ofprotocols/ofdatapaths/pings/noxes
+killall controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+killall -9 controller ofprotocol ofdatapath ping nox_corelt-nox_core ovs-openflowd ovs-controllerovs-testcontroller udpbwtest mnexec ivs ryu-manager 2> /dev/null
+pkill -9 -f "sudo mnexec"
+*** Removing junk from /tmp
+rm -f /tmp/vconn* /tmp/vlogs* /tmp/*.out /tmp/*.log
+*** Removing old X11 tunnels
+*** Removing excess kernel datapaths
+ps ax | egrep -o 'dp[0-9]+' | sed 's/dp/nl:/'
+***  Removing OVS datapaths
+ovs-vsctl --timeout=1 list-br
+ovs-vsctl --timeout=1 list-br
+*** Removing all links of the pattern foo-ethX
+ip link show | egrep -o '([-_.[:alnum:]]+-eth[[:digit:]]+)'
+ip link show
+*** Killing stale mininet node processes
+pkill -9 -f mininet:
+*** Shutting down stale tunnels
+pkill -9 -f Tunnel=Ethernet
+pkill -9 -f .ssh/mn
+rm -f ~/.ssh/mn/*
+*** Cleanup complete.
+# python3 build_overlay.py mtu_b.yaml
+*** Error setting resource limits. Mininet's performance may be affected.
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-arptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-iptables = 1 
+Warning: Linux bridge may not work with net.bridge.bridge-nf-call-ip6tables = 1 
+*** Configuring hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Starting controller
+
+*** Starting 1 switches
+s1 
+VTEP commands on hv1 (10.42.0.1):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv1-eth1 master br4201
+  ip link set hv1-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.1 dstport 4789 dev hv1-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv1-eth2 master br4202
+  ip link set hv1-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.3
+VTEP commands on hv2 (10.42.0.2):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.2 dstport 4789 dev hv2-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv2-eth1 master br4201
+  ip link set hv2-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.3
+VTEP commands on hv3 (10.42.0.3):
+  ip link add br4201 type bridge
+  ip link set br4201 up
+  ip link add vxlan4201 type vxlan id 4201 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4201 master br4201
+  ip link set vxlan4201 up
+  ip link set hv3-eth1 master br4201
+  ip link set hv3-eth1 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.1
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4201 dst 10.42.0.2
+  ip link add br4202 type bridge
+  ip link set br4202 up
+  ip link add vxlan4202 type vxlan id 4202 local 10.42.0.3 dstport 4789 dev hv3-eth0
+  ip link set vxlan4202 master br4202
+  ip link set vxlan4202 up
+  ip link set hv3-eth2 master br4202
+  ip link set hv3-eth2 up
+  bridge fdb append 00:00:00:00:00:00 dev vxlan4202 dst 10.42.0.1
+
+Hypervisors: hv1 10.42.0.1, hv2 10.42.0.2, hv3 10.42.0.3
+Tenant web (VNI 4201, MTU 1500): web1 10.42.50.10 on hv1, web2 10.42.50.11 on hv2, web3 10.42.50.12 on hv3
+Tenant db (VNI 4202, MTU 1500): db1 10.42.50.10 on hv1, db2 10.42.50.11 on hv3
+
+*** Starting CLI:
+mininet> web2 iperf3 -s -D
+mininet> sh echo "=== FIX B: tenant MTU 1500, underlay 9000 ===" >> /lab/week6/evidence6/fixes.txt
+mininet> web1 ip link show web1-eth0 >> /lab/week6/evidence6/fixes.txt
+mininet> hv1 ip link show vxlan4201 >> /lab/week6/evidence6/fixes.txt
+mininet> hv1 ip link show hv1-eth0 >> /lab/week6/evidence6/fixes.txt
+mininet> web1 ping -M do -c 1 -s 1472 10.42.50.11 >> /lab/week6/evidence6/fixes.txt
+mininet> web1 ping -M do -c 1 -W 1 -s 1473 10.42.50.11 >> /lab/week6/evidence6/fixes.txt 2>&1
+mininet> web1 iperf3 -c 10.42.50.11 -t 5 >> /lab/week6/evidence6/fixes.txt
+mininet> sh cat /lab/week6/evidence6/fixes.txt
+=== FIX A: tenant MTU 1450, underlay 1500 ===
+2: web1-eth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 02:00:10:69:00:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether c6:33:6b:68:f3:0f brd ff:ff:ff:ff:ff:ff
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1430 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=0.323 ms
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.323/0.323/0.323/0.000 ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 56884 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   1.00-2.00   sec   426 MBytes  3.57 Gbits/sec    1    425 KBytes       
+[  5]   2.00-3.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   3.00-4.00   sec   432 MBytes  3.63 Gbits/sec    2    425 KBytes       
+[  5]   4.00-5.00   sec   419 MBytes  3.52 Gbits/sec    4    425 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec   15             sender
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec                  receiver
+
+iperf Done.
+=== FIX B: tenant MTU 1500, underlay 9000 ===
+2: web1-eth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 02:00:10:69:00:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 8950 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether b2:d2:8d:07:38:d1 brd ff:ff:ff:ff:ff:ff
+2: hv1-eth0@if23: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 56:01:43:bb:3b:25 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+PING 10.42.50.11 (10.42.50.11) 1472(1500) bytes of data.
+1480 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=0.356 ms
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.356/0.356/0.356/0.000 ms
+PING 10.42.50.11 (10.42.50.11) 1473(1501) bytes of data.
+ping: local error: message too long, mtu=1500
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 37210 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   314 MBytes  2.63 Gbits/sec  233    411 KBytes       
+[  5]   1.00-2.00   sec   392 MBytes  3.29 Gbits/sec    2    411 KBytes       
+[  5]   2.00-3.00   sec   418 MBytes  3.51 Gbits/sec    5    411 KBytes       
+[  5]   3.00-4.00   sec   382 MBytes  3.20 Gbits/sec  332    411 KBytes       
+[  5]   4.00-5.00   sec   419 MBytes  3.51 Gbits/sec  200    272 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  1.90 GBytes  3.27 Gbits/sec  772             sender
+[  5]   0.00-5.00   sec  1.90 GBytes  3.27 Gbits/sec                  receiver
+
+iperf Done.
+mininet> exit
+*** Stopping 0 controllers
+
+*** Stopping 8 links
+.......e.
+*** Stopping 1 switches
+s1 
+*** Stopping 8 hosts
+hv1 hv2 hv3 web1 web2 web3 db1 db2 
+*** Done
+# ^?exi^?^?^W^W^W^?^?^?^?^?^?^?^?^?^?^?^?^[
+sh: 12: eexi: not found
+# exit
+
+Script done on 2026-11-19 06:34:21+00:00 [COMMAND_EXIT_CODE="127"]

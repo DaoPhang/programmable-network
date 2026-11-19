@@ -1,0 +1,63 @@
+=== FIX A: tenant MTU 1450, underlay 1500 ===
+2: web1-eth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 02:00:10:69:00:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether c6:33:6b:68:f3:0f brd ff:ff:ff:ff:ff:ff
+PING 10.42.50.11 (10.42.50.11) 1422(1450) bytes of data.
+1430 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=0.323 ms
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.323/0.323/0.323/0.000 ms
+PING 10.42.50.11 (10.42.50.11) 1423(1451) bytes of data.
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 56884 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   1.00-2.00   sec   426 MBytes  3.57 Gbits/sec    1    425 KBytes       
+[  5]   2.00-3.00   sec   438 MBytes  3.67 Gbits/sec    4    425 KBytes       
+[  5]   3.00-4.00   sec   432 MBytes  3.63 Gbits/sec    2    425 KBytes       
+[  5]   4.00-5.00   sec   419 MBytes  3.52 Gbits/sec    4    425 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec   15             sender
+[  5]   0.00-5.00   sec  2.12 GBytes  3.64 Gbits/sec                  receiver
+
+iperf Done.
+=== FIX B: tenant MTU 1500, underlay 9000 ===
+2: web1-eth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 02:00:10:69:00:0a brd ff:ff:ff:ff:ff:ff link-netnsid 0
+6: vxlan4201: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 8950 qdisc noqueue master br4201 state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether b2:d2:8d:07:38:d1 brd ff:ff:ff:ff:ff:ff
+2: hv1-eth0@if23: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 56:01:43:bb:3b:25 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+PING 10.42.50.11 (10.42.50.11) 1472(1500) bytes of data.
+1480 bytes from 10.42.50.11: icmp_seq=1 ttl=64 time=0.356 ms
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.356/0.356/0.356/0.000 ms
+PING 10.42.50.11 (10.42.50.11) 1473(1501) bytes of data.
+ping: local error: message too long, mtu=1500
+
+--- 10.42.50.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+Connecting to host 10.42.50.11, port 5201
+[  5] local 10.42.50.10 port 37210 connected to 10.42.50.11 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   314 MBytes  2.63 Gbits/sec  233    411 KBytes       
+[  5]   1.00-2.00   sec   392 MBytes  3.29 Gbits/sec    2    411 KBytes       
+[  5]   2.00-3.00   sec   418 MBytes  3.51 Gbits/sec    5    411 KBytes       
+[  5]   3.00-4.00   sec   382 MBytes  3.20 Gbits/sec  332    411 KBytes       
+[  5]   4.00-5.00   sec   419 MBytes  3.51 Gbits/sec  200    272 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec  1.90 GBytes  3.27 Gbits/sec  772             sender
+[  5]   0.00-5.00   sec  1.90 GBytes  3.27 Gbits/sec                  receiver
+
+iperf Done.
