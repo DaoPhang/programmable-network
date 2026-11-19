@@ -1,38 +1,99 @@
 # Lab 6: Linux Networking Building Blocks, VXLAN and Containers
 
-Student ID suffix: 6042  
-Date: 19 November 2026
+| | |
+|---|---|
+| Student ID suffix | 6042 |
+| Date | 19 November 2026 |
+| Course instructions | [Week 6 lab](https://firdaussahran.github.io/wic2005/weeks/week-06/#tab-lab) |
+| Week 6 page | [docs/week6/index.html](../docs/week6/index.html) |
 
-[Course lab instructions](https://firdaussahran.github.io/wic2005/weeks/week-06/#tab-lab)
+## Contents
+
+1. [Setup](#setup)
+2. [Practical results (Parts 1 to 7)](#practical-results-parts-1-to-7)
+3. [Assignment: overlay your own data centre](#assignment-overlay-your-own-data-centre)
+4. [Wrap-up answers](#wrap-up-answers)
+5. [AI use](#ai-use)
 
 ## Setup
 
-The lab used `firdaussahran/netlab-mininet:1.0`, started with `start-lab-wsl.sh`. Addressing uses
-NN = 42: IPv4 block `10.42.0.0/16`, IPv6 block `fd00:6042::/32`. Parts 1–6 ran inside the lab container
-and Part 7 ran with `docker.exe` from WSL, outside it. Each part was recorded with `script`.
+- Image: `firdaussahran/netlab-mininet:1.0`, started with `start-lab-wsl.sh`.
+- Addressing: NN = 42, so IPv4 block `10.42.0.0/16` and IPv6 block `fd00:6042::/32`.
+- Where it ran: Parts 1 to 6 inside the lab container, Part 7 with `docker.exe` from WSL, outside it.
+- Recording: each part was recorded with `script`.
 
 ## Practical results (Parts 1 to 7)
 
-| Part | Actual result | Evidence |
-|---|---|---|
-| 1: Mininet hosts are namespaces | `h1` and `h2` were `bash` processes (pids 1552 and 1554), each in its own network namespace. `h1` saw only `lo` and `h1-eth0`. The container saw `s1-eth1` and `s1-eth2`. | [part1.txt](practical/part1.txt) |
-| 2: Week 1's network by hand | Namespaces `red` and `blue`, two veth pairs and bridge `br0`. red pinged blue 2/2. `br0` learned one MAC on each of `red-br` and `blue-br`. | [part2.txt](practical/part2.txt) |
-| 3: VXLAN overlay by hand | `vxlan100` (VNI 100) between h1 and h2. The first pings failed because a garbled line left h2's `vxlan100` down. After `h2 ip link set vxlan100 up`, pings succeeded 2/2 and 3/3. The capture on h2 showed `10.42.0.1 > 10.42.0.2:4789 VXLAN vni 100` carrying the ICMP echo. | [part3-4.txt](practical/part3-4.txt) |
-| 4: Cost of tunnelling | `h1-eth0` MTU 1500, `vxlan100` MTU 1450. DF ping payload 1422 worked and 1423 was refused (`message too long, mtu=1450`). iperf3: underlay 28.8 Gbit/s, overlay 22.1 Gbit/s. | [part3-4.txt](practical/part3-4.txt) |
-| 5: Same tunnel over IPv6 | IPv6 ping 2/2. `vxlan106` (VNI 106) MTU 1430. Payload 1402 worked and 1403 was refused (`mtu=1430`). The capture showed `IP6 fd00:6042::1 > fd00:6042::2:4789 VXLAN vni 106` carrying IPv4 ICMP. | [part5.txt](practical/part5.txt) |
-| 6: MTU mismatch | With `h2-eth0` at MTU 1400, small pings worked, a 1400-byte-payload DF ping lost 2/2, and iperf3 moved 4.5 MBytes in the first second and 0 after that. Largest working payload 1326, smallest failing 1327. `tx_dropped` on `s1-eth2` and `rx_dropped` on `h2-eth0` were both 108. After restoring MTU 1500 the ping worked and iperf3 ran at 22.1 Gbit/s with 0 retransmits. `ip link set vxlan100 mtu 1500` was refused with `Invalid argument`. | [part6.txt](practical/part6.txt) |
-| 7: Containers | `alpine:3.20` container `c1`: Alpine Linux v3.20 (`VERSION_ID=3.20.10`), `eth0` 172.17.0.4/16, MTU 1500, and `ps` showed only `sleep 600` as PID 1 plus the `ps` command. Removed with `docker.exe rm -f c1`. | [part7.txt](practical/part7.txt) |
+### Part 1: Mininet hosts are namespaces
 
-In Part 7 the plain `docker` command was not available inside the WSL distribution, so the recording
-starts with that error and then uses `docker.exe`.
+- `h1` and `h2` were `bash` processes (pids 1552 and 1554), each in its own network namespace.
+- `h1` saw only `lo` and `h1-eth0`. The container saw `s1-eth1` and `s1-eth2`.
+- Evidence: [part1.txt](practical/part1.txt)
+
+### Part 2: Week 1's network by hand
+
+- Namespaces `red` and `blue`, two veth pairs and bridge `br0`.
+- red pinged blue 2/2.
+- `br0` learned one MAC on each of `red-br` and `blue-br`.
+- Evidence: [part2.txt](practical/part2.txt)
+
+### Part 3: VXLAN overlay by hand
+
+- `vxlan100` (VNI 100) between h1 and h2.
+- The first pings failed because a garbled line left h2's `vxlan100` down. After `h2 ip link set vxlan100 up`, pings succeeded 2/2 and 3/3.
+- The capture on h2 showed `10.42.0.1 > 10.42.0.2:4789 VXLAN vni 100` carrying the ICMP echo.
+- Evidence: [part3-4.txt](practical/part3-4.txt)
+
+### Part 4: Cost of tunnelling
+
+- `h1-eth0` MTU 1500, `vxlan100` MTU 1450.
+- DF ping payload 1422 worked and 1423 was refused (`message too long, mtu=1450`).
+- iperf3: underlay 28.8 Gbit/s, overlay 22.1 Gbit/s.
+- Evidence: [part3-4.txt](practical/part3-4.txt)
+
+### Part 5: Same tunnel over IPv6
+
+- IPv6 ping 2/2. `vxlan106` (VNI 106) MTU 1430.
+- Payload 1402 worked and 1403 was refused (`mtu=1430`).
+- The capture showed `IP6 fd00:6042::1 > fd00:6042::2:4789 VXLAN vni 106` carrying IPv4 ICMP.
+- Evidence: [part5.txt](practical/part5.txt)
+
+### Part 6: MTU mismatch
+
+- With `h2-eth0` at MTU 1400, small pings worked, a 1400-byte-payload DF ping lost 2/2, and iperf3 moved 4.5 MBytes in the first second and 0 after that.
+- Largest working payload 1326, smallest failing 1327.
+- `tx_dropped` on `s1-eth2` and `rx_dropped` on `h2-eth0` were both 108.
+- After restoring MTU 1500 the ping worked and iperf3 ran at 22.1 Gbit/s with 0 retransmits.
+- `ip link set vxlan100 mtu 1500` was refused with `Invalid argument`.
+- Evidence: [part6.txt](practical/part6.txt)
+
+### Part 7: Containers
+
+- `alpine:3.20` container `c1`: Alpine Linux v3.20 (`VERSION_ID=3.20.10`), `eth0` 172.17.0.4/16, MTU 1500.
+- `ps` showed only `sleep 600` as PID 1 plus the `ps` command. Removed with `docker.exe rm -f c1`.
+- The plain `docker` command was not available inside the WSL distribution, so the recording starts with that error and then uses `docker.exe`.
+- Evidence: [part7.txt](practical/part7.txt)
 
 ## Assignment: overlay your own data centre
 
-The design in `overlay.yaml` has three hypervisors (`hv1`, `hv2` and `hv3`) on `10.42.0.0/24` and two tenants on the
-same network, `10.42.50.0/24`: web (VNI 4201: web1, web2, web3) and db (VNI 4202: db1, db2).
-`build_overlay.py` builds it, with `tenant_commands()` and `check_mtu()` written by me.
+### Design
 
-| Evidence file | What it shows |
+`overlay.yaml` has three hypervisors and two tenants on the same network, `10.42.50.0/24`. `build_overlay.py` builds it, with `tenant_commands()` and `check_mtu()` written by me.
+
+| Hypervisor | Underlay address |
+|---|---|
+| `hv1` | 10.42.0.1 |
+| `hv2` | 10.42.0.2 |
+| `hv3` | 10.42.0.3 |
+
+| Tenant | VNI | Network | VMs |
+|---|---|---|---|
+| web | 4201 | 10.42.50.0/24 | web1 on hv1, web2 on hv2, web3 on hv3 |
+| db | 4202 | 10.42.50.0/24 | db1 on hv1, db2 on hv3 |
+
+### Evidence
+
+| File | What it shows |
 |---|---|
 | [evidence6/check.txt](evidence6/check.txt) | `check_mtu()` refusing the black-hole design (1550 > 1500, both tenants) |
 | [evidence6/flood.txt](evidence6/flood.txt) | VTEP tables before and after traffic, and the flooded ARP captured on hv3 |
@@ -43,18 +104,17 @@ same network, `10.42.50.0/24`: web (VNI 4201: web1, web2, web3) and db (VNI 4202
 
 The chosen fix in `overlay.yaml` is Fix B (underlay MTU 9000). Each throughput figure is one 5-second run.
 
-The generated page is `docs/week6/index.html`.
-
 ## Wrap-up answers
 
 ### 1. Linux building blocks behind one Mininet host and one Mininet cable
 
 A Mininet host is a `bash` process (`bash --norc --noediting -is mininet:h1`, pid 1552 in Part 1)
 running in its own network namespace, which gives it its own interfaces, routes and neighbour table.
-`h1` saw only `lo` and `h1-eth0`, while the container's namespace saw `s1-eth1` and `s1-eth2`. A Mininet
-cable is a veth pair: two virtual interfaces that pass frames to each other, with one end in the host's
-namespace and the other on the switch. The `@if` numbers in `ip -br link` name the other end of the pair.
-In this lab the switch (`lxbr`) is a Linux bridge.
+`h1` saw only `lo` and `h1-eth0`, while the container's namespace saw `s1-eth1` and `s1-eth2`.
+
+A Mininet cable is a veth pair: two virtual interfaces that pass frames to each other, with one end in
+the host's namespace and the other on the switch. The `@if` numbers in `ip -br link` name the other end
+of the pair. In this lab the switch (`lxbr`) is a Linux bridge.
 
 ### 2. MTU and throughput measurements, and the 50-byte difference
 
@@ -71,10 +131,18 @@ Each throughput figure is a single 5-second run, and the underlay run dipped to 
 second, so the gap is indicative only. I did not measure what part of it comes from the extra headers
 and what part from the cost of encapsulation.
 
-The 50 bytes are the headers VXLAN adds around the tenant's IP packet: an inner Ethernet header (14),
-a VXLAN header (8), a UDP header (8) and an outer IPv4 header (20). All of that must fit in the
-underlay's 1500-byte IP packet, which leaves 1450 bytes for the tenant's IP packet. `build_overlay.py`
-uses the same figures for `VXLAN_OVERHEAD`.
+The 50 bytes are the headers VXLAN adds around the tenant's IP packet:
+
+| Header | Bytes |
+|---|---:|
+| Inner Ethernet | 14 |
+| VXLAN | 8 |
+| UDP | 8 |
+| Outer IPv4 | 20 |
+| Total | 50 |
+
+All of that must fit in the underlay's 1500-byte IP packet, which leaves 1450 bytes for the tenant's IP
+packet. `build_overlay.py` uses the same figures for `VXLAN_OVERHEAD`.
 
 Over IPv6 the outer header is 40 bytes instead of 20, so the overhead is 70 bytes. Part 5 matches this:
 `vxlan106` had MTU 1430, payload 1402 worked, and 1403 was refused with `mtu=1430`. The capture shows
@@ -107,19 +175,21 @@ network namespaces there, so I cannot say from my output which other namespaces 
 
 ### 5. This VXLAN tunnel compared with the Week 5 tunnel
 
-- Bytes added: Week 5's tunnel header (`tunnel.p4`) has two 16-bit fields, `proto_id` and
-  `dst_id`, so it adds 4 bytes. VXLAN over IPv4 adds 50 bytes.
-- Devices that must understand it: every P4 switch on the path had to understand the Week 5 header.
-  With VXLAN only the VTEPs do, and the network in between only routes IP, as the header of
-  `vtep.p4` states.
-- What stops loops: in my Week 5 assignment I added an 8-bit `hops` field to the tunnel header. A
-  switch drops a tunnelled packet whose incoming `hops` is 0 or 1 and otherwise subtracts one before
-  the table lookup. Without it, a loop I created between s1 and s2 kept circulating a single packet
-  (counts rose from 18 and 17 to 192 on both switches). With `--hops 8` the counts stopped at 4 and 4,
-  8 visits in total. The tunnel itself carries the protection, so every switch on the path has to
-  enforce it. In `vtep.p4` the VTEP gives the outer IPv4 packet a fresh TTL of 64, and the underlay
-  routers count it down, so the tunnel header needs no counter of its own. The program has no TTL
-  check of its own, and I did not test a loop in the VXLAN overlay.
+| | Week 5 tunnel | VXLAN |
+|---|---|---|
+| Bytes added | 4 bytes: `proto_id` and `dst_id`, two 16-bit fields in `tunnel.p4` | 50 bytes over IPv4 |
+| Devices that must understand it | every P4 switch on the path | only the VTEPs; the network in between only routes IP, as the header of `vtep.p4` states |
+
+What stops loops: in my Week 5 assignment I added an 8-bit `hops` field to the tunnel header. A
+switch drops a tunnelled packet whose incoming `hops` is 0 or 1 and otherwise subtracts one before
+the table lookup. Without it, a loop I created between s1 and s2 kept circulating a single packet
+(counts rose from 18 and 17 to 192 on both switches). With `--hops 8` the counts stopped at 4 and 4,
+8 visits in total. The tunnel itself carries the protection, so every switch on the path has to
+enforce it.
+
+In `vtep.p4` the VTEP gives the outer IPv4 packet a fresh TTL of 64, and the underlay routers count it
+down, so the tunnel header needs no counter of its own. The program has no TTL check of its own, and I
+did not test a loop in the VXLAN overlay.
 
 ## AI use
 
@@ -138,5 +208,4 @@ command was split over two lines, a `practical/` folder that WSL could not write
 `docker` command in WSL, where `docker.exe` worked. I kept those mistakes in the recordings.
 
 I also used it for the P4 answer. It downloaded the lecture's `vtep.p4` and I based the answer on that file.
-For the Week 5 loop comparison it read my Week 5 report and `tunnel.p4` from the `hop-limit` branch. Last, it
-helped me rewrite some sentences so they read more naturally.
+For the Week 5 loop comparison it read my Week 5 report and `tunnel.p4` from the `hop-limit` branch.
