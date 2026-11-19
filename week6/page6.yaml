@@ -1,0 +1,47 @@
+# page6.yaml: the words on your Week 6 page. make_page6.py puts each answer under its question.
+# A few sentences each, in your own words, about YOUR overlay and YOUR evidence.
+# Leave a blank line between paragraphs. Don't put your name or your full student ID in this file.
+
+repository: https://github.com/DaoPhang/programmable-network
+
+answers:
+  design:
+    question: "Describe your design: hypervisors, tenants, VNIs and addresses. Which tenants overlap, and why did you place each VM where you did?"
+    answer: |
+      There are three hypervisors, hv1, hv2 and hv3, on the underlay network 10.42.0.0/24 at 10.42.0.1, 10.42.0.2 and 10.42.0.3. There are two tenants. The web tenant uses VNI 4201 and the db tenant uses VNI 4202. Both use the same network, 10.42.50.0/24, so their addresses overlap.
+
+      web1 (10.42.50.10) runs on hv1, web2 (10.42.50.11) on hv2 and web3 (10.42.50.12) on hv3. db1 (10.42.50.10) runs on hv1 and db2 (10.42.50.11) on hv3. web1 and db1 share the address .10, and web2 and db2 share .11. Only the VNI keeps them apart.
+
+      web spans all three hypervisors, so a broadcast from one web VM has two other hypervisors to be flooded to. db is on two hypervisors, so its traffic still crosses the overlay. hv1 and hv3 each host VMs of both tenants, so one hypervisor has to keep two VNIs apart with a separate bridge and VXLAN device for each. hv2 hosts only web.
+
+  isolation:
+    question: "Two of your VMs have the same IP address. Using your evidence, explain how a ping reaches the right one — and what would have to go wrong for one tenant to see another's traffic."
+    answer: |
+      web3 pinged 10.42.50.11, an address that both web2 (web tenant, on hv2) and db2 (db tenant, on hv3) use. The ping got 3 replies out of 3. web3's neighbour table maps 10.42.50.11 to 02:00:10:69:00:0b, which is web2's MAC address (the middle bytes 10:69 are VNI 4201). A capture on web2 saw the echo request and the echo reply. A capture on db2, which has the same IP address as web2 and sits on the same hypervisor as web3, recorded 0 packets.
+
+      The reason is that web3's frame enters the bridge br4201 and can only leave through the tunnel device vxlan4201 (VNI 4201) or the web VM ports. db2 is plugged into br4202, a different bridge, and its tunnel carries VNI 4202. For one tenant to see another's traffic, something would have to break that separation: two tenants given the same VNI, a VM port plugged into the wrong bridge, or both tenants' devices sharing one bridge.
+
+  flood_learn:
+    question: "Using your evidence, explain what was flooded, to which hypervisors, and what each VTEP learned. With 50 hypervisors in one VNI, how many copies would one broadcast need — and how would EVPN change that?"
+    answer: |
+      Before any traffic, each hypervisor's table for vxlan4201 held only its permanent flood entries (00:00:00:00:00:00 dst the other two hypervisors) and no VM MAC addresses. When web1 pinged web2, web1 first sent an ARP broadcast. hv1 copied it to hv2 and hv3 using the flood entries. The capture on hv3 shows it: 10.42.0.1 to 10.42.0.3 on port 4789, VXLAN vni 4201, ARP request who-has 10.42.50.11 tell 10.42.50.10.
+
+      After the pings, hv1 had learned web2's MAC (02:00:10:69:00:0b) behind 10.42.0.2. hv2 and hv3 had both learned web1's MAC (02:00:10:69:00:0a) behind 10.42.0.1. hv3 learned web1 even though hv3 is not part of the conversation, because it received the flooded ARP. It did not learn web2's MAC, because the reply went directly to hv1.
+
+      With 50 hypervisors in one VNI, one broadcast would need 49 copies, one unicast copy to each of the other VTEPs, sent by the source hypervisor. With EVPN, VTEPs would learn MAC and IP addresses from BGP routes instead of from flooded traffic, so known destinations would not need flooding and ARP requests could be answered locally.
+
+  mtu:
+    question: "Compare your two MTU fixes using your measurements. Which would you choose for a data centre, what does each cost, and who has to change what?"
+    answer: |
+      The black hole: with VM MTU 1500 and underlay MTU 1500, the tunnel device vxlan4201 had MTU 1450. Small pings worked, but a 1500-byte DF ping got 100% loss with no error, and iperf3 moved 0 bytes with the congestion window stuck at 1.41 KBytes. The largest working ping payload was 1422 (a 1450-byte packet) and the smallest failing was 1423.
+
+      Fix A lowers the tenant MTU to 1450 with the underlay at 1500. Payload 1422 worked, and 1423 was refused by the VM itself with message too long, mtu=1450. iperf3 reached 3.64 Gbit/s with 15 retransmits. Fix B raises the underlay MTU to 9000 and keeps the VMs at 1500. vxlan4201 came up with MTU 8950, payload 1472 worked and 1473 was refused with mtu=1500. iperf3 reached 3.27 Gbit/s with 772 retransmits. Each result is one 5-second run, so the throughput difference is not conclusive, and I did not investigate why Fix B had more retransmits.
+
+      I would choose Fix B for a data centre. Fix A needs every VM in every tenant changed, and tenants lose 50 bytes of every packet. Fix B is one change by the operator on the underlay, but every underlay link and hypervisor port on the path must support the larger MTU, or the black hole comes back.
+
+  p4:
+    question: "If your hypervisors' VTEPs were P4 switches running the lecture's vtep.p4, what would have to fill the vtep_encap table, and how? What would replace flood-and-learn?"
+    answer: |
+      The tables in vtep.p4 start empty, so the control plane has to fill them, as in the Week 5 lab. vtep_encap matches the ingress port and the destination MAC, and its encap action takes the VNI, the switch's own MAC and VTEP address, the remote VTEP address, the next-hop MAC and the output port. vtep_decap matches the VNI and the inner destination MAC, and its decap action takes the local output port. A controller would write both through P4Runtime, with one entry per tenant MAC.
+
+      It would take the data from the same placement information as overlay.yaml: which VM is on which hypervisor, which VNI its tenant uses, and each hypervisor's underlay address. That information would replace flood-and-learn. The program header says the P4 version has no flooding and no ARP, and a packet that matches no entry hits the default action, which is drop. So the controller must know every destination in advance, and an unknown MAC is dropped instead of being flooded.
