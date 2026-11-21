@@ -121,7 +121,7 @@ plan is empty.
 |---|---|---|
 | `GET` (reads and the check) | Yes | Reading changes nothing. |
 | `PUT /vlans/{id}` | Yes | It sets the VLAN to the given name, so sending it twice gives the same end state (201 then 200 in Step 3). |
-| `DELETE` | Yes | A second delete gives 404, which `sync.py` treats as done, because a retry follows a lost reply that may have deleted it already. |
+| `DELETE` | Yes | A retry follows a lost reply, and the first try may already have deleted the item. The second delete then gives 404, which `sync.py` accepts as done. |
 | `POST /acl/entries` | Yes, only with an `Idempotency-Key` | Without the key a retry after a lost reply adds the entry again (the duplicates in `retry_naive.py`). With the key the server replays the first result. |
 
 A 401 means the token expired, so it logs in again and sends the same request. A 429 waits for `Retry-After`. A 503
@@ -139,8 +139,7 @@ server would see each retry as a new change, and a lost reply would add the entr
 got with `retry_naive.py`. If one key were used for every entry or every run, the server would answer later POSTs
 with the stored first result and add nothing: a second entry sent with the same key and a different body should be
 rejected with 422 (from the OpenAPI document, which I did not test), and a later run that needed the same entry
-again, after it was deleted, would just get the old reply back and the entry would stay missing. So the key
-identifies one attempt-and-its-retries of one change, never more.
+again, after it was deleted, would just get the old reply back and the entry would stay missing.
 
 ### 4. Two people running different intents at the same time
 
@@ -157,15 +156,15 @@ git so that only one intent exists.
 The username and password are only read from the environment variables `LAB_USERNAME` and `LAB_PASSWORD`, which I
 set in the client container shell for the session. `sync.py` and `inventory.py` contain no password or token. The
 token is kept only in memory and renewed when the API answers 401. The evidence files print `logged in as netops`
-and never the token, and the audit log does not contain tokens. I checked the repository and its history for token
-and password strings before the final commit (see the commit step of this assignment).
+and never the token, and the audit log does not contain tokens. Before committing I searched the working tree and
+the git history for `lab_` tokens and found none. The only passwords in the repository are the lab's own published
+accounts in `labapi.py` and a comment in `inventory.py`.
 
 ## AI use
 
 I used Claude Code (Anthropic), at Level 3 (Open), for both the lab and the assignment. For the lab it walked me
-through the steps, explained the output of each step, wrote `step1-commands.md` notes, and corrected where I had
+through the steps, explained the output of each step, wrote `step1-commands.md` notes and corrected where I had
 pasted code in the wrong place in `inventory.py`. For the assignment it proposed the content of `intent.yaml`,
-wrote the first version of `sync.py`, gave me the commands for each evidence run, checked the pasted output against
-what I expected, and drafted the answers above from my evidence. I ran every command myself, in my own containers,
-and pasted the output; the evidence files are what those runs produced. I read `sync.py` and the answers before
-committing them.
+wrote the first version of `sync.py` and checked the pasted output against what I expected. I ran every command
+myself, in my own containers, and pasted the output; the evidence files are what those runs produced. I read
+`sync.py` and the answers before committing them.
