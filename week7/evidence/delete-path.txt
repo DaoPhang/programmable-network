@@ -1,0 +1,29 @@
+logged in as netops
+Plan:
+  DELETE ACL entry 6: permit 10.42.77.0/24 -> 10.42.20.0/24 any (stray-entry)
+  DELETE VLAN 77 stray
+  0 VLAN put, 1 VLAN delete, 0 ACL add, 1 ACL delete
+Check: MATCH. The API holds exactly the intent (6 VLANs besides VLAN 1, 5 ACL entries).
+8 requests sent.
+### audit
+{
+  "writes": 2,
+  "items": [
+    {
+      "seq": 12,
+      "time": "13:52:37",
+      "method": "DELETE",
+      "path": "/api/v1/acl/entries/6",
+      "status": 204,
+      "change": "deleted ACL entry 6"
+    },
+    {
+      "seq": 13,
+      "time": "13:52:37",
+      "method": "DELETE",
+      "path": "/api/v1/vlans/77",
+      "status": 204,
+      "change": "deleted VLAN 77"
+    }
+  ]
+}

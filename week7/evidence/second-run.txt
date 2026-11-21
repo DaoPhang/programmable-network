@@ -1,0 +1,10 @@
+logged in as netops
+Plan:
+  (empty: the API already matches the intent)
+Check: MATCH. The API holds exactly the intent (6 VLANs besides VLAN 1, 5 ACL entries).
+4 requests sent.
+### audit
+{
+  "writes": 0,
+  "items": []
+}

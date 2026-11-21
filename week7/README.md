@@ -85,8 +85,87 @@ Its `limit` goes up to 50 (default 20), so the same inventory could be read in 5
 `Idempotency-Key` description says the same key with a different body is rejected with 422. I read that from
 the document and did not test it.
 
+## Assignment: `sync.py` makes the API match `intent.yaml`
+
+`intent.yaml` lists 6 VLANs (10 users, 20 servers, 30 guests, 40 voice, 50 iot, 99 mgmt) and 5 ACL entries on
+`10.42.0.0/16`: permits (one with tcp/443, one with udp/161, one with udp/5060) and denies (two, protocol any).
+`python3 sync.py intent.yaml --dry-run` prints the plan and sends only reads. Without `--dry-run` it applies the
+plan, reads the state back and prints `Check: MATCH` or `Check: MISMATCH` (exit code 1).
+It reads `LAB_API_URL` (default `http://api:8000`), `LAB_USERNAME` and `LAB_PASSWORD` from the environment.
+
+| Evidence | What it shows |
+|---|---|
+| [dry-run.txt](evidence/dry-run.txt) | Fresh API: plan of 4 VLAN PUTs and 5 ACL POSTs, 2 requests (reads), audit `writes: 0`. |
+| [apply.txt](evidence/apply.txt) | Chaos `lose_responses` 0.3 and `errors_503` 0.2: 28 requests, `Check: MATCH`, audit `writes: 9` (4 PUTs, 5 POSTs, each once), VLANs 1, 10, 20, 30, 40, 50, 99 and ACL entries 1 to 5, no duplicates. |
+| [second-run.txt](evidence/second-run.txt) | Same API, chaos still on, audit cleared first: empty plan, `Check: MATCH`, 4 requests (2 reads for the plan, 2 for the check), audit `writes: 0`. |
+| [expiry.txt](evidence/expiry.txt) | API with `--token-ttl 3 --rate 2`: logged in 3 times (first login and 2 re-logins after a 401), `Check: MATCH`, audit `writes: 9`, 21 requests. |
+| [delete-path.txt](evidence/delete-path.txt) | Extra check: I added a stray VLAN 77 and a stray ACL entry 6 by hand. `sync.py` planned exactly `DELETE ACL entry 6` and `DELETE VLAN 77`, ended with `Check: MATCH`, and the audit shows 2 writes (both 204). |
+
+### 1. How `sync.py` decides what to change
+
+It reads both collections (`GET /vlans`, `GET /acl/entries`, following `next`) and compares them with the intent
+without sending anything. VLANs are matched by id. In my apply run, VLAN 30 `guests` was missing, so the plan was
+`PUT VLAN 30 guests: create`. VLAN 99 existed as `old-guest`, so the plan was `PUT VLAN 99 mgmt: rename from
+old-guest`. A VLAN on the API that is not in the intent is deleted, except VLAN 1, which the API owns and never
+lets go (a delete gives 409). ACL entries have no usable id in the intent, so an entry is identified by all its
+fields: action, src, dst, protocol, port and description. The API fills in `protocol: any` and `port: null`, and
+`sync.py` fills in the same defaults before comparing. An entry in the intent that has no match is a POST, for
+example `permit 10.42.10.0/24 -> 10.42.20.0/24 tcp/443 (users-reach-web)`. An entry on the API that matches nothing
+in the intent is a `DELETE` by id. The API has no PUT or PATCH for ACL entries, so a changed entry is a delete plus
+a new add. After applying, it reads the state again and runs the same comparison. The check passes only if that
+plan is empty.
+
+### 2. Which requests are safe to retry, and why
+
+| Request | Retried? | Why |
+|---|---|---|
+| `GET` (reads and the check) | Yes | Reading changes nothing. |
+| `PUT /vlans/{id}` | Yes | It sets the VLAN to the given name, so sending it twice gives the same end state (201 then 200 in Step 3). |
+| `DELETE` | Yes | A second delete gives 404, which `sync.py` treats as done, because a retry follows a lost reply that may have deleted it already. |
+| `POST /acl/entries` | Yes, only with an `Idempotency-Key` | Without the key a retry after a lost reply adds the entry again (the duplicates in `retry_naive.py`). With the key the server replays the first result. |
+
+A 401 means the token expired, so it logs in again and sends the same request. A 429 waits for `Retry-After`. A 503
+or no reply at all waits 1, 2, 4... seconds plus a random part and tries again, up to 6 failed tries, then it stops with an
+error. Other 4xx codes (such as 400, 404, 409 and 422) are not retried, because the same request would fail again.
+The only exception is the 404 on a `DELETE`, which is accepted as done.
+
+### 3. PUT for VLANs, POST for ACL entries, and how the key is chosen
+
+A VLAN has an id that I choose, and `PUT /vlans/{id}` states the whole result, so it can be repeated safely and
+needs no key. An ACL entry has an id that the server assigns, and the only way to add one is `POST`, which adds a new
+entry each time. Because of that, every planned POST gets a new key (`str(uuid.uuid4())`), made once before the first
+attempt of that POST and reused only by the retries of that same POST. If a new key were made for each attempt, the
+server would see each retry as a new change, and a lost reply would add the entry again, which is the duplicates I
+got with `retry_naive.py`. If one key were used for every entry or every run, the server would answer later POSTs
+with the stored first result and add nothing: a second entry sent with the same key and a different body should be
+rejected with 422 (from the OpenAPI document, which I did not test), and a later run that needed the same entry
+again, after it was deleted, would just get the old reply back and the entry would stay missing. So the key
+identifies one attempt-and-its-retries of one change, never more.
+
+### 4. Two people running different intents at the same time
+
+Each `sync.py` makes the API equal to its own intent, so each one deletes what the other one added. They would keep
+undoing each other, and the last run wins. There is also a gap between reading the state and applying the plan: a
+plan made from a state that has since changed can delete or add the wrong thing. The OpenAPI document I read shows no
+version number, ETag or lock, so the API cannot detect this today. It would need a version for the collection (an
+ETag, with `If-Match` on every write and a 412 answer when the version is old, after which the client reads again
+and plans again), or a lock with a timeout that one client holds while it applies, or a single shared intent file in
+git so that only one intent exists.
+
+### 5. Where the credentials are, and why none are in the repository
+
+The username and password are only read from the environment variables `LAB_USERNAME` and `LAB_PASSWORD`, which I
+set in the client container shell for the session. `sync.py` and `inventory.py` contain no password or token. The
+token is kept only in memory and renewed when the API answers 401. The evidence files print `logged in as netops`
+and never the token, and the audit log does not contain tokens. I checked the repository and its history for token
+and password strings before the final commit (see the commit step of this assignment).
+
 ## AI use
 
-I used Claude Code (Anthropic) to walk through the lab, to explain the output of each step, and to write
-`step1-commands.md` notes. It also corrected where I had pasted code in the wrong place in `inventory.py`.
-I ran every command and pasted the output myself.
+I used Claude Code (Anthropic), at Level 3 (Open), for both the lab and the assignment. For the lab it walked me
+through the steps, explained the output of each step, wrote `step1-commands.md` notes, and corrected where I had
+pasted code in the wrong place in `inventory.py`. For the assignment it proposed the content of `intent.yaml`,
+wrote the first version of `sync.py`, gave me the commands for each evidence run, checked the pasted output against
+what I expected, and drafted the answers above from my evidence. I ran every command myself, in my own containers,
+and pasted the output; the evidence files are what those runs produced. I read `sync.py` and the answers before
+committing them.

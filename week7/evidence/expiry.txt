@@ -1,0 +1,94 @@
+logged in as netops
+Plan:
+  PUT    VLAN 30 guests: create
+  PUT    VLAN 40 voice: create
+  PUT    VLAN 50 iot: create
+  PUT    VLAN 99 mgmt: rename from old-guest
+  POST   ACL entry: permit 10.42.10.0/24 -> 10.42.20.0/24 tcp/443 (users-reach-web)
+  POST   ACL entry: deny 10.42.30.0/24 -> 10.42.20.0/24 any (guests-blocked-from-servers)
+  POST   ACL entry: permit 10.42.99.0/24 -> 10.42.50.0/24 udp/161 (mgmt-snmp-to-iot)
+  POST   ACL entry: deny 10.42.50.0/24 -> 10.42.10.0/24 any (iot-no-users)
+  POST   ACL entry: permit 10.42.40.0/24 -> 10.42.20.0/24 udp/5060 (voice-sip)
+  4 VLAN put, 0 VLAN delete, 5 ACL add, 0 ACL delete
+logged in as netops
+logged in as netops
+Check: MATCH. The API holds exactly the intent (6 VLANs besides VLAN 1, 5 ACL entries).
+21 requests sent.
+### audit
+{
+  "writes": 9,
+  "items": [
+    {
+      "seq": 1,
+      "time": "13:49:27",
+      "method": "PUT",
+      "path": "/api/v1/vlans/30",
+      "status": 201,
+      "change": "created VLAN 30 guests"
+    },
+    {
+      "seq": 2,
+      "time": "13:49:27",
+      "method": "PUT",
+      "path": "/api/v1/vlans/40",
+      "status": 201,
+      "change": "created VLAN 40 voice"
+    },
+    {
+      "seq": 3,
+      "time": "13:49:28",
+      "method": "PUT",
+      "path": "/api/v1/vlans/50",
+      "status": 201,
+      "change": "created VLAN 50 iot"
+    },
+    {
+      "seq": 4,
+      "time": "13:49:28",
+      "method": "PUT",
+      "path": "/api/v1/vlans/99",
+      "status": 200,
+      "change": "set VLAN 99 mgmt"
+    },
+    {
+      "seq": 5,
+      "time": "13:49:29",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 1: permit 10.42.10.0/24 \u2192 10.42.20.0/24 tcp/443"
+    },
+    {
+      "seq": 6,
+      "time": "13:49:29",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 2: deny 10.42.30.0/24 \u2192 10.42.20.0/24 any"
+    },
+    {
+      "seq": 7,
+      "time": "13:49:30",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 3: permit 10.42.99.0/24 \u2192 10.42.50.0/24 udp/161"
+    },
+    {
+      "seq": 8,
+      "time": "13:49:30",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 4: deny 10.42.50.0/24 \u2192 10.42.10.0/24 any"
+    },
+    {
+      "seq": 9,
+      "time": "13:49:31",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 5: permit 10.42.40.0/24 \u2192 10.42.20.0/24 udp/5060"
+    }
+  ]
+}
