@@ -1,6 +1,6 @@
 name: Compile tunnel.p4
 
-# The lab lives in week05/, so the compile step runs there.
+# The lab lives in week5/, so the compile step runs there.
 # Compiles week5/tunnel.p4 with the same P4 compiler as the lab image, on every push and pull request.
 # A red cross means the program doesn't compile; open the run to read the compiler's message.
 # Warnings are shown in the log but don't fail the check.

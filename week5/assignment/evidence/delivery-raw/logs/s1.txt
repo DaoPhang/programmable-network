@@ -1,0 +1,563 @@
+[06:46:40.182] [bmv2] [D] [thread 61] Set default default entry for table 'tbl_drop': MyIngress.drop - 
+[06:46:40.183] [bmv2] [D] [thread 61] Set default default entry for table 'tbl_tunnel127': tunnel127 - 
+[06:46:40.183] [bmv2] [D] [thread 61] Set default default entry for table 'MyIngress.myTunnel_exact': MyIngress.drop - 
+[06:46:40.184] [bmv2] [D] [thread 61] Set default default entry for table 'MyIngress.ipv4_lpm': MyIngress.drop - 
+[06:46:40.184] [bmv2] [D] [thread 61] Set default default entry for table 'tbl_drop_0': MyIngress.drop - 
+[06:46:40.188] [bmv2] [D] [thread 61] Adding interface s1-eth1 as port 1
+[06:46:40.204] [bmv2] [D] [thread 61] Adding interface s1-eth2 as port 2
+[06:46:40.231] [bmv2] [I] [thread 61] Starting Thrift server on port 9090
+[06:46:40.233] [bmv2] [I] [thread 61] Thrift server was started
+[06:46:40.234] [bmv2] [D] [thread 67] [0.0] [cxt 0] Processing packet received on port 2
+[06:46:40.235] [bmv2] [D] [thread 67] [0.0] [cxt 0] Parser 'parser': start
+[06:46:40.235] [bmv2] [D] [thread 67] [0.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:40.236] [bmv2] [D] [thread 67] [0.0] [cxt 0] Extracting header 'ethernet'
+[06:46:40.236] [bmv2] [D] [thread 67] [0.0] [cxt 0] Parser state 'start': key is 86dd
+[06:46:40.236] [bmv2] [T] [thread 67] [0.0] [cxt 0] Bytes parsed: 14
+[06:46:40.237] [bmv2] [D] [thread 67] [0.0] [cxt 0] Parser 'parser': end
+[06:46:40.237] [bmv2] [D] [thread 67] [0.0] [cxt 0] Pipeline 'ingress': start
+[06:46:40.238] [bmv2] [T] [thread 67] [0.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:40.238] [bmv2] [T] [thread 67] [0.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is false
+[06:46:40.238] [bmv2] [T] [thread 67] [0.0] [cxt 0] Applying table 'tbl_drop_0'
+[06:46:40.239] [bmv2] [D] [thread 67] [0.0] [cxt 0] Looking up key:
+
+[06:46:40.239] [bmv2] [D] [thread 67] [0.0] [cxt 0] Table 'tbl_drop_0': miss
+[06:46:40.240] [bmv2] [D] [thread 67] [0.0] [cxt 0] Action entry is MyIngress.drop - 
+[06:46:40.240] [bmv2] [T] [thread 67] [0.0] [cxt 0] Action MyIngress.drop
+[06:46:40.240] [bmv2] [T] [thread 67] [0.0] [cxt 0] tunnel.p4(96) Primitive mark_to_drop(standard_metadata)
+[06:46:40.241] [bmv2] [D] [thread 67] [0.0] [cxt 0] Pipeline 'ingress': end
+[06:46:40.241] [bmv2] [D] [thread 67] [0.0] [cxt 0] Egress port is 511
+[06:46:40.241] [bmv2] [D] [thread 67] [0.0] [cxt 0] Dropping packet at the end of ingress
+[06:46:40.734] [bmv2] [T] [thread 99] bm_get_config
+[06:46:40.741] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.741] [bmv2] [D] [thread 99] Entry 0 added to table 'MyIngress.ipv4_lpm'
+[06:46:40.742] [bmv2] [D] [thread 99] Dumping entry 0
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0001/32
+Action entry: MyIngress.ipv4_forward - 1,
+
+[06:46:40.742] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.743] [bmv2] [D] [thread 99] Entry 1 added to table 'MyIngress.ipv4_lpm'
+[06:46:40.743] [bmv2] [D] [thread 99] Dumping entry 1
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0002/32
+Action entry: MyIngress.ipv4_forward - 2,
+
+[06:46:40.744] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.744] [bmv2] [D] [thread 99] Entry 2 added to table 'MyIngress.ipv4_lpm'
+[06:46:40.744] [bmv2] [D] [thread 99] Dumping entry 2
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0003/32
+Action entry: MyIngress.ipv4_forward - 2,
+
+[06:46:40.745] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.745] [bmv2] [D] [thread 99] Entry 0 added to table 'MyIngress.myTunnel_exact'
+[06:46:40.746] [bmv2] [D] [thread 99] Dumping entry 0
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0001
+Action entry: MyIngress.myTunnel_forward - 1,
+
+[06:46:40.746] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.747] [bmv2] [D] [thread 99] Entry 1 added to table 'MyIngress.myTunnel_exact'
+[06:46:40.747] [bmv2] [D] [thread 99] Dumping entry 1
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:40.748] [bmv2] [T] [thread 99] bm_table_add_entry
+[06:46:40.748] [bmv2] [D] [thread 99] Entry 2 added to table 'MyIngress.myTunnel_exact'
+[06:46:40.749] [bmv2] [D] [thread 99] Dumping entry 2
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:43.164] [bmv2] [D] [thread 67] [1.0] [cxt 0] Processing packet received on port 1
+[06:46:43.165] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser 'parser': start
+[06:46:43.166] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:43.166] [bmv2] [D] [thread 67] [1.0] [cxt 0] Extracting header 'ethernet'
+[06:46:43.167] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:43.167] [bmv2] [T] [thread 67] [1.0] [cxt 0] Bytes parsed: 14
+[06:46:43.168] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:43.168] [bmv2] [D] [thread 67] [1.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:43.168] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:43.169] [bmv2] [T] [thread 67] [1.0] [cxt 0] Bytes parsed: 19
+[06:46:43.169] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:43.169] [bmv2] [D] [thread 67] [1.0] [cxt 0] Extracting header 'ipv4'
+[06:46:43.170] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:43.170] [bmv2] [T] [thread 67] [1.0] [cxt 0] Bytes parsed: 39
+[06:46:43.171] [bmv2] [D] [thread 67] [1.0] [cxt 0] Parser 'parser': end
+[06:46:43.171] [bmv2] [D] [thread 67] [1.0] [cxt 0] Pipeline 'ingress': start
+[06:46:43.171] [bmv2] [T] [thread 67] [1.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:43.172] [bmv2] [T] [thread 67] [1.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is false
+[06:46:43.172] [bmv2] [T] [thread 67] [1.0] [cxt 0] Applying table 'tbl_tunnel127'
+[06:46:43.173] [bmv2] [D] [thread 67] [1.0] [cxt 0] Looking up key:
+
+[06:46:43.173] [bmv2] [D] [thread 67] [1.0] [cxt 0] Table 'tbl_tunnel127': miss
+[06:46:43.173] [bmv2] [D] [thread 67] [1.0] [cxt 0] Action entry is tunnel127 - 
+[06:46:43.174] [bmv2] [T] [thread 67] [1.0] [cxt 0] Action tunnel127
+[06:46:43.174] [bmv2] [T] [thread 67] [1.0] [cxt 0] tunnel.p4(127) Primitive hdr.myTunnel.hops = hdr.myTunnel.hops - 1
+[06:46:43.174] [bmv2] [T] [thread 67] [1.0] [cxt 0] Applying table 'MyIngress.myTunnel_exact'
+[06:46:43.175] [bmv2] [D] [thread 67] [1.0] [cxt 0] Looking up key:
+* hdr.myTunnel.dst_id : 0002
+
+[06:46:43.175] [bmv2] [D] [thread 67] [1.0] [cxt 0] Table 'MyIngress.myTunnel_exact': hit with handle 1
+[06:46:43.176] [bmv2] [D] [thread 67] [1.0] [cxt 0] Dumping entry 1
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:43.176] [bmv2] [D] [thread 67] [1.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[06:46:43.176] [bmv2] [T] [thread 67] [1.0] [cxt 0] Action MyIngress.myTunnel_forward
+[06:46:43.177] [bmv2] [T] [thread 67] [1.0] [cxt 0] tunnel.p4(112) Primitive standard_metadata.egress_spec = port
+[06:46:43.177] [bmv2] [D] [thread 67] [1.0] [cxt 0] Pipeline 'ingress': end
+[06:46:43.177] [bmv2] [D] [thread 67] [1.0] [cxt 0] Egress port is 2
+[06:46:43.178] [bmv2] [D] [thread 70] [1.0] [cxt 0] Pipeline 'egress': start
+[06:46:43.178] [bmv2] [D] [thread 70] [1.0] [cxt 0] Pipeline 'egress': end
+[06:46:43.178] [bmv2] [D] [thread 70] [1.0] [cxt 0] Deparser 'deparser': start
+[06:46:43.179] [bmv2] [D] [thread 70] [1.0] [cxt 0] Updating checksum 'cksum'
+[06:46:43.179] [bmv2] [D] [thread 70] [1.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:43.179] [bmv2] [D] [thread 70] [1.0] [cxt 0] Deparsing header 'myTunnel'
+[06:46:43.180] [bmv2] [D] [thread 70] [1.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:43.180] [bmv2] [D] [thread 70] [1.0] [cxt 0] Deparser 'deparser': end
+[06:46:43.180] [bmv2] [D] [thread 72] [1.0] [cxt 0] Transmitting packet of size 66 out of port 2
+[06:46:43.580] [bmv2] [D] [thread 67] [2.0] [cxt 0] Processing packet received on port 1
+[06:46:43.581] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser 'parser': start
+[06:46:43.582] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:43.582] [bmv2] [D] [thread 67] [2.0] [cxt 0] Extracting header 'ethernet'
+[06:46:43.583] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:43.584] [bmv2] [T] [thread 67] [2.0] [cxt 0] Bytes parsed: 14
+[06:46:43.584] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:43.585] [bmv2] [D] [thread 67] [2.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:43.585] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:43.586] [bmv2] [T] [thread 67] [2.0] [cxt 0] Bytes parsed: 19
+[06:46:43.586] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:43.587] [bmv2] [D] [thread 67] [2.0] [cxt 0] Extracting header 'ipv4'
+[06:46:43.587] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:43.587] [bmv2] [T] [thread 67] [2.0] [cxt 0] Bytes parsed: 39
+[06:46:43.588] [bmv2] [D] [thread 67] [2.0] [cxt 0] Parser 'parser': end
+[06:46:43.588] [bmv2] [D] [thread 67] [2.0] [cxt 0] Pipeline 'ingress': start
+[06:46:43.589] [bmv2] [T] [thread 67] [2.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:43.589] [bmv2] [T] [thread 67] [2.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is false
+[06:46:43.589] [bmv2] [T] [thread 67] [2.0] [cxt 0] Applying table 'tbl_tunnel127'
+[06:46:43.590] [bmv2] [D] [thread 67] [2.0] [cxt 0] Looking up key:
+
+[06:46:43.590] [bmv2] [D] [thread 67] [2.0] [cxt 0] Table 'tbl_tunnel127': miss
+[06:46:43.590] [bmv2] [D] [thread 67] [2.0] [cxt 0] Action entry is tunnel127 - 
+[06:46:43.590] [bmv2] [T] [thread 67] [2.0] [cxt 0] Action tunnel127
+[06:46:43.591] [bmv2] [T] [thread 67] [2.0] [cxt 0] tunnel.p4(127) Primitive hdr.myTunnel.hops = hdr.myTunnel.hops - 1
+[06:46:43.591] [bmv2] [T] [thread 67] [2.0] [cxt 0] Applying table 'MyIngress.myTunnel_exact'
+[06:46:43.591] [bmv2] [D] [thread 67] [2.0] [cxt 0] Looking up key:
+* hdr.myTunnel.dst_id : 0003
+
+[06:46:43.592] [bmv2] [D] [thread 67] [2.0] [cxt 0] Table 'MyIngress.myTunnel_exact': hit with handle 2
+[06:46:43.592] [bmv2] [D] [thread 67] [2.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:43.592] [bmv2] [D] [thread 67] [2.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[06:46:43.593] [bmv2] [T] [thread 67] [2.0] [cxt 0] Action MyIngress.myTunnel_forward
+[06:46:43.593] [bmv2] [T] [thread 67] [2.0] [cxt 0] tunnel.p4(112) Primitive standard_metadata.egress_spec = port
+[06:46:43.593] [bmv2] [D] [thread 67] [2.0] [cxt 0] Pipeline 'ingress': end
+[06:46:43.594] [bmv2] [D] [thread 67] [2.0] [cxt 0] Egress port is 2
+[06:46:43.594] [bmv2] [D] [thread 70] [2.0] [cxt 0] Pipeline 'egress': start
+[06:46:43.594] [bmv2] [D] [thread 70] [2.0] [cxt 0] Pipeline 'egress': end
+[06:46:43.595] [bmv2] [D] [thread 70] [2.0] [cxt 0] Deparser 'deparser': start
+[06:46:43.595] [bmv2] [D] [thread 70] [2.0] [cxt 0] Updating checksum 'cksum'
+[06:46:43.596] [bmv2] [D] [thread 70] [2.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:43.596] [bmv2] [D] [thread 70] [2.0] [cxt 0] Deparsing header 'myTunnel'
+[06:46:43.596] [bmv2] [D] [thread 70] [2.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:43.596] [bmv2] [D] [thread 70] [2.0] [cxt 0] Deparser 'deparser': end
+[06:46:43.597] [bmv2] [D] [thread 72] [2.0] [cxt 0] Transmitting packet of size 64 out of port 2
+[06:46:44.032] [bmv2] [D] [thread 67] [3.0] [cxt 0] Processing packet received on port 1
+[06:46:44.033] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser 'parser': start
+[06:46:44.034] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:44.034] [bmv2] [D] [thread 67] [3.0] [cxt 0] Extracting header 'ethernet'
+[06:46:44.035] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:44.035] [bmv2] [T] [thread 67] [3.0] [cxt 0] Bytes parsed: 14
+[06:46:44.036] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:44.036] [bmv2] [D] [thread 67] [3.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:44.037] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:44.037] [bmv2] [T] [thread 67] [3.0] [cxt 0] Bytes parsed: 19
+[06:46:44.037] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:44.038] [bmv2] [D] [thread 67] [3.0] [cxt 0] Extracting header 'ipv4'
+[06:46:44.038] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:44.038] [bmv2] [T] [thread 67] [3.0] [cxt 0] Bytes parsed: 39
+[06:46:44.039] [bmv2] [D] [thread 67] [3.0] [cxt 0] Parser 'parser': end
+[06:46:44.039] [bmv2] [D] [thread 67] [3.0] [cxt 0] Pipeline 'ingress': start
+[06:46:44.039] [bmv2] [T] [thread 67] [3.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:44.040] [bmv2] [T] [thread 67] [3.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is true
+[06:46:44.040] [bmv2] [T] [thread 67] [3.0] [cxt 0] Applying table 'tbl_drop'
+[06:46:44.040] [bmv2] [D] [thread 67] [3.0] [cxt 0] Looking up key:
+
+[06:46:44.041] [bmv2] [D] [thread 67] [3.0] [cxt 0] Table 'tbl_drop': miss
+[06:46:44.041] [bmv2] [D] [thread 67] [3.0] [cxt 0] Action entry is MyIngress.drop - 
+[06:46:44.041] [bmv2] [T] [thread 67] [3.0] [cxt 0] Action MyIngress.drop
+[06:46:44.042] [bmv2] [T] [thread 67] [3.0] [cxt 0] tunnel.p4(96) Primitive mark_to_drop(standard_metadata)
+[06:46:44.042] [bmv2] [D] [thread 67] [3.0] [cxt 0] Pipeline 'ingress': end
+[06:46:44.042] [bmv2] [D] [thread 67] [3.0] [cxt 0] Egress port is 511
+[06:46:44.043] [bmv2] [D] [thread 67] [3.0] [cxt 0] Dropping packet at the end of ingress
+[06:46:44.468] [bmv2] [D] [thread 67] [4.0] [cxt 0] Processing packet received on port 1
+[06:46:44.469] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser 'parser': start
+[06:46:44.470] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:44.470] [bmv2] [D] [thread 67] [4.0] [cxt 0] Extracting header 'ethernet'
+[06:46:44.471] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:44.471] [bmv2] [T] [thread 67] [4.0] [cxt 0] Bytes parsed: 14
+[06:46:44.472] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:44.472] [bmv2] [D] [thread 67] [4.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:44.472] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:44.473] [bmv2] [T] [thread 67] [4.0] [cxt 0] Bytes parsed: 19
+[06:46:44.473] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:44.474] [bmv2] [D] [thread 67] [4.0] [cxt 0] Extracting header 'ipv4'
+[06:46:44.474] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:44.474] [bmv2] [T] [thread 67] [4.0] [cxt 0] Bytes parsed: 39
+[06:46:44.475] [bmv2] [D] [thread 67] [4.0] [cxt 0] Parser 'parser': end
+[06:46:44.475] [bmv2] [D] [thread 67] [4.0] [cxt 0] Pipeline 'ingress': start
+[06:46:44.475] [bmv2] [T] [thread 67] [4.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:44.476] [bmv2] [T] [thread 67] [4.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is true
+[06:46:44.476] [bmv2] [T] [thread 67] [4.0] [cxt 0] Applying table 'tbl_drop'
+[06:46:44.477] [bmv2] [D] [thread 67] [4.0] [cxt 0] Looking up key:
+
+[06:46:44.477] [bmv2] [D] [thread 67] [4.0] [cxt 0] Table 'tbl_drop': miss
+[06:46:44.477] [bmv2] [D] [thread 67] [4.0] [cxt 0] Action entry is MyIngress.drop - 
+[06:46:44.478] [bmv2] [T] [thread 67] [4.0] [cxt 0] Action MyIngress.drop
+[06:46:44.478] [bmv2] [T] [thread 67] [4.0] [cxt 0] tunnel.p4(96) Primitive mark_to_drop(standard_metadata)
+[06:46:44.478] [bmv2] [D] [thread 67] [4.0] [cxt 0] Pipeline 'ingress': end
+[06:46:44.479] [bmv2] [D] [thread 67] [4.0] [cxt 0] Egress port is 511
+[06:46:44.479] [bmv2] [D] [thread 67] [4.0] [cxt 0] Dropping packet at the end of ingress
+[06:46:44.920] [bmv2] [D] [thread 67] [5.0] [cxt 0] Processing packet received on port 1
+[06:46:44.920] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser 'parser': start
+[06:46:44.921] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:44.922] [bmv2] [D] [thread 67] [5.0] [cxt 0] Extracting header 'ethernet'
+[06:46:44.922] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:44.923] [bmv2] [T] [thread 67] [5.0] [cxt 0] Bytes parsed: 14
+[06:46:44.923] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:44.923] [bmv2] [D] [thread 67] [5.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:44.924] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:44.924] [bmv2] [T] [thread 67] [5.0] [cxt 0] Bytes parsed: 19
+[06:46:44.925] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:44.925] [bmv2] [D] [thread 67] [5.0] [cxt 0] Extracting header 'ipv4'
+[06:46:44.925] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:44.926] [bmv2] [T] [thread 67] [5.0] [cxt 0] Bytes parsed: 39
+[06:46:44.926] [bmv2] [D] [thread 67] [5.0] [cxt 0] Parser 'parser': end
+[06:46:44.926] [bmv2] [D] [thread 67] [5.0] [cxt 0] Pipeline 'ingress': start
+[06:46:44.927] [bmv2] [T] [thread 67] [5.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:44.927] [bmv2] [T] [thread 67] [5.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is false
+[06:46:44.928] [bmv2] [T] [thread 67] [5.0] [cxt 0] Applying table 'tbl_tunnel127'
+[06:46:44.928] [bmv2] [D] [thread 67] [5.0] [cxt 0] Looking up key:
+
+[06:46:44.929] [bmv2] [D] [thread 67] [5.0] [cxt 0] Table 'tbl_tunnel127': miss
+[06:46:44.929] [bmv2] [D] [thread 67] [5.0] [cxt 0] Action entry is tunnel127 - 
+[06:46:44.929] [bmv2] [T] [thread 67] [5.0] [cxt 0] Action tunnel127
+[06:46:44.930] [bmv2] [T] [thread 67] [5.0] [cxt 0] tunnel.p4(127) Primitive hdr.myTunnel.hops = hdr.myTunnel.hops - 1
+[06:46:44.930] [bmv2] [T] [thread 67] [5.0] [cxt 0] Applying table 'MyIngress.myTunnel_exact'
+[06:46:44.931] [bmv2] [D] [thread 67] [5.0] [cxt 0] Looking up key:
+* hdr.myTunnel.dst_id : 0003
+
+[06:46:44.931] [bmv2] [D] [thread 67] [5.0] [cxt 0] Table 'MyIngress.myTunnel_exact': hit with handle 2
+[06:46:44.932] [bmv2] [D] [thread 67] [5.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:44.932] [bmv2] [D] [thread 67] [5.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[06:46:44.932] [bmv2] [T] [thread 67] [5.0] [cxt 0] Action MyIngress.myTunnel_forward
+[06:46:44.933] [bmv2] [T] [thread 67] [5.0] [cxt 0] tunnel.p4(112) Primitive standard_metadata.egress_spec = port
+[06:46:44.933] [bmv2] [D] [thread 67] [5.0] [cxt 0] Pipeline 'ingress': end
+[06:46:44.933] [bmv2] [D] [thread 67] [5.0] [cxt 0] Egress port is 2
+[06:46:44.934] [bmv2] [D] [thread 70] [5.0] [cxt 0] Pipeline 'egress': start
+[06:46:44.935] [bmv2] [D] [thread 70] [5.0] [cxt 0] Pipeline 'egress': end
+[06:46:44.935] [bmv2] [D] [thread 70] [5.0] [cxt 0] Deparser 'deparser': start
+[06:46:44.935] [bmv2] [D] [thread 70] [5.0] [cxt 0] Updating checksum 'cksum'
+[06:46:44.936] [bmv2] [D] [thread 70] [5.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:44.936] [bmv2] [D] [thread 70] [5.0] [cxt 0] Deparsing header 'myTunnel'
+[06:46:44.936] [bmv2] [D] [thread 70] [5.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:44.937] [bmv2] [D] [thread 70] [5.0] [cxt 0] Deparser 'deparser': end
+[06:46:44.937] [bmv2] [D] [thread 72] [5.0] [cxt 0] Transmitting packet of size 57 out of port 2
+[06:46:45.368] [bmv2] [D] [thread 67] [6.0] [cxt 0] Processing packet received on port 1
+[06:46:45.369] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser 'parser': start
+[06:46:45.370] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:45.370] [bmv2] [D] [thread 67] [6.0] [cxt 0] Extracting header 'ethernet'
+[06:46:45.371] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:45.371] [bmv2] [T] [thread 67] [6.0] [cxt 0] Bytes parsed: 14
+[06:46:45.372] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:45.372] [bmv2] [D] [thread 67] [6.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:45.372] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:45.373] [bmv2] [T] [thread 67] [6.0] [cxt 0] Bytes parsed: 19
+[06:46:45.373] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:45.374] [bmv2] [D] [thread 67] [6.0] [cxt 0] Extracting header 'ipv4'
+[06:46:45.374] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:45.374] [bmv2] [T] [thread 67] [6.0] [cxt 0] Bytes parsed: 39
+[06:46:45.375] [bmv2] [D] [thread 67] [6.0] [cxt 0] Parser 'parser': end
+[06:46:45.375] [bmv2] [D] [thread 67] [6.0] [cxt 0] Pipeline 'ingress': start
+[06:46:45.375] [bmv2] [T] [thread 67] [6.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:45.376] [bmv2] [T] [thread 67] [6.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is false
+[06:46:45.376] [bmv2] [T] [thread 67] [6.0] [cxt 0] Applying table 'tbl_tunnel127'
+[06:46:45.376] [bmv2] [D] [thread 67] [6.0] [cxt 0] Looking up key:
+
+[06:46:45.377] [bmv2] [D] [thread 67] [6.0] [cxt 0] Table 'tbl_tunnel127': miss
+[06:46:45.377] [bmv2] [D] [thread 67] [6.0] [cxt 0] Action entry is tunnel127 - 
+[06:46:45.377] [bmv2] [T] [thread 67] [6.0] [cxt 0] Action tunnel127
+[06:46:45.378] [bmv2] [T] [thread 67] [6.0] [cxt 0] tunnel.p4(127) Primitive hdr.myTunnel.hops = hdr.myTunnel.hops - 1
+[06:46:45.378] [bmv2] [T] [thread 67] [6.0] [cxt 0] Applying table 'MyIngress.myTunnel_exact'
+[06:46:45.379] [bmv2] [D] [thread 67] [6.0] [cxt 0] Looking up key:
+* hdr.myTunnel.dst_id : 0003
+
+[06:46:45.379] [bmv2] [D] [thread 67] [6.0] [cxt 0] Table 'MyIngress.myTunnel_exact': hit with handle 2
+[06:46:45.379] [bmv2] [D] [thread 67] [6.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:45.380] [bmv2] [D] [thread 67] [6.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[06:46:45.380] [bmv2] [T] [thread 67] [6.0] [cxt 0] Action MyIngress.myTunnel_forward
+[06:46:45.381] [bmv2] [T] [thread 67] [6.0] [cxt 0] tunnel.p4(112) Primitive standard_metadata.egress_spec = port
+[06:46:45.381] [bmv2] [D] [thread 67] [6.0] [cxt 0] Pipeline 'ingress': end
+[06:46:45.381] [bmv2] [D] [thread 67] [6.0] [cxt 0] Egress port is 2
+[06:46:45.382] [bmv2] [D] [thread 70] [6.0] [cxt 0] Pipeline 'egress': start
+[06:46:45.382] [bmv2] [D] [thread 70] [6.0] [cxt 0] Pipeline 'egress': end
+[06:46:45.382] [bmv2] [D] [thread 70] [6.0] [cxt 0] Deparser 'deparser': start
+[06:46:45.383] [bmv2] [D] [thread 70] [6.0] [cxt 0] Updating checksum 'cksum'
+[06:46:45.383] [bmv2] [D] [thread 70] [6.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:45.383] [bmv2] [D] [thread 70] [6.0] [cxt 0] Deparsing header 'myTunnel'
+[06:46:45.384] [bmv2] [D] [thread 70] [6.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:45.384] [bmv2] [D] [thread 70] [6.0] [cxt 0] Deparser 'deparser': end
+[06:46:45.384] [bmv2] [D] [thread 72] [6.0] [cxt 0] Transmitting packet of size 57 out of port 2
+[06:46:45.772] [bmv2] [D] [thread 67] [7.0] [cxt 0] Processing packet received on port 1
+[06:46:45.773] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser 'parser': start
+[06:46:45.773] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:45.773] [bmv2] [D] [thread 67] [7.0] [cxt 0] Extracting header 'ethernet'
+[06:46:45.774] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser state 'start': key is 1212
+[06:46:45.774] [bmv2] [T] [thread 67] [7.0] [cxt 0] Bytes parsed: 14
+[06:46:45.774] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[06:46:45.775] [bmv2] [D] [thread 67] [7.0] [cxt 0] Extracting header 'myTunnel'
+[06:46:45.775] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[06:46:45.775] [bmv2] [T] [thread 67] [7.0] [cxt 0] Bytes parsed: 19
+[06:46:45.776] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:45.776] [bmv2] [D] [thread 67] [7.0] [cxt 0] Extracting header 'ipv4'
+[06:46:45.777] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:45.777] [bmv2] [T] [thread 67] [7.0] [cxt 0] Bytes parsed: 39
+[06:46:45.777] [bmv2] [D] [thread 67] [7.0] [cxt 0] Parser 'parser': end
+[06:46:45.778] [bmv2] [D] [thread 67] [7.0] [cxt 0] Pipeline 'ingress': start
+[06:46:45.778] [bmv2] [T] [thread 67] [7.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is true
+[06:46:45.778] [bmv2] [T] [thread 67] [7.0] [cxt 0] tunnel.p4(124) Condition "hdr.myTunnel.hops <= 1" (node_3) is false
+[06:46:45.779] [bmv2] [T] [thread 67] [7.0] [cxt 0] Applying table 'tbl_tunnel127'
+[06:46:45.779] [bmv2] [D] [thread 67] [7.0] [cxt 0] Looking up key:
+
+[06:46:45.780] [bmv2] [D] [thread 67] [7.0] [cxt 0] Table 'tbl_tunnel127': miss
+[06:46:45.780] [bmv2] [D] [thread 67] [7.0] [cxt 0] Action entry is tunnel127 - 
+[06:46:45.780] [bmv2] [T] [thread 67] [7.0] [cxt 0] Action tunnel127
+[06:46:45.780] [bmv2] [T] [thread 67] [7.0] [cxt 0] tunnel.p4(127) Primitive hdr.myTunnel.hops = hdr.myTunnel.hops - 1
+[06:46:45.781] [bmv2] [T] [thread 67] [7.0] [cxt 0] Applying table 'MyIngress.myTunnel_exact'
+[06:46:45.781] [bmv2] [D] [thread 67] [7.0] [cxt 0] Looking up key:
+* hdr.myTunnel.dst_id : 0003
+
+[06:46:45.781] [bmv2] [D] [thread 67] [7.0] [cxt 0] Table 'MyIngress.myTunnel_exact': hit with handle 2
+[06:46:45.782] [bmv2] [D] [thread 67] [7.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.myTunnel.dst_id : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 2,
+
+[06:46:45.782] [bmv2] [D] [thread 67] [7.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[06:46:45.782] [bmv2] [T] [thread 67] [7.0] [cxt 0] Action MyIngress.myTunnel_forward
+[06:46:45.783] [bmv2] [T] [thread 67] [7.0] [cxt 0] tunnel.p4(112) Primitive standard_metadata.egress_spec = port
+[06:46:45.783] [bmv2] [D] [thread 67] [7.0] [cxt 0] Pipeline 'ingress': end
+[06:46:45.784] [bmv2] [D] [thread 67] [7.0] [cxt 0] Egress port is 2
+[06:46:45.784] [bmv2] [D] [thread 70] [7.0] [cxt 0] Pipeline 'egress': start
+[06:46:45.784] [bmv2] [D] [thread 70] [7.0] [cxt 0] Pipeline 'egress': end
+[06:46:45.785] [bmv2] [D] [thread 70] [7.0] [cxt 0] Deparser 'deparser': start
+[06:46:45.785] [bmv2] [D] [thread 70] [7.0] [cxt 0] Updating checksum 'cksum'
+[06:46:45.785] [bmv2] [D] [thread 70] [7.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:45.786] [bmv2] [D] [thread 70] [7.0] [cxt 0] Deparsing header 'myTunnel'
+[06:46:45.786] [bmv2] [D] [thread 70] [7.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:45.786] [bmv2] [D] [thread 70] [7.0] [cxt 0] Deparser 'deparser': end
+[06:46:45.787] [bmv2] [D] [thread 72] [7.0] [cxt 0] Transmitting packet of size 59 out of port 2
+[06:46:46.196] [bmv2] [D] [thread 67] [8.0] [cxt 0] Processing packet received on port 1
+[06:46:46.197] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser 'parser': start
+[06:46:46.197] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:46.198] [bmv2] [D] [thread 67] [8.0] [cxt 0] Extracting header 'ethernet'
+[06:46:46.198] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser state 'start': key is 0800
+[06:46:46.199] [bmv2] [T] [thread 67] [8.0] [cxt 0] Bytes parsed: 14
+[06:46:46.199] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:46.200] [bmv2] [D] [thread 67] [8.0] [cxt 0] Extracting header 'ipv4'
+[06:46:46.200] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:46.201] [bmv2] [T] [thread 67] [8.0] [cxt 0] Bytes parsed: 34
+[06:46:46.201] [bmv2] [D] [thread 67] [8.0] [cxt 0] Parser 'parser': end
+[06:46:46.201] [bmv2] [D] [thread 67] [8.0] [cxt 0] Pipeline 'ingress': start
+[06:46:46.202] [bmv2] [T] [thread 67] [8.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:46.202] [bmv2] [T] [thread 67] [8.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is true
+[06:46:46.203] [bmv2] [T] [thread 67] [8.0] [cxt 0] Applying table 'MyIngress.ipv4_lpm'
+[06:46:46.203] [bmv2] [D] [thread 67] [8.0] [cxt 0] Looking up key:
+* hdr.ipv4.dstAddr    : 0a2a0003
+
+[06:46:46.203] [bmv2] [D] [thread 67] [8.0] [cxt 0] Table 'MyIngress.ipv4_lpm': hit with handle 2
+[06:46:46.204] [bmv2] [D] [thread 67] [8.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0003/32
+Action entry: MyIngress.ipv4_forward - 2,
+
+[06:46:46.204] [bmv2] [D] [thread 67] [8.0] [cxt 0] Action entry is MyIngress.ipv4_forward - 2,
+[06:46:46.204] [bmv2] [T] [thread 67] [8.0] [cxt 0] Action MyIngress.ipv4_forward
+[06:46:46.205] [bmv2] [T] [thread 67] [8.0] [cxt 0] tunnel.p4(100) Primitive standard_metadata.egress_spec = port
+[06:46:46.205] [bmv2] [T] [thread 67] [8.0] [cxt 0] tunnel.p4(101) Primitive hdr.ipv4.ttl = hdr.ipv4.ttl - 1
+[06:46:46.205] [bmv2] [D] [thread 67] [8.0] [cxt 0] Pipeline 'ingress': end
+[06:46:46.206] [bmv2] [D] [thread 67] [8.0] [cxt 0] Egress port is 2
+[06:46:46.206] [bmv2] [D] [thread 70] [8.0] [cxt 0] Pipeline 'egress': start
+[06:46:46.206] [bmv2] [D] [thread 70] [8.0] [cxt 0] Pipeline 'egress': end
+[06:46:46.207] [bmv2] [D] [thread 70] [8.0] [cxt 0] Deparser 'deparser': start
+[06:46:46.207] [bmv2] [D] [thread 70] [8.0] [cxt 0] Updating checksum 'cksum'
+[06:46:46.207] [bmv2] [D] [thread 70] [8.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:46.208] [bmv2] [D] [thread 70] [8.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:46.208] [bmv2] [D] [thread 70] [8.0] [cxt 0] Deparser 'deparser': end
+[06:46:46.208] [bmv2] [D] [thread 72] [8.0] [cxt 0] Transmitting packet of size 61 out of port 2
+[06:46:46.308] [bmv2] [D] [thread 67] [9.0] [cxt 0] Processing packet received on port 1
+[06:46:46.309] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser 'parser': start
+[06:46:46.310] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:46.311] [bmv2] [D] [thread 67] [9.0] [cxt 0] Extracting header 'ethernet'
+[06:46:46.311] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser state 'start': key is 0800
+[06:46:46.312] [bmv2] [T] [thread 67] [9.0] [cxt 0] Bytes parsed: 14
+[06:46:46.312] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:46.313] [bmv2] [D] [thread 67] [9.0] [cxt 0] Extracting header 'ipv4'
+[06:46:46.313] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:46.313] [bmv2] [T] [thread 67] [9.0] [cxt 0] Bytes parsed: 34
+[06:46:46.314] [bmv2] [D] [thread 67] [9.0] [cxt 0] Parser 'parser': end
+[06:46:46.314] [bmv2] [D] [thread 67] [9.0] [cxt 0] Pipeline 'ingress': start
+[06:46:46.315] [bmv2] [T] [thread 67] [9.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:46.315] [bmv2] [T] [thread 67] [9.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is true
+[06:46:46.315] [bmv2] [T] [thread 67] [9.0] [cxt 0] Applying table 'MyIngress.ipv4_lpm'
+[06:46:46.316] [bmv2] [D] [thread 67] [9.0] [cxt 0] Looking up key:
+* hdr.ipv4.dstAddr    : 0a2a0003
+
+[06:46:46.316] [bmv2] [D] [thread 67] [9.0] [cxt 0] Table 'MyIngress.ipv4_lpm': hit with handle 2
+[06:46:46.317] [bmv2] [D] [thread 67] [9.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0003/32
+Action entry: MyIngress.ipv4_forward - 2,
+
+[06:46:46.317] [bmv2] [D] [thread 67] [9.0] [cxt 0] Action entry is MyIngress.ipv4_forward - 2,
+[06:46:46.317] [bmv2] [T] [thread 67] [9.0] [cxt 0] Action MyIngress.ipv4_forward
+[06:46:46.318] [bmv2] [T] [thread 67] [9.0] [cxt 0] tunnel.p4(100) Primitive standard_metadata.egress_spec = port
+[06:46:46.318] [bmv2] [T] [thread 67] [9.0] [cxt 0] tunnel.p4(101) Primitive hdr.ipv4.ttl = hdr.ipv4.ttl - 1
+[06:46:46.318] [bmv2] [D] [thread 67] [9.0] [cxt 0] Pipeline 'ingress': end
+[06:46:46.319] [bmv2] [D] [thread 67] [9.0] [cxt 0] Egress port is 2
+[06:46:46.319] [bmv2] [D] [thread 70] [9.0] [cxt 0] Pipeline 'egress': start
+[06:46:46.319] [bmv2] [D] [thread 70] [9.0] [cxt 0] Pipeline 'egress': end
+[06:46:46.320] [bmv2] [D] [thread 70] [9.0] [cxt 0] Deparser 'deparser': start
+[06:46:46.320] [bmv2] [D] [thread 70] [9.0] [cxt 0] Updating checksum 'cksum'
+[06:46:46.320] [bmv2] [D] [thread 70] [9.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:46.321] [bmv2] [D] [thread 70] [9.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:46.321] [bmv2] [D] [thread 70] [9.0] [cxt 0] Deparser 'deparser': end
+[06:46:46.321] [bmv2] [D] [thread 72] [9.0] [cxt 0] Transmitting packet of size 98 out of port 2
+[06:46:46.345] [bmv2] [D] [thread 67] [10.0] [cxt 0] Processing packet received on port 2
+[06:46:46.346] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser 'parser': start
+[06:46:46.346] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:46.347] [bmv2] [D] [thread 67] [10.0] [cxt 0] Extracting header 'ethernet'
+[06:46:46.347] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser state 'start': key is 0800
+[06:46:46.347] [bmv2] [T] [thread 67] [10.0] [cxt 0] Bytes parsed: 14
+[06:46:46.348] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:46.348] [bmv2] [D] [thread 67] [10.0] [cxt 0] Extracting header 'ipv4'
+[06:46:46.348] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:46.349] [bmv2] [T] [thread 67] [10.0] [cxt 0] Bytes parsed: 34
+[06:46:46.349] [bmv2] [D] [thread 67] [10.0] [cxt 0] Parser 'parser': end
+[06:46:46.349] [bmv2] [D] [thread 67] [10.0] [cxt 0] Pipeline 'ingress': start
+[06:46:46.350] [bmv2] [T] [thread 67] [10.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:46.350] [bmv2] [T] [thread 67] [10.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is true
+[06:46:46.350] [bmv2] [T] [thread 67] [10.0] [cxt 0] Applying table 'MyIngress.ipv4_lpm'
+[06:46:46.351] [bmv2] [D] [thread 67] [10.0] [cxt 0] Looking up key:
+* hdr.ipv4.dstAddr    : 0a2a0001
+
+[06:46:46.351] [bmv2] [D] [thread 67] [10.0] [cxt 0] Table 'MyIngress.ipv4_lpm': hit with handle 0
+[06:46:46.351] [bmv2] [D] [thread 67] [10.0] [cxt 0] Dumping entry 0
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0001/32
+Action entry: MyIngress.ipv4_forward - 1,
+
+[06:46:46.352] [bmv2] [D] [thread 67] [10.0] [cxt 0] Action entry is MyIngress.ipv4_forward - 1,
+[06:46:46.352] [bmv2] [T] [thread 67] [10.0] [cxt 0] Action MyIngress.ipv4_forward
+[06:46:46.352] [bmv2] [T] [thread 67] [10.0] [cxt 0] tunnel.p4(100) Primitive standard_metadata.egress_spec = port
+[06:46:46.353] [bmv2] [T] [thread 67] [10.0] [cxt 0] tunnel.p4(101) Primitive hdr.ipv4.ttl = hdr.ipv4.ttl - 1
+[06:46:46.353] [bmv2] [D] [thread 67] [10.0] [cxt 0] Pipeline 'ingress': end
+[06:46:46.354] [bmv2] [D] [thread 67] [10.0] [cxt 0] Egress port is 1
+[06:46:46.354] [bmv2] [D] [thread 69] [10.0] [cxt 0] Pipeline 'egress': start
+[06:46:46.354] [bmv2] [D] [thread 69] [10.0] [cxt 0] Pipeline 'egress': end
+[06:46:46.355] [bmv2] [D] [thread 69] [10.0] [cxt 0] Deparser 'deparser': start
+[06:46:46.356] [bmv2] [D] [thread 69] [10.0] [cxt 0] Updating checksum 'cksum'
+[06:46:46.357] [bmv2] [D] [thread 69] [10.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:46.357] [bmv2] [D] [thread 69] [10.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:46.358] [bmv2] [D] [thread 69] [10.0] [cxt 0] Deparser 'deparser': end
+[06:46:46.358] [bmv2] [D] [thread 72] [10.0] [cxt 0] Transmitting packet of size 98 out of port 1
+[06:46:47.310] [bmv2] [D] [thread 67] [11.0] [cxt 0] Processing packet received on port 1
+[06:46:47.311] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser 'parser': start
+[06:46:47.311] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:47.312] [bmv2] [D] [thread 67] [11.0] [cxt 0] Extracting header 'ethernet'
+[06:46:47.312] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser state 'start': key is 0800
+[06:46:47.313] [bmv2] [T] [thread 67] [11.0] [cxt 0] Bytes parsed: 14
+[06:46:47.313] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:47.314] [bmv2] [D] [thread 67] [11.0] [cxt 0] Extracting header 'ipv4'
+[06:46:47.314] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:47.314] [bmv2] [T] [thread 67] [11.0] [cxt 0] Bytes parsed: 34
+[06:46:47.315] [bmv2] [D] [thread 67] [11.0] [cxt 0] Parser 'parser': end
+[06:46:47.315] [bmv2] [D] [thread 67] [11.0] [cxt 0] Pipeline 'ingress': start
+[06:46:47.315] [bmv2] [T] [thread 67] [11.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:47.316] [bmv2] [T] [thread 67] [11.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is true
+[06:46:47.316] [bmv2] [T] [thread 67] [11.0] [cxt 0] Applying table 'MyIngress.ipv4_lpm'
+[06:46:47.316] [bmv2] [D] [thread 67] [11.0] [cxt 0] Looking up key:
+* hdr.ipv4.dstAddr    : 0a2a0003
+
+[06:46:47.317] [bmv2] [D] [thread 67] [11.0] [cxt 0] Table 'MyIngress.ipv4_lpm': hit with handle 2
+[06:46:47.317] [bmv2] [D] [thread 67] [11.0] [cxt 0] Dumping entry 2
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0003/32
+Action entry: MyIngress.ipv4_forward - 2,
+
+[06:46:47.317] [bmv2] [D] [thread 67] [11.0] [cxt 0] Action entry is MyIngress.ipv4_forward - 2,
+[06:46:47.318] [bmv2] [T] [thread 67] [11.0] [cxt 0] Action MyIngress.ipv4_forward
+[06:46:47.318] [bmv2] [T] [thread 67] [11.0] [cxt 0] tunnel.p4(100) Primitive standard_metadata.egress_spec = port
+[06:46:47.318] [bmv2] [T] [thread 67] [11.0] [cxt 0] tunnel.p4(101) Primitive hdr.ipv4.ttl = hdr.ipv4.ttl - 1
+[06:46:47.319] [bmv2] [D] [thread 67] [11.0] [cxt 0] Pipeline 'ingress': end
+[06:46:47.319] [bmv2] [D] [thread 67] [11.0] [cxt 0] Egress port is 2
+[06:46:47.319] [bmv2] [D] [thread 70] [11.0] [cxt 0] Pipeline 'egress': start
+[06:46:47.320] [bmv2] [D] [thread 70] [11.0] [cxt 0] Pipeline 'egress': end
+[06:46:47.320] [bmv2] [D] [thread 70] [11.0] [cxt 0] Deparser 'deparser': start
+[06:46:47.320] [bmv2] [D] [thread 70] [11.0] [cxt 0] Updating checksum 'cksum'
+[06:46:47.321] [bmv2] [D] [thread 70] [11.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:47.321] [bmv2] [D] [thread 70] [11.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:47.321] [bmv2] [D] [thread 70] [11.0] [cxt 0] Deparser 'deparser': end
+[06:46:47.322] [bmv2] [D] [thread 72] [11.0] [cxt 0] Transmitting packet of size 98 out of port 2
+[06:46:47.345] [bmv2] [D] [thread 67] [12.0] [cxt 0] Processing packet received on port 2
+[06:46:47.345] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser 'parser': start
+[06:46:47.346] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser 'parser' entering state 'start'
+[06:46:47.346] [bmv2] [D] [thread 67] [12.0] [cxt 0] Extracting header 'ethernet'
+[06:46:47.346] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser state 'start': key is 0800
+[06:46:47.347] [bmv2] [T] [thread 67] [12.0] [cxt 0] Bytes parsed: 14
+[06:46:47.347] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[06:46:47.348] [bmv2] [D] [thread 67] [12.0] [cxt 0] Extracting header 'ipv4'
+[06:46:47.348] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+[06:46:47.349] [bmv2] [T] [thread 67] [12.0] [cxt 0] Bytes parsed: 34
+[06:46:47.349] [bmv2] [D] [thread 67] [12.0] [cxt 0] Parser 'parser': end
+[06:46:47.350] [bmv2] [D] [thread 67] [12.0] [cxt 0] Pipeline 'ingress': start
+[06:46:47.350] [bmv2] [T] [thread 67] [12.0] [cxt 0] tunnel.p4(123) Condition "hdr.myTunnel.isValid()" (node_2) is false
+[06:46:47.350] [bmv2] [T] [thread 67] [12.0] [cxt 0] tunnel.p4(130) Condition "hdr.ipv4.isValid()" (node_7) is true
+[06:46:47.351] [bmv2] [T] [thread 67] [12.0] [cxt 0] Applying table 'MyIngress.ipv4_lpm'
+[06:46:47.351] [bmv2] [D] [thread 67] [12.0] [cxt 0] Looking up key:
+* hdr.ipv4.dstAddr    : 0a2a0001
+
+[06:46:47.352] [bmv2] [D] [thread 67] [12.0] [cxt 0] Table 'MyIngress.ipv4_lpm': hit with handle 0
+[06:46:47.352] [bmv2] [D] [thread 67] [12.0] [cxt 0] Dumping entry 0
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a2a0001/32
+Action entry: MyIngress.ipv4_forward - 1,
+
+[06:46:47.352] [bmv2] [D] [thread 67] [12.0] [cxt 0] Action entry is MyIngress.ipv4_forward - 1,
+[06:46:47.353] [bmv2] [T] [thread 67] [12.0] [cxt 0] Action MyIngress.ipv4_forward
+[06:46:47.353] [bmv2] [T] [thread 67] [12.0] [cxt 0] tunnel.p4(100) Primitive standard_metadata.egress_spec = port
+[06:46:47.353] [bmv2] [T] [thread 67] [12.0] [cxt 0] tunnel.p4(101) Primitive hdr.ipv4.ttl = hdr.ipv4.ttl - 1
+[06:46:47.354] [bmv2] [D] [thread 67] [12.0] [cxt 0] Pipeline 'ingress': end
+[06:46:47.354] [bmv2] [D] [thread 67] [12.0] [cxt 0] Egress port is 1
+[06:46:47.354] [bmv2] [D] [thread 69] [12.0] [cxt 0] Pipeline 'egress': start
+[06:46:47.355] [bmv2] [D] [thread 69] [12.0] [cxt 0] Pipeline 'egress': end
+[06:46:47.355] [bmv2] [D] [thread 69] [12.0] [cxt 0] Deparser 'deparser': start
+[06:46:47.355] [bmv2] [D] [thread 69] [12.0] [cxt 0] Updating checksum 'cksum'
+[06:46:47.356] [bmv2] [D] [thread 69] [12.0] [cxt 0] Deparsing header 'ethernet'
+[06:46:47.356] [bmv2] [D] [thread 69] [12.0] [cxt 0] Deparsing header 'ipv4'
+[06:46:47.356] [bmv2] [D] [thread 69] [12.0] [cxt 0] Deparser 'deparser': end
+[06:46:47.357] [bmv2] [D] [thread 72] [12.0] [cxt 0] Transmitting packet of size 98 out of port 1

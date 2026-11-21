@@ -61,6 +61,6 @@ P4 testing must therefore combine compilation and warning review with packet exp
 
 ## Completed program and assistance
 
-The final [tunnel.p4](tunnel.p4) includes tunnel parsing, tunnel-first forwarding and `packet.emit(hdr.myTunnel);`. The Step 6 fault is restored. Its contents match the successfully tested [Step 5 program](stages/step05-tunnel-forwarding.p4).
+The completed practical is preserved as [tunnel_v1.p4](tunnel_v1.p4), including tunnel parsing, tunnel-first forwarding and `packet.emit(hdr.myTunnel);`. The Step 6 fault is restored, and this baseline matches the tested [Step 5 program](stages/step05-tunnel-forwarding.p4). The current `tunnel.p4` adds the later assignment's hop limit.
 
 AI assistance was used to prepare the P4 changes, automate the practical experiments, analyse the saved logs and draft these answers. The observations above are supported by the saved experimental evidence. Review the program and answers so you can explain and defend the work.

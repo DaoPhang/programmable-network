@@ -1,0 +1,44 @@
+{
+  "checks": {
+    "mixed_frame_reaches_h2_with_7": true,
+    "mixed_ipv4_protocol_corrupted": true,
+    "mixed_ipv4_checksum_invalid": true,
+    "mixed_udp_not_received": true,
+    "hops_8_exact_visits": true,
+    "hops_8_counts_stable": true
+  },
+  "measurements": {
+    "mixed_delivery": {
+      "frame_hex": "ffffffffffff000000000001121208000002074500002a00010000400d666b0a2a00010a2a000310e110e10016c60b6d697865642064656c6976657279",
+      "proto_id": 2048,
+      "dst_id": 2,
+      "hops": 7,
+      "ipv4_version": 4,
+      "ipv4_protocol": 13,
+      "ipv4_checksum": "666b",
+      "ipv4_checksum_valid": false
+    },
+    "hops_8": {
+      "before": {
+        "s1": 1,
+        "s2": 1
+      },
+      "first": {
+        "s1": 9,
+        "s2": 8
+      },
+      "after_five_seconds": {
+        "s1": 9,
+        "s2": 8
+      },
+      "visits": {
+        "s1": 8,
+        "s2": 7
+      },
+      "expected": {
+        "s1": 8,
+        "s2": 7
+      }
+    }
+  }
+}
