@@ -1,0 +1,20 @@
+# Week 7 intent: the whole truth for what the lab API should hold.
+# Student ID suffix 6042, so NN = 42 and the address block is 10.42.0.0/16.
+# sync.py removes anything on the API that is not listed here, except VLAN 1.
+
+student_id_last4: "6042"
+
+vlans:
+  - {id: 10, name: users}
+  - {id: 20, name: servers}
+  - {id: 30, name: guests}
+  - {id: 40, name: voice}
+  - {id: 50, name: iot}
+  - {id: 99, name: mgmt}
+
+acl:
+  - {action: permit, src: 10.42.10.0/24, dst: 10.42.20.0/24, protocol: tcp, port: 443, description: users-reach-web}
+  - {action: deny, src: 10.42.30.0/24, dst: 10.42.20.0/24, protocol: any, description: guests-blocked-from-servers}
+  - {action: permit, src: 10.42.99.0/24, dst: 10.42.50.0/24, protocol: udp, port: 161, description: mgmt-snmp-to-iot}
+  - {action: deny, src: 10.42.50.0/24, dst: 10.42.10.0/24, protocol: any, description: iot-no-users}
+  - {action: permit, src: 10.42.40.0/24, dst: 10.42.20.0/24, protocol: udp, port: 5060, description: voice-sip}
