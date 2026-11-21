@@ -1,0 +1,61 @@
+### 404 GET /vlans/77
+HTTP/1.1 404 Not Found
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:23:48 GMT
+Content-Type: application/json
+Content-Length: 35
+
+{
+  "error": "VLAN 77 not found"
+}
+### 405 POST /vlans/10
+HTTP/1.1 405 Method Not Allowed
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:23:52 GMT
+Content-Type: application/json
+Content-Length: 54
+Allow: GET, PUT, PATCH, DELETE
+
+{
+  "error": "POST is not allowed on a single VLAN"
+}
+### 400 POST /vlans broken JSON
+HTTP/1.1 400 Bad Request
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:23:56 GMT
+Content-Type: application/json
+Content-Length: 52
+
+{
+  "error": "the request body is not valid JSON"
+}
+### 422 PUT /vlans/5000
+HTTP/1.1 422 Unprocessable Entity
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:24:00 GMT
+Content-Type: application/json
+Content-Length: 57
+
+{
+  "error": "id must be a VLAN number from 1 to 4094"
+}
+### 409 POST /vlans id 10
+HTTP/1.1 409 Conflict
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:24:04 GMT
+Content-Type: application/json
+Content-Length: 63
+
+{
+  "error": "VLAN 10 already exists: use PUT to replace it"
+}
+### 403 PUT /vlans/30 as viewer
+HTTP/1.1 403 Forbidden
+Server: labapi/1.0 Python/3.12.16
+Date: Sat, 21 Nov 2026 06:24:28 GMT
+Content-Type: application/json
+Content-Length: 46
+
+{
+  "error": "viewer has a read-only token"
+}

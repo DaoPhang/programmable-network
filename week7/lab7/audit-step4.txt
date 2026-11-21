@@ -1,0 +1,53 @@
+{
+  "writes": 6,
+  "items": [
+    {
+      "seq": 17,
+      "time": "07:53:16",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 15: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    },
+    {
+      "seq": 18,
+      "time": "07:53:16",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 16: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    },
+    {
+      "seq": 19,
+      "time": "07:53:18",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 17: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    },
+    {
+      "seq": 20,
+      "time": "07:53:18",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 18: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    },
+    {
+      "seq": 21,
+      "time": "07:53:19",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 19: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    },
+    {
+      "seq": 22,
+      "time": "07:53:19",
+      "method": "POST",
+      "path": "/api/v1/acl/entries",
+      "status": 201,
+      "change": "added ACL entry 20: deny 10.42.30.0/24 \u2192 10.42.20.0/24 tcp/22"
+    }
+  ]
+}
